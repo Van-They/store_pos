@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_pos/localication/app_string_resource.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -11,6 +12,9 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(appBar: AppBarWidget(title: "MainScreen"),);
+    AppStringResource.of(context);
+    return Scaffold(
+      appBar: AppBarWidget(title: res('hello')),
+    );
   }
 }
