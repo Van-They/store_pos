@@ -8,7 +8,9 @@ class DbService {
 
   static Database? _database;
 
-  Future<Database> get detabase async => _database ??= await initDatabase();
+  static DbService instance = DbService._();
+
+  Future<Database> get database async => _database ??= await initDatabase();
 
   Future<Database> initDatabase() async {
     String path = join(await getDatabasesPath(), 'store_database.db');
