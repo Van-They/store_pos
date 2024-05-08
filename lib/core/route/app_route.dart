@@ -1,36 +1,44 @@
 import 'package:get/get.dart';
 import 'package:store_pos/screen/cart/cart_screen.dart';
 import 'package:store_pos/screen/category/category_screen.dart';
-import 'package:store_pos/screen/home/home_controller.dart';
 import 'package:store_pos/screen/home/home_screen.dart';
-import 'package:store_pos/screen/main/main_controller.dart';
 import 'package:store_pos/screen/main/main_screen.dart';
 import 'package:store_pos/screen/menu/MenuScreen.dart';
+import 'package:store_pos/screen/menu/components/group_item_screen.dart';
+import 'package:store_pos/screen/menu/components/item_screen.dart';
+import 'package:store_pos/screen/menu/components/item_set_up_screen.dart';
 
 List<GetPage<dynamic>> appRoute = [
   GetPage(
-    name: '/main',
+    name: MainScreen.routeName,
     page: () => const MainScreen(),
-    transition: Transition.zoom,
   ),
   GetPage(
-    name: '/home',
+    name: HomeScreen.routeName,
     page: () => const HomeScreen(),
-    transition: Transition.leftToRight,
   ),
   GetPage(
-    name: '/category',
+    name: CategoryScreen.routeName,
     page: () => const CategoryScreen(),
-    transition: Transition.leftToRight,
   ),
   GetPage(
-    name: '/cart',
+    name: CartScreen.routeName,
     page: () => const CartScreen(),
-    transition: Transition.leftToRight,
   ),
   GetPage(
-    name: '/menu',
+    name: MenuScreen.routeName,
     page: () => const MenuScreen(),
-    transition: Transition.leftToRight,
+  ),
+  GetPage(
+    name: ItemScreen.routeName,
+    page: () => const ItemScreen(),
+  ),
+  GetPage(
+    name: ItemSetUpScreen.routeName,
+    page: () => const ItemSetUpScreen(),
+  ),
+  GetPage(
+    name: GroupItemScreen.routeName,
+    page: () => const GroupItemScreen(),
   ),
 ];

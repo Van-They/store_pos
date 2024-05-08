@@ -10,36 +10,40 @@ class BoxWidget extends StatelessWidget {
     this.decoration,
     this.width,
     this.height,
+    this.radius,
+    this.onTap,
   });
 
   final EdgeInsetsGeometry? padding, margin;
   final Widget? child;
   final BoxDecoration? decoration;
-  final double? width, height;
+  final double? width, height, radius;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: decoration ??
-          BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(
-              scaleFactor(appSpace),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: decoration ??
+            BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(radius ?? appSpace.scale),
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, 0.5),
+                  blurRadius: 1,
+                  color: Colors.grey.shade100,
+                )
+              ],
             ),
-            boxShadow: [
-              BoxShadow(
-                offset: const Offset(0, 0.5),
-                blurRadius: 1,
-                color: Colors.grey.shade400,
-              )
-            ],
-          ),
-      padding: padding ?? EdgeInsets.all(scaleFactor(appSpace)),
-      margin: margin ?? EdgeInsets.all(scaleFactor(appSpace)),
-      child: child,
+        padding: padding ?? EdgeInsets.all(appSpace.scale),
+        margin: margin ?? EdgeInsets.all(appSpace.scale),
+        child: child,
+      ),
     );
   }
 }

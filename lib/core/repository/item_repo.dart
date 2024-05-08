@@ -14,7 +14,6 @@ class ItemRepo {
       {Map? arg}) async {
     try {
       final result = await api.onGetHomeItems(arg: arg);
-
       if (result.status != 'success') {
         throw GeneralException();
       }

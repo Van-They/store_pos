@@ -10,6 +10,8 @@ import 'package:store_pos/screen/menu/MenuScreen.dart';
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
+  static const String routeName = '/main';
+
   @override
   Widget build(BuildContext context) {
     final controller = MainController();
@@ -28,10 +30,16 @@ class MainScreen extends StatelessWidget {
       bottomNavigationBar: Obx(
         () => BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           currentIndex: controller.currentIndex.value,
           onTap: (value) {
             controller.changeIndex(value);
-            pageCtr.jumpToPage(value);
+            pageCtr.animateToPage(
+              value,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
           },
           items: _buildBottomNavItems(),
         ),
@@ -44,28 +52,28 @@ class MainScreen extends StatelessWidget {
       BottomNavigationBarItem(
         icon: Icon(
           Icons.home_rounded,
-          size: scaleFactor(24),
+          size: 24.scale,
         ),
         label: 'home'.tr,
       ),
       BottomNavigationBarItem(
         icon: Icon(
           Icons.category_rounded,
-          size: scaleFactor(24),
+          size: 24.scale,
         ),
         label: 'category'.tr,
       ),
       BottomNavigationBarItem(
         icon: Icon(
           Icons.shopping_bag_rounded,
-          size: scaleFactor(24),
+          size: 24.scale,
         ),
         label: 'cart'.tr,
       ),
       BottomNavigationBarItem(
         icon: Icon(
           Icons.settings_rounded,
-          size: scaleFactor(24),
+          size: 24.scale,
         ),
         label: 'menu'.tr,
       ),
