@@ -2,37 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:store_pos/core/constant/colors.dart';
-import 'package:store_pos/core/data/model/item_model.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/home/home_controller.dart';
+import 'package:store_pos/screen/merchant/group/group_item_screen.dart';
 import 'package:store_pos/widget/box_widget.dart';
-import 'package:store_pos/widget/input_text_widget.dart';
+import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/item_widget.dart';
 import 'package:store_pos/widget/loading_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends GetView<HomeController> {
   const HomeScreen({super.key});
 
   static const String routeName = '/HomeScreen';
 
   @override
   Widget build(BuildContext context) {
-    final controller = HomeController()..onGetHomeItems();
+    Get.put<HomeController>(HomeController());
+    controller.onGetHomeItems();
+    controller.onGetGroup();
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0.0,
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.qr_code_2_rounded,
-                size: 24.scale,
-              ),
-            ),
-            const Expanded(child: InputTextWidget()),
+            TextWidget(text: 'Cambodia Modern Drone', fontSize: 18.scale),
             IconButton(
               onPressed: () {},
               icon: Icon(
@@ -45,24 +41,11 @@ class HomeScreen extends StatelessWidget {
         titleSpacing: appSpace.scale,
         toolbarHeight: kToolbarHeight,
       ),
-      backgroundColor: kBgColor,
-      body: GestureDetector(
-        onTap: () => Get.focusScope!.unfocus(),
-        child: controller.obx(
-          (state) => _buildItemList(state),
-          onLoading: const LoadingWidget(),
-          onEmpty: const Center(
-            child: Text('Empty'),
-          ),
-        ),
-      ),
+      body: _buildItemList(),
     );
   }
 
-  _buildItemList(List<ItemModel>? records) {
-    if (records == null) {
-      return Container();
-    }
+  _buildItemList() {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
@@ -98,42 +81,60 @@ class HomeScreen extends StatelessWidget {
             onTap: () {
               Get.toNamed(CategoryScreen.routeName);
             },
-            margin: EdgeInsets.zero,
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.scale,
+              vertical: appSpace.scale,
+            ),
             radius: 0,
             child: Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const TextWidget(text: 'category'),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 18.scale,
+                    TextWidget(text: 'category'.tr),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(GroupItemScreen.routeName);
+                      },
+                      child: Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 18.scale,
+                      ),
                     ),
                   ],
                 ),
                 SizedBox(height: appSpace.scale),
-                Wrap(
-                  alignment: WrapAlignment.start,
-                  spacing: appSpace.scale,
-                  children: List.generate(
-                    5,
-                    (index) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.greenAccent,
-                            borderRadius: BorderRadius.circular(appSpace.scale),
-                          ),
-                          width: 80.scale,
-                          height: 80.scale,
+                Obx(() {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children:
+                        List.generate(controller.groupList.length, (index) {
+                      final record = controller.groupList[index];
+                      return Padding(
+                        padding: EdgeInsets.only(right: appSpace.scale),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.greenAccent,
+                                borderRadius:
+                                    BorderRadius.circular(appSpace.scale),
+                              ),
+                              width: 70.scale,
+                              height: 70.scale,
+                              child: ImageWidget(
+                                imgPath: record.imgPath,
+                              ),
+                            ),
+                            TextWidget(text: record.description)
+                          ],
                         ),
-                        const TextWidget(text: 'categ')
-                      ],
-                    ),
-                  ),
-                ),
+                      );
+                    }),
+                  );
+                }),
+
                 // SizedBox(
                 //   height: 100.scale,
                 //   child: ListView.builder(
@@ -157,19 +158,29 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         SliverToBoxAdapter(
-          child: MasonryGridView.builder(
-            itemCount: records.length,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: appSpace.scale,
-            padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-            gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: Get.width ~/ 150.scale,
-            ),
-            itemBuilder: (context, index) {
-              final record = records[index];
-              return ItemWidget(record: record);
+          child: controller.obx(
+            (state) {
+              final records = state ?? [];
+              return MasonryGridView.builder(
+                itemCount: records.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisSpacing: 16.scale,
+                mainAxisSpacing: 16.scale,
+                padding: EdgeInsets.all(16.scale),
+                gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: itemCanFitHorizontal(width: 150.scale),
+                ),
+                itemBuilder: (context, index) {
+                  final record = records[index];
+                  return ItemWidget(record: record);
+                },
+              );
             },
+            onLoading: const LoadingWidget(),
+            onEmpty: const Center(
+              child: Text('Empty'),
+            ),
           ),
         ),
       ],

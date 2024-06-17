@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:store_pos/core/data/model/order_tran_model.dart';
+import 'package:store_pos/core/global/cart_controller.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
-import 'package:store_pos/widget/image_widget.dart';
+import 'package:store_pos/widget/empty_widget.dart';
+import 'package:store_pos/widget/item_cart_widget.dart';
+import 'package:store_pos/widget/loading_widget.dart';
 import 'package:store_pos/widget/primary_btn_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
-class CartScreen extends GetView {
+class CartScreen extends GetView<CartController> {
   const CartScreen({super.key});
 
   static const String routeName = '/CartScreen';
@@ -15,87 +19,63 @@ class CartScreen extends GetView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(title: 'cart'),
+      appBar: AppBarWidget(title: 'cart'.tr),
       resizeToAvoidBottomInset: false,
-      body: ListView.builder(
-        itemCount: 5,
-        padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-        itemBuilder: (context, index) {
-          return BoxWidget(
-            margin: EdgeInsets.only(top: appSpace.scale),
-            padding: EdgeInsets.zero,
-            height: 100.scale,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ImageWidget(
-                  imgPath: '',
-                  height: double.infinity,
-                  width: 100.scale,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: appSpace.scale),
-                      child: TextWidget(text: 'record.code'),
-                    ),
-                    SizedBox(height: appSpace.scale),
-                    Padding(
-                      padding: EdgeInsets.only(left: appSpace.scale),
-                      child: TextWidget(text: 'record.description'),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: EdgeInsets.only(left: appSpace.scale),
-                      child: const TextWidget(text: 'add_to_cart'),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                const TextWidget(text: 'price'),
-                // SizedBox(height: scaleFactor(appSpace/2)),
-                // const Hr(),
-              ],
-            ),
-          );
-        },
+      body: controller.obx(
+        onEmpty: const EmptyWidget(),
+        onLoading: const LoadingWidget(),
+        onError: (error) => const EmptyWidget(),
+        (state) => _buildListItem(state ?? []),
       ),
       bottomNavigationBar: BoxWidget(
-        height: 150.scale,
+        height: 160.scale,
         margin: EdgeInsets.zero,
+        padding: EdgeInsets.all(appSpace.scale),
         child: Column(
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextWidget(text: 'subtotal'),
-                TextWidget(text: '0.0'),
+                TextWidget(text: 'subtotal'.tr),
+                const TextWidget(text: '0.0'),
               ],
             ),
-            const Row(
+            SizedBox(height: 4.scale),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextWidget(text: 'discount'),
-                TextWidget(text: '0.0'),
+                TextWidget(text: 'discount'.tr),
+                const TextWidget(text: '0.0'),
               ],
             ),
-            const Row(
+            SizedBox(height: appSpace.scale),
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextWidget(text: 'amount_to_pay'),
-                TextWidget(text: '0.0'),
+                TextWidget(text: 'amount_to_pay'.tr),
+                const TextWidget(text: '0.0'),
               ],
             ),
             const Spacer(),
             PrimaryBtnWidget(
               padding: EdgeInsets.zero,
-              label: 'check_out',
+              label: 'check_out'.tr,
               onTap: () {},
             )
           ],
         ),
       ),
+    );
+  }
+
+  _buildListItem(List<OrderTranModel> records) {
+    return ListView.builder(
+      itemCount: records.length,
+      padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+      itemBuilder: (context, index) {
+        final record = records[index];
+        return ItemCartWidget(record: record);
+      },
     );
   }
 }

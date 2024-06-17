@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:store_pos/screen/menu/components/item_screen.dart';
+import 'package:store_pos/screen/merchant/item/item_screen.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 
-import 'components/group_item_screen.dart';
+import '../merchant/group/group_item_screen.dart';
 
 class MenuScreen extends GetView {
   const MenuScreen({super.key});

@@ -1,76 +1,83 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:store_pos/core/data/model/group_item_model.dart';
 import 'package:store_pos/core/util/helper.dart';
+import 'package:store_pos/screen/merchant/group/group_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
+import 'package:store_pos/widget/box_widget.dart';
+import 'package:store_pos/widget/custom_empty_widget.dart';
+import 'package:store_pos/widget/custom_error_widget.dart';
+import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
-class CategoryScreen extends GetView {
+class CategoryScreen extends GetView<GroupController> {
   const CategoryScreen({super.key});
 
   static const String routeName = '/CategoryScreen';
 
   @override
   Widget build(BuildContext context) {
+    controller.onGetGroupItem();
     return Scaffold(
       appBar: const AppBarWidget(title: 'category'),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 1,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: List.generate(
-                    10,
-                    (index) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.greenAccent,
-                            borderRadius: BorderRadius.circular(appSpace.scale),
-                          ),
-                          width: 100.scale,
-                          height: 80.scale,
-                        ),
-                        const TextWidget(text: 'categ')
-                      ],
+        child:  CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverFillRemaining(
+              child: controller.obx(
+                onError: (error) => const CustomErrorWidget(),
+                onEmpty: const CustomEmptyWidget(),
+                    (state) {
+                  final records = state ?? [];
+                  return MasonryGridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: records.length,
+                    crossAxisSpacing: appSpace.scale,
+                    gridDelegate:
+                    SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: itemCanFitHorizontal(width: 150.scale),
                     ),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: MasonryGridView.builder(
-                shrinkWrap: true,
-                crossAxisSpacing: appSpace.scale,
-                itemCount: 10,
-                gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: Get.width ~/ 150.scale,
-                ),
-                itemBuilder: (context, index) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.greenAccent,
-                          borderRadius: BorderRadius.circular(appSpace.scale),
-                        ),
-                        width: double.infinity,
-                        height: 80.scale,
-                      ),
-                      const TextWidget(text: 'pro')
-                    ],
+                    itemBuilder: (context, index) {
+                      final record = records[index];
+                      return _buildGroupItem(record);
+                    },
                   );
                 },
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _buildGroupItem(GroupItemModel record) {
+    return AbsorbPointer(
+      child: BoxWidget(
+        height: 70.scale,
+        enableShadow: true,
+        child: Row(
+          children: [
+            ImageWidget(
+              imgPath: record.imgPath,
+              width: 70.scale,
+            ),
+            SizedBox(width: appSpace.scale),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextWidget(
+                  text: record.code,
+                  fontSize: 16.scale,
+                ),
+                if (record.displayLang.contains("EN"))
+                  TextWidget(text: record.description),
+                if (record.displayLang.contains("KH"))
+                  TextWidget(text: record.description_2)
+              ],
             ),
           ],
         ),

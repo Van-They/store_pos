@@ -1,48 +1,39 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:store_pos/core/constant/images.dart';
 import 'package:store_pos/core/util/helper.dart';
 
 class ImageWidget extends StatelessWidget {
   const ImageWidget({
     super.key,
-    required this.imgPath,
-    required this.height,
+    this.imgPath = '',
+    this.height,
     this.width,
     this.fit = BoxFit.cover,
     this.borderRadius,
   });
 
   final double? width;
-  final double height;
-  final String? imgPath;
+  final double? height;
+  final String imgPath;
   final BoxFit fit;
   final BorderRadiusGeometry? borderRadius;
 
   @override
   Widget build(BuildContext context) {
-    final path = imgPath;
-
-    if (path == null) {
+    if (imgPath.isEmpty) {
       return Container(
         width: width ?? double.infinity,
         height: height,
         decoration: BoxDecoration(
           color: Colors.grey,
-          borderRadius:
-          borderRadius ?? BorderRadius.circular(appSpace.scale),
-        ),
-      );
-    }
-
-    if (path.isEmpty) {
-      return Container(
-        width: width ?? double.infinity,
-        height: height,
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          borderRadius:
-              borderRadius ?? BorderRadius.circular(appSpace.scale),
+          image: DecorationImage(
+            image: const AssetImage(no_photo),
+            repeat: ImageRepeat.noRepeat,
+            fit: fit,
+          ),
+          borderRadius: borderRadius ?? BorderRadius.circular(appSpace.scale),
         ),
       );
     }
@@ -51,13 +42,12 @@ class ImageWidget extends StatelessWidget {
       width: width ?? double.infinity,
       height: height,
       decoration: BoxDecoration(
-        borderRadius:
-            borderRadius ?? BorderRadius.circular(appSpace.scale),
+        borderRadius: borderRadius ?? BorderRadius.circular(appSpace.scale),
         image: DecorationImage(
           repeat: ImageRepeat.noRepeat,
           fit: fit,
           image: FileImage(
-            File(path),
+            File(imgPath),
           ),
         ),
       ),

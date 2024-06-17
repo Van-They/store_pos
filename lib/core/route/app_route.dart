@@ -4,9 +4,13 @@ import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/home/home_screen.dart';
 import 'package:store_pos/screen/main/main_screen.dart';
 import 'package:store_pos/screen/menu/MenuScreen.dart';
-import 'package:store_pos/screen/menu/components/group_item_screen.dart';
-import 'package:store_pos/screen/menu/components/item_screen.dart';
-import 'package:store_pos/screen/menu/components/item_set_up_screen.dart';
+import 'package:store_pos/screen/merchant/group/components/group_set_up_screen.dart';
+import 'package:store_pos/screen/merchant/group/group_controller.dart';
+import 'package:store_pos/screen/merchant/group/group_item_screen.dart';
+import 'package:store_pos/screen/merchant/item/components/fetch_group_item_screen.dart';
+import 'package:store_pos/screen/merchant/item/components/item_set_up_screen.dart';
+import 'package:store_pos/screen/merchant/item/item_screen.dart';
+import 'package:store_pos/screen/merchant/main_merchant_screen.dart';
 
 List<GetPage<dynamic>> appRoute = [
   GetPage(
@@ -40,5 +44,20 @@ List<GetPage<dynamic>> appRoute = [
   GetPage(
     name: GroupItemScreen.routeName,
     page: () => const GroupItemScreen(),
+  ),
+  GetPage(
+    name: MainMerchantScreen.routeName,
+    page: () => const MainMerchantScreen(),
+  ),
+  GetPage(
+    name: GroupSetupScreen.routeName,
+    page: () => const GroupSetupScreen(),
+  ),
+  GetPage(
+    name: FetchGroupItemScreen.routeName,
+    page: () => const FetchGroupItemScreen(),
+    binding: BindingsBuilder(() {
+      return Get.lazyPut(() => GroupController());
+    }),
   ),
 ];

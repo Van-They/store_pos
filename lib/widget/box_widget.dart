@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/util/helper.dart';
 
 class BoxWidget extends StatelessWidget {
@@ -12,6 +13,13 @@ class BoxWidget extends StatelessWidget {
     this.height,
     this.radius,
     this.onTap,
+    this.borderRadius,
+    this.alignment = Alignment.center,
+    this.backgroundColor = kWhite,
+    this.borderColor = kWhite,
+    this.shadowColor = kborderColor,
+    this.enableShadow = false,
+    this.blueRadius = 1.0,
   });
 
   final EdgeInsetsGeometry? padding, margin;
@@ -19,6 +27,11 @@ class BoxWidget extends StatelessWidget {
   final BoxDecoration? decoration;
   final double? width, height, radius;
   final VoidCallback? onTap;
+  final BorderRadiusGeometry? borderRadius;
+  final AlignmentGeometry alignment;
+  final Color backgroundColor, borderColor, shadowColor;
+  final bool enableShadow;
+  final double blueRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -27,21 +40,25 @@ class BoxWidget extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
+        alignment: alignment,
         decoration: decoration ??
             BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.white),
-              borderRadius: BorderRadius.circular(radius ?? appSpace.scale),
-              boxShadow: [
-                BoxShadow(
-                  offset: const Offset(0, 0.5),
-                  blurRadius: 1,
-                  color: Colors.grey.shade100,
-                )
-              ],
+              color: backgroundColor,
+              border: Border.all(color: borderColor),
+              borderRadius: borderRadius ??
+                  BorderRadius.circular(radius ?? appSpace.scale),
+              boxShadow: enableShadow
+                  ? [
+                      BoxShadow(
+                        offset: const Offset(0, 0.5),
+                        blurRadius: blueRadius,
+                        color: shadowColor,
+                      )
+                    ]
+                  : null,
             ),
-        padding: padding ?? EdgeInsets.all(appSpace.scale),
-        margin: margin ?? EdgeInsets.all(appSpace.scale),
+        padding: padding,
+        margin: margin,
         child: child,
       ),
     );
