@@ -1,10 +1,10 @@
 
 
 class SettingModel {
-  static const String tableName = "setting";
+  static const String tableName = "Setting";
 
-  final int invoiceNo;
-  final int orderNo;
+   int invoiceNo;
+   int orderNo;
   SettingModel({
     required this.invoiceNo,
     required this.orderNo,

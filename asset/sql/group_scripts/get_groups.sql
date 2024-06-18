@@ -1,1 +1,1 @@
-SELECT * FROM groupItem
+SELECT * FROM group_item

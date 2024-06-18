@@ -17,6 +17,7 @@ class SettingRepo {
         throw GeneralException();
       }
       final record = SettingModel.fromMap(result.record);
+
       return Right(
         RepoResponse(
           record: record,

@@ -1,17 +1,16 @@
-
-
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class OrderHead {
-  static const String orderHeadTmp = "orderHeadTmp";
-  static const String orderHead = "orderHead";
-  final String orderId;
-  final String invoiceNo;
-  final double subtotal;
-  final double discountAmount;
-  final double discountPercentage;
-  final double taxAmount;
-  final double taxPercentage;
-  final double grandTotal;
-  final String date;
+  static const String orderHeadTmp = "order_head_tmp";
+  static const String orderHead = "order_head";
+  String orderId;
+  String invoiceNo;
+  double subtotal;
+  double discountAmount;
+  double discountPercentage;
+  double taxAmount;
+  double taxPercentage;
+  double grandTotal;
+  String date;
   OrderHead({
     required this.orderId,
     required this.invoiceNo,
@@ -42,13 +41,24 @@ class OrderHead {
     return OrderHead(
       orderId: map['orderId'] ?? "",
       invoiceNo: map['invoiceNo'] ?? "",
-      subtotal: map['subtotal'] ?? "",
-      discountAmount: map['discountAmount'] ?? "",
-      discountPercentage: map['discountPercentage'] ?? "",
-      taxAmount: map['taxAmount'] ?? "",
-      taxPercentage: map['taxPercentage'] ?? "",
-      grandTotal: map['grandTotal'] ?? "",
+      subtotal: map['subtotal'] ?? 0.0,
+      discountAmount: map['discountAmount'] ?? 0.0,
+      discountPercentage: map['discountPercentage'] ?? 0.0,
+      taxAmount: map['taxAmount'] ?? 0.0,
+      taxPercentage: map['taxPercentage'] ?? 0.0,
+      grandTotal: map['grandTotal'] ?? 0.0,
       date: map['date'] ?? "",
     );
+  }
+
+  static double calculateGrandtotal(OrderHead orderHead) {
+    final discount = orderHead.discountAmount;
+    final subtotal = orderHead.subtotal;
+    return subtotal - discount;
+  }
+
+  @override
+  String toString() {
+    return 'OrderHead(orderId: $orderId, invoiceNo: $invoiceNo, subtotal: $subtotal, discountAmount: $discountAmount, discountPercentage: $discountPercentage, taxAmount: $taxAmount, taxPercentage: $taxPercentage, grandTotal: $grandTotal, date: $date)';
   }
 }

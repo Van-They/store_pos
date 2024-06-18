@@ -1,5 +1,5 @@
 CREATE TABLE
-    IF NOT EXISTS groupItem (
+    IF NOT EXISTS group_item (
         code TEXT PRIMARY Key NOT NULL,
         description TEXT,
         description_2 TEXT,
@@ -29,32 +29,33 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    IF NOT EXISTS orderHead (
+    IF NOT EXISTS order_head (
         orderId TEXT PRIMARY KEY,
         invoiceNo TEXT,
-        subtotal REAL,
         discountAmount REAL,
         discountPercentage REAL,
         taxAmount REAL,
         taxPercentage REAL,
-        grandTotal REAL,
-        date TEXT
-    );
-CREATE TABLE
-    IF NOT EXISTS orderHeadTmp (
-        orderId TEXT PRIMARY KEY,
-        invoiceNo TEXT,
         subtotal REAL,
-        discountAmount REAL,
-        discountPercentage REAL,
-        taxAmount REAL,
-        taxPercentage REAL,
         grandTotal REAL,
         date TEXT
     );
 
 CREATE TABLE
-    IF NOT EXISTS orderTran (
+    IF NOT EXISTS order_head_tmp (
+        orderId TEXT PRIMARY KEY,
+        invoiceNo TEXT,
+        discountAmount REAL,
+        discountPercentage REAL,
+        taxAmount REAL,
+        taxPercentage REAL,
+        subtotal REAL,
+        grandTotal REAL,
+        date TEXT
+    );
+
+CREATE TABLE
+    IF NOT EXISTS order_tran (
         uId INTEGER PRIMARY KEY AUTOINCREMENT,
         orderId TEXT,
         invoiceNo TEXT,
@@ -77,7 +78,7 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    IF NOT EXISTS orderTranTmp (
+    IF NOT EXISTS order_tran_tmp (
         uId INTEGER PRIMARY KEY AUTOINCREMENT,
         orderId TEXT,
         invoiceNo TEXT,
@@ -97,4 +98,13 @@ CREATE TABLE
         grandTotal REAL,
         imagePath TEXT,
         date TEXT
+    );
+
+CREATE TABLE
+    IF NOT EXISTS payment_method (
+        code TEXT PRIMARY KEY NOT NULL,
+        description TEXT,
+        description_2 TEXT,
+        displayLang TEXT,
+        imagePath TEXT
     );

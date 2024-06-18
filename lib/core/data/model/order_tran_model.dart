@@ -1,8 +1,9 @@
-import 'dart:convert';
+
+import 'package:store_pos/core/service/app_service.dart';
 
 class OrderTranModel {
-  static const String orderTran = "orderTran";
-  static const String orderTranTmp = "orderTranTmp";
+  static const String orderTran = "order_tran";
+  static const String orderTranTmp = "order_tran_tmp";
   final String orderId;
   final String invoiceNo;
   final String code;
@@ -75,22 +76,30 @@ class OrderTranModel {
       description: map['description'] ?? "",
       description_2: map['description_2'] ?? "",
       displayLang: map['displayLang'] ?? "EN",
-      unitPrice: map['unitPrice'] ?? 0.0,
-      qty: map['qty'] ?? 0.0,
-      taxAmount: map['taxAmount'] ?? 0.0,
-      taxPercentage: map['taxPercentage'] ?? 0.0,
-      discountAmount: map['discountAmount'] ?? 0.0,
-      discountPercentage: map['discountPercentage'] ?? 0.0,
-      extendPrice: map['extendPrice'] ?? 0.0,
-      subtotal: map['subtotal'] ?? 0.0,
-      grandTotal: map['grandTotal'] ?? 0.0,
+      unitPrice: AppService.convertToDouble(map['unitPrice'] ?? 0.0),
+      qty: AppService.convertToDouble(map['qty'] ?? 0.0),
+      taxAmount: AppService.convertToDouble(map['taxAmount'] ?? 0.0),
+      taxPercentage: AppService.convertToDouble(map['taxPercentage'] ?? 0.0),
+      discountAmount: AppService.convertToDouble(map['discountAmount'] ?? 0.0),
+      discountPercentage:
+          AppService.convertToDouble(map['discountPercentage'] ?? 0.0),
+      extendPrice: AppService.convertToDouble(map['extendPrice'] ?? 0.0),
+      subtotal: AppService.convertToDouble(map['subtotal'] ?? 0.0),
+      grandTotal: AppService.convertToDouble(map['grandTotal'] ?? 0.0),
       imagePath: map['imagePath'] ?? "",
       date: map['date'] ?? "",
     );
   }
 
-  String toJson() => json.encode(toMap());
+  static double calculateSubtotal(List<OrderTranModel> records) {
+    final result = records
+        .map((e) => e.unitPrice * e.qty)
+        .reduce((value, element) => value + element);
+    return result;
+  }
 
-  factory OrderTranModel.fromJson(String source) =>
-      OrderTranModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  @override
+  String toString() {
+    return 'OrderTranModel(orderId: $orderId, invoiceNo: $invoiceNo, code: $code, groupCode: $groupCode, description: $description, description_2: $description_2, unitPrice: $unitPrice, qty: $qty, taxAmount: $taxAmount, taxPercentage: $taxPercentage, discountAmount: $discountAmount, discountPercentage: $discountPercentage, extendPrice: $extendPrice, subtotal: $subtotal, grandTotal: $grandTotal, imagePath: $imagePath, date: $date, displayLang: $displayLang)';
+  }
 }

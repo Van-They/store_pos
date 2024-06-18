@@ -1,8 +1,5 @@
-import 'dart:convert';
-
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class GroupItemModel {
-  static const String tableName = "groupItem";
+  static const String tableName = "group_item";
   final String code;
   final String description;
   final String description_2;
@@ -40,8 +37,8 @@ class GroupItemModel {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory GroupItemModel.fromJson(String source) =>
-      GroupItemModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  @override
+  String toString() {
+    return 'GroupItemModel(code: $code, description: $description, description_2: $description_2, displayLang: $displayLang, imgPath: $imgPath, active: $active)';
+  }
 }

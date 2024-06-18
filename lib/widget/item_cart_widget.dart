@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/data/model/order_tran_model.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
+import 'package:store_pos/core/service/app_service.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
@@ -83,7 +84,8 @@ class ItemCartWidget extends GetView<CartController> {
                             ),
                           ),
                           SizedBox(width: appSpace.scale),
-                          TextWidget(text: '${record.qty}'),
+                          TextWidget(
+                              text: '${AppService.convertToInt(record.qty)}'),
                           SizedBox(width: appSpace.scale),
                           Container(
                             color: kborderColor,

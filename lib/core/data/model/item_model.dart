@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class ItemModel {
   static const String tableName = "item";
@@ -56,8 +55,8 @@ class ItemModel {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory ItemModel.fromJson(String source) =>
-      ItemModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  @override
+  String toString() {
+    return 'ItemModel(code: $code, groupCode: $groupCode, description: $description, description_2: $description_2, displayLang: $displayLang, cartQty: $cartQty, unitPrice: $unitPrice, cost: $cost, active: $active, imgPath: $imgPath)';
+  }
 }

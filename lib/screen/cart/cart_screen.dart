@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/data/model/order_tran_model.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
 import 'package:store_pos/core/util/helper.dart';
@@ -31,38 +32,54 @@ class CartScreen extends GetView<CartController> {
         height: 160.scale,
         margin: EdgeInsets.zero,
         padding: EdgeInsets.all(appSpace.scale),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Obx(
+          () {
+            final ordeHead = controller.orderHead.value;
+            final counter = controller.state?.length ?? 0;
+            return Column(
               children: [
-                TextWidget(text: 'subtotal'.tr),
-                const TextWidget(text: '0.0'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextWidget(text: 'subtotal'.tr),
+                    TextWidget(text: '\$${ordeHead?.subtotal ?? 0.0}'),
+                  ],
+                ),
+                SizedBox(height: 4.scale),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextWidget(text: 'discount'.tr),
+                        SizedBox(width: appSpace.scale),
+                        TextWidget(
+                          text: '(${ordeHead?.discountPercentage ?? ''}%)',
+                          color: kErrorColor,
+                        ),
+                      ],
+                    ),
+                    TextWidget(text: '\$${ordeHead?.discountAmount ?? 0.0}'),
+                  ],
+                ),
+                SizedBox(height: appSpace.scale),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextWidget(text: 'amount_to_pay'.tr),
+                    TextWidget(text: '\$${ordeHead?.grandTotal ?? 0.0}'),
+                  ],
+                ),
+                const Spacer(),
+                PrimaryBtnWidget(
+                  padding: EdgeInsets.zero,
+                  label: '${'check_out'.tr} ($counter)',
+                  onTap: () {},
+                )
               ],
-            ),
-            SizedBox(height: 4.scale),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextWidget(text: 'discount'.tr),
-                const TextWidget(text: '0.0'),
-              ],
-            ),
-            SizedBox(height: appSpace.scale),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextWidget(text: 'amount_to_pay'.tr),
-                const TextWidget(text: '0.0'),
-              ],
-            ),
-            const Spacer(),
-            PrimaryBtnWidget(
-              padding: EdgeInsets.zero,
-              label: 'check_out'.tr,
-              onTap: () {},
-            )
-          ],
+            );
+          },
         ),
       ),
     );

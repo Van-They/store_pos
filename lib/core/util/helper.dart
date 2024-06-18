@@ -23,4 +23,7 @@ const appSpace = 8.0;
 int itemCanFitHorizontal({required double width}) => Get.width ~/ width;
 int itemCanFitVertical({required double height}) => Get.height ~/ height;
 
-String formatDate(DateTime dateTime) => DateFormat("dd-MMM-yyyy").format(dateTime);
+String formatDate(DateTime dateTime) =>
+    DateFormat("dd-MMM-yyyy").format(dateTime); //11-Jul-2000
+
+String invoiceFormater(int no) => no.toString().padLeft(5, "0");

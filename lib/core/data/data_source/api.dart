@@ -17,4 +17,6 @@ abstract class Api {
   Future<ApiResponse> onGetItemCart();
 
   Future<ApiResponse> onGetSetting();
+
+  Future<ApiResponse> onGetOrderHead();
 }

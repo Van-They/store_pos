@@ -16,11 +16,10 @@ class ItemWidget extends GetView<CartController> {
     super.key,
     required this.record,
     this.isList = false,
-    this.isCart = false,
   });
 
   final ItemModel record;
-  final bool isList, isCart;
+  final bool isList;
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +97,7 @@ class ItemWidget extends GetView<CartController> {
           Stack(
             children: [
               ImageWidget(
-                imgPath: '',
+                imgPath: record.imgPath,
                 height: 130.scale,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(appSpace.scale),
@@ -160,11 +159,12 @@ class ItemWidget extends GetView<CartController> {
                         padding: EdgeInsets.all(4.scale),
                         margin: EdgeInsets.only(right: appSpace.scale),
                         decoration: BoxDecoration(
-                            color: kErrorColor,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(7.5.scale),
-                              bottomRight: Radius.circular(7.5.scale),
-                            )),
+                          color: kErrorColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(7.5.scale),
+                            bottomRight: Radius.circular(7.5.scale),
+                          ),
+                        ),
                         child: Icon(
                           Icons.shopping_cart_outlined,
                           color: kWhite,
