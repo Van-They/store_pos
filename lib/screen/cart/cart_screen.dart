@@ -4,6 +4,7 @@ import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/data/model/order_tran_model.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
 import 'package:store_pos/core/util/helper.dart';
+import 'package:store_pos/screen/cart/components/check_out_screen.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
 import 'package:store_pos/widget/empty_widget.dart';
@@ -21,7 +22,6 @@ class CartScreen extends GetView<CartController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(title: 'cart'.tr),
-      resizeToAvoidBottomInset: false,
       body: controller.obx(
         onEmpty: const EmptyWidget(),
         onLoading: const LoadingWidget(),
@@ -75,7 +75,9 @@ class CartScreen extends GetView<CartController> {
                 PrimaryBtnWidget(
                   padding: EdgeInsets.zero,
                   label: '${'check_out'.tr} ($counter)',
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed(CheckOutScreen.routeName);
+                  },
                 )
               ],
             );

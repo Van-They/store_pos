@@ -11,17 +11,16 @@ class GroupItemRepo {
 
   const GroupItemRepo(this.api);
 
-  Future<Either<Failure, RepoResponse<String>>> onCreateGroupItem(
+  Future<Either<Failure, RepoResponse<GroupItemModel>>> onCreateGroupItem(
       {required Map<String, dynamic> arg}) async {
     try {
       final result = await api.onCreateGroupItem(arg: arg);
       if (result.status != 'success') {
         throw GeneralException();
       }
+      final record = GroupItemModel.fromMap(result.record);
       return Right(
-        RepoResponse(
-          record: result.record,
-        ),
+        RepoResponse(record: record),
       );
     } on GeneralException {
       return Left(ServerFailure('failed'.tr));

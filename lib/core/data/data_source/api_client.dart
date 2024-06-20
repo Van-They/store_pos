@@ -55,7 +55,7 @@ class ApiClient extends Api {
       }
 
       return ApiResponse(
-        record: Status.success.name,
+        record: arg,
         status: Status.success.name,
       );
     } on Exception {
@@ -255,6 +255,7 @@ class ApiClient extends Api {
         status: Status.success.name,
       );
     } catch (e) {
+      logger.i(e);
       rethrow;
     }
   }
@@ -266,24 +267,20 @@ class ApiClient extends Api {
 
       final setting = await database.query(SettingModel.tableName);
 
-      // Map<String, Object?> data;
+      Map<String, Object?> data;
 
-      // if (setting.isEmpty) {
-      //   data = {
-      //     'invoiceNo': 1,
-      //     'orderNo': 1,
-      //   };
-
-      //   final result = await database.insert(SettingModel.tableName, data);
-      //   if (result == -1) {
-      //     throw GeneralException();
-      //   }
-      // } else {
-      //   data = setting[0];
-      // }
+      if (setting.isEmpty) {
+        data = {'invoiceNo': 1, 'orderNo': 1, 'invoiceText': "IN"};
+        final result = await database.insert(SettingModel.tableName, data);
+        if (result == -1) {
+          throw GeneralException();
+        }
+      } else {
+        data = setting[0];
+      }
 
       return ApiResponse(
-        record: setting[0],
+        record: data,
         status: Status.success.name,
       );
     } catch (e) {
@@ -298,15 +295,17 @@ class ApiClient extends Api {
 
       final orderHead = await database.query(OrderHead.orderHeadTmp);
 
+      final setting = Get.find<SettingController>().settingModel;
+
       Map<String, Object?> response;
 
-      final setting = Get.find<SettingController>().settingModel;
       //if order head not exist
       if (orderHead.isEmpty) {
         //if order head does not exist create new orderhead
         final data = {
           'orderId': "${setting.value!.orderNo}",
-          'invoiceNo': "R${invoiceFormater(setting.value!.invoiceNo)}",
+          'invoiceNo':
+              "${setting.value!.invoiceText}${invoiceFormater(setting.value!.invoiceNo)}",
           'subtotal': 0.0,
           'discountAmount': 0.0,
           'discountPercentage': 0.0,
@@ -336,7 +335,7 @@ class ApiClient extends Api {
         status: Status.success.name,
       );
     } catch (e) {
-      throw GeneralException();
+      rethrow;
     }
   }
 }

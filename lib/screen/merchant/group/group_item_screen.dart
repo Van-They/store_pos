@@ -9,7 +9,6 @@ import 'package:store_pos/widget/box_widget.dart';
 import 'package:store_pos/widget/custom_empty_widget.dart';
 import 'package:store_pos/widget/custom_error_widget.dart';
 import 'package:store_pos/widget/group_item_widget.dart';
-import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/slidable_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 

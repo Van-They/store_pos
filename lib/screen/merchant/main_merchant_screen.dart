@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/merchant/group/group_item_screen.dart';
 import 'package:store_pos/screen/merchant/item/item_screen.dart';
@@ -48,32 +49,69 @@ class _MainMerchantScreenState extends State<MainMerchantScreen> {
             child: Wrap(
               children: [
                 BoxWidget(
-                  margin: EdgeInsets.only(right: appSpace.scale),
-                  width: 70.scale,
-                  height: 50.scale,
+                  width: double.infinity,
+                  height: 100.scale,
+                  backgroundColor: kPrimaryColor,
                   alignment: Alignment.center,
                   onTap: () {
                     Get.toNamed(ItemScreen.routeName);
                   },
-                  child: TextWidget(
+                  child: const TextWidget(
                     text: "Item",
                   ),
                 ),
                 BoxWidget(
-                  margin: EdgeInsets.only(right: appSpace.scale),
-                  width: 70.scale,
-                  height: 50.scale,
+                  width: double.infinity,
+                  height: 100.scale,
+                  backgroundColor: kSecondaryColor,
                   onTap: () {
                     Get.toNamed(GroupItemScreen.routeName);
                   },
                   alignment: Alignment.center,
-                  child: TextWidget(
+                  child: const TextWidget(
                     text: "Group",
+                  ),
+                ),
+                BoxWidget(
+                  width: double.infinity,
+                  height: 100.scale,
+                  backgroundColor: kSecondaryColor,
+                  onTap: () {
+                    Get.toNamed(GroupItemScreen.routeName);
+                  },
+                  alignment: Alignment.center,
+                  child: const TextWidget(
+                    text: "Customer",
+                  ),
+                ),
+                BoxWidget(
+                  width: double.infinity,
+                  height: 100.scale,
+                  backgroundColor: kSecondaryColor,
+                  onTap: () {
+                    Get.toNamed(GroupItemScreen.routeName);
+                  },
+                  alignment: Alignment.center,
+                  child: const TextWidget(
+                    text: "Payment",
+                  ),
+                ),
+                BoxWidget(
+                  width: double.infinity,
+                  height: 100.scale,
+                  backgroundColor: kSecondaryColor,
+                  onTap: () {
+                    Get.toNamed(GroupItemScreen.routeName);
+                  },
+                  alignment: Alignment.center,
+                  child: const TextWidget(
+                    text: "Setting",
                   ),
                 ),
               ],
             ),
           ),
+
           SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
 
           // SliverToBoxAdapter(

@@ -17,7 +17,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: TextWidget(text: title),
+      title: TextWidget(
+        text: title,
+        fontSize: 18.scale,
+      ),
       scrolledUnderElevation: 0.0,
       leading: isBack
           ? IconButton(

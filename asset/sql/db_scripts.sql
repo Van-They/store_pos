@@ -25,7 +25,8 @@ CREATE TABLE
     IF NOT EXISTS setting (
         uId INTEGER PRIMARY KEY AUTOINCREMENT,
         invoiceNo INTEGER,
-        orderNo INTEGER
+        orderNo INTEGER,
+        invoiceText TEXT
     );
 
 CREATE TABLE
@@ -108,3 +109,24 @@ CREATE TABLE
         displayLang TEXT,
         imagePath TEXT
     );
+
+CREATE TABLE
+    IF NOT EXISTS customer (
+        code TEXT PRIMARY KEY NOT NULL,
+        firstName TEXT,
+        lastName TEXT,
+        phoneNumber TEXT,
+        imagePath TEXT,
+        dob TEXT,
+        date TEXT
+    );
+
+CREATE TABLE
+    IF NOT EXISTS posh_cash (
+        orderId TEXT PRIMARY KEY NOT NULL,
+        invoiceNo TEXT,
+        paymentCode TEXT,
+        paymentDesc TEXT,
+        amount REAL,
+        date TEXT
+    )

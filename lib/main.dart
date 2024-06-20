@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/dependancy/injection.dart';
 import 'package:store_pos/core/route/app_route.dart';
+import 'package:store_pos/core/service/db_service.dart';
 import 'package:store_pos/localication/translate.dart';
 import 'package:store_pos/screen/main/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await DbService.instance.database;
   runApp(const MyApp());
 }
 

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:store_pos/screen/cart/cart_screen.dart';
+import 'package:store_pos/screen/cart/components/check_out_screen.dart';
 import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/home/home_screen.dart';
 import 'package:store_pos/screen/main/main_screen.dart';
@@ -52,6 +53,10 @@ List<GetPage<dynamic>> appRoute = [
   GetPage(
     name: GroupSetupScreen.routeName,
     page: () => const GroupSetupScreen(),
+  ),
+  GetPage(
+    name: CheckOutScreen.routeName,
+    page: () => const CheckOutScreen(),
   ),
   GetPage(
     name: FetchGroupItemScreen.routeName,

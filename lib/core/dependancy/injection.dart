@@ -15,9 +15,9 @@ class Injection extends Bindings {
     Get.put<Api>(permanent: true, ApiClient());
     Get.put<SettingRepo>(SettingRepo(Get.find<Api>()), permanent: true);
     Get.put<SettingController>(SettingController(), permanent: true);
-    Get.put<CartRepo>(CartRepo(Get.find<Api>()), permanent: true);
     Get.put<GroupItemRepo>(GroupItemRepo(Get.find<Api>()), permanent: true);
     Get.put<ItemRepo>(ItemRepo(Get.find<Api>()), permanent: true);
+    Get.put<CartRepo>(CartRepo(Get.find<Api>()), permanent: true);
     Get.put<CartController>(CartController(), permanent: true);
     Get.put<GroupController>(GroupController());
   }

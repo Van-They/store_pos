@@ -14,7 +14,6 @@ class Translate extends Translations {
     'disable': 'Disable',
     'active': 'Active',
 
-
     //-----------------
     'add_to_cart': 'Add To Cart',
     'group_code': 'Group code',
@@ -48,6 +47,7 @@ class Translate extends Translations {
 
     //-----------------
     'item': 'Item',
+    'cart': 'Cart',
 
     //-----------------
     'item_set_up': 'Item set up',

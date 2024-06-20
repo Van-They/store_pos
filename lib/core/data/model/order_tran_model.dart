@@ -1,4 +1,3 @@
-
 import 'package:store_pos/core/service/app_service.dart';
 
 class OrderTranModel {
@@ -92,6 +91,9 @@ class OrderTranModel {
   }
 
   static double calculateSubtotal(List<OrderTranModel> records) {
+    if (records.isEmpty) {
+      return 0.0;
+    }
     final result = records
         .map((e) => e.unitPrice * e.qty)
         .reduce((value, element) => value + element);
