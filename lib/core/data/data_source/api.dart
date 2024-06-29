@@ -16,7 +16,12 @@ abstract class Api {
 
   Future<ApiResponse> onGetItemCart();
 
-  Future<ApiResponse> onGetSetting();
-
   Future<ApiResponse> onGetOrderHead();
+
+  Future<ApiResponse> onUpdateCart({required String code, required double qty});
+
+  Future<ApiResponse> onGetCustomer();
+  Future<ApiResponse> onGetPaymentMethod();
+
+  Future<ApiResponse> onCheckOutCart();
 }

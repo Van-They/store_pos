@@ -69,20 +69,14 @@ class GroupItemScreen extends GetView<GroupController> {
                     itemBuilder: (context, index) {
                       final record = records[index];
                       return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: appSpace.scale),
                         child: SlidableWidget(
-                          onDelete: () {
-
-                          },
-                          onEdit: () {
-
-                          },
-                          child: GroupItemWidget(
-                            record: record
-                          ),
+                          onDelete: () {},
+                          onEdit: () {},
+                          child: GroupItemWidget(record: record),
                         ),
                       );
-
                     },
                   );
                 },

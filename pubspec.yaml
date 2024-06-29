@@ -78,7 +78,6 @@ flutter:
   assets:
     - asset/images/
     - asset/sql/
-    - asset/sql/group_scripts/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

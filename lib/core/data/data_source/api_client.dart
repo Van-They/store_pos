@@ -2,25 +2,28 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqlite_api.dart';
 import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/data/data_source/api.dart';
 import 'package:store_pos/core/data/data_source/api_response.dart';
+import 'package:store_pos/core/data/model/customer_model.dart';
 import 'package:store_pos/core/data/model/group_item_model.dart';
 import 'package:store_pos/core/data/model/item_model.dart';
 import 'package:store_pos/core/data/model/order_head_model.dart';
 import 'package:store_pos/core/data/model/order_tran_model.dart';
+import 'package:store_pos/core/data/model/payment_method_model.dart';
+import 'package:store_pos/core/data/model/posh_cash.dart';
 import 'package:store_pos/core/data/model/setting_model.dart';
 import 'package:store_pos/core/exception/exceptions.dart';
 import 'package:store_pos/core/exception/failures.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
-import 'package:store_pos/core/global/setting_controller.dart';
 import 'package:store_pos/core/service/db_service.dart';
 import 'package:store_pos/core/util/helper.dart';
 
 class ApiClient extends Api {
-  Database? _db;
+  late Database db;
 
-  Future<Database> get db async => _db ??= await DbService.instance.database;
+  Future<void> getDatabase() async => db = await DbService.instance.database;
 
   @override
   Future<ApiResponse> onGetHomeItems({Map? arg}) async {
@@ -40,12 +43,10 @@ class ApiClient extends Api {
     required Map<String, dynamic> arg,
   }) async {
     try {
-      final response = await db.then(
-        (value) => value.insert(
-          GroupItemModel.tableName,
-          arg,
-          conflictAlgorithm: ConflictAlgorithm.ignore,
-        ),
+      final response = await db.insert(
+        GroupItemModel.tableName,
+        arg,
+        conflictAlgorithm: ConflictAlgorithm.ignore,
       );
       if (response == -1) {
         throw GeneralException();
@@ -66,12 +67,55 @@ class ApiClient extends Api {
   @override
   Future<ApiResponse> onGetGroupItem() async {
     try {
-      final scrip =
-          await rootBundle.loadString("asset/sql/group_scripts/get_groups.sql");
+      // final scrip =
+      //     await rootBundle.loadString("asset/sql/group_scripts/get_groups.sql");
+      //
+      // final response = await db.rawQuery(scrip);
 
-      final response = await db.then((value) => value.rawQuery(scrip));
+      final data = [
+        {
+          'code': "code",
+          'description': "description",
+          'description_2': "description_2",
+          'displayLang': "displayLang",
+          'active': 1,
+          'imgPath': "",
+        },
+        {
+          'code': "code",
+          'description': "description",
+          'description_2': "description_2",
+          'displayLang': "displayLang",
+          'active': 1,
+          'imgPath': "",
+        },
+        {
+          'code': "code",
+          'description': "description",
+          'description_2': "description_2",
+          'displayLang': "displayLang",
+          'active': 1,
+          'imgPath': "",
+        },
+        {
+          'code': "code",
+          'description': "description",
+          'description_2': "description_2",
+          'displayLang': "displayLang",
+          'active': 1,
+          'imgPath': "",
+        },
+        {
+          'code': "code",
+          'description': "description",
+          'description_2': "description_2",
+          'displayLang': "displayLang",
+          'active': 1,
+          'imgPath': "",
+        }
+      ];
       return ApiResponse(
-        record: response,
+        record: data,
         status: Status.success.name,
       );
     } catch (e) {
@@ -82,9 +126,10 @@ class ApiClient extends Api {
   @override
   Future<ApiResponse> onCreateItem({required Map<String, dynamic> arg}) async {
     try {
-      final result = await db.then(
-        (value) => value.insert(ItemModel.tableName, arg,
-            conflictAlgorithm: ConflictAlgorithm.ignore),
+      final result = await db.insert(
+        ItemModel.tableName,
+        arg,
+        conflictAlgorithm: ConflictAlgorithm.ignore,
       );
       if (result == -1) {
         return ApiResponse(
@@ -178,15 +223,83 @@ class ApiClient extends Api {
   }
 
   @override
+  Future<ApiResponse> onGetItemCart() async {
+    try {
+      final result = await db.query(OrderTranModel.orderTranTmp);
+
+      return ApiResponse(
+        record: result,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      logger.i(e);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetOrderHead() async {
+    try {
+      final settingList = await db.query(SettingModel.tableName);
+
+      if (settingList.isEmpty) {
+        throw GeneralException();
+      }
+
+      final setting = SettingModel.fromMap(settingList[0]);
+
+      final orderHead = await db.query(OrderHead.orderHeadTmp);
+
+      Map<String, Object?> response;
+
+      //if order head not exist
+      if (orderHead.isEmpty) {
+        //if order head does not exist create new orderhead
+        final data = {
+          'orderId': "${setting.orderNo}",
+          'invoiceNo':
+              "${setting.invoiceText}${invoiceFormater(setting.invoiceNo)}",
+          'subtotal': 0.0,
+          'discountAmount': 0.0,
+          'discountPercentage': 0.0,
+          'taxAmount': 0.0,
+          'taxPercentage': 0.0,
+          'grandTotal': 0.0,
+          'date': formatDate(DateTime.now()),
+        };
+
+        final createHead = await db.insert(OrderHead.orderHeadTmp, data);
+        //if create new orderHead not success throw exception
+        if (createHead == -1) {
+          throw GeneralException();
+        }
+        response = data;
+
+        //update setting when orderHead create success
+        setting.orderNo++;
+        setting.invoiceNo++;
+        await db.update(SettingModel.tableName, setting.toMap());
+      } else {
+        response = orderHead[0];
+      }
+
+      return ApiResponse(
+        record: response,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<ApiResponse> toggleCart({required ItemModel arg}) async {
     try {
-      final database = await db;
-
       //orderHead only exist 1 during process
       final orderHead = Get.find<CartController>().orderHead;
 
       //check if item already exist in cart
-      final isItemExist = await database.delete(OrderTranModel.orderTranTmp,
+      final isItemExist = await db.delete(OrderTranModel.orderTranTmp,
           where: "code=?", whereArgs: [arg.code]);
 
       final orderTran = {
@@ -212,13 +325,13 @@ class ApiClient extends Api {
 
       if (isItemExist < 1) {
         final createOrderTran =
-            await database.insert(OrderTranModel.orderTranTmp, orderTran);
+            await db.insert(OrderTranModel.orderTranTmp, orderTran);
         if (createOrderTran == -1) {
           throw GeneralException();
         }
       }
 
-      final records = await database.query(OrderTranModel.orderTranTmp);
+      final records = await db.query(OrderTranModel.orderTranTmp);
 
       List<OrderTranModel> orderTranList = [];
 
@@ -230,7 +343,7 @@ class ApiClient extends Api {
       orderHead.value!.subtotal = subtotal;
       orderHead.value!.grandTotal =
           OrderHead.calculateGrandtotal(orderHead.value!);
-      await database.update(OrderHead.orderHeadTmp, orderHead.value!.toMap());
+      await db.update(OrderHead.orderHeadTmp, orderHead.value!.toMap());
 
       debugPrint(orderHead.value!.toString());
 
@@ -244,43 +357,70 @@ class ApiClient extends Api {
   }
 
   @override
-  Future<ApiResponse> onGetItemCart() async {
+  Future<ApiResponse> onUpdateCart(
+      {required String code, required double qty}) async {
     try {
-      final result = await db.then(
-        (value) => value.query(OrderTranModel.orderTranTmp),
+      //orderHead only exist 1 during process
+      final orderHead = Get.find<CartController>().orderHead;
+
+      final currentItemList = await db.query(OrderTranModel.orderTranTmp,
+          where: 'code=?', whereArgs: [code]);
+
+      if (currentItemList.isEmpty) throw GeneralException();
+
+      final currrentItemMap = currentItemList[0];
+
+      final currentItem = OrderTranModel.fromMap(currrentItemMap);
+
+      currentItem.qty = qty;
+      currentItem.subtotal =
+          OrderTranModel.calculateSubtotalByItem(currentItem);
+      currentItem.grandTotal =
+          OrderTranModel.calculateSubtotalByItem(currentItem);
+
+      await db.update(
+        OrderTranModel.orderTranTmp,
+        currentItem.toMap(),
+        where: "code=?",
+        whereArgs: [code],
       );
 
+      final records = await db.query(OrderTranModel.orderTranTmp);
+
+      List<OrderTranModel> orderTranList = [];
+
+      for (var e in records) {
+        orderTranList.add(OrderTranModel.fromMap(e));
+      }
+
+      final subtotal = OrderTranModel.calculateSubtotal(orderTranList);
+      orderHead.value!.subtotal = subtotal;
+      orderHead.value!.grandTotal =
+          OrderHead.calculateGrandtotal(orderHead.value!);
+      await db.update(OrderHead.orderHeadTmp, orderHead.value!.toMap());
+
+      debugPrint(orderHead.value!.toString());
+
+      final indexCurrentItem =
+          orderTranList.indexWhere((element) => element.code == code);
+
+      final orderTran = orderTranList[indexCurrentItem];
+
       return ApiResponse(
-        record: result,
+        record: orderTran.toMap(),
         status: Status.success.name,
       );
     } catch (e) {
-      logger.i(e);
       rethrow;
     }
   }
 
   @override
-  Future<ApiResponse> onGetSetting() async {
+  Future<ApiResponse> onGetCustomer() async {
     try {
-      final database = await db;
-
-      final setting = await database.query(SettingModel.tableName);
-
-      Map<String, Object?> data;
-
-      if (setting.isEmpty) {
-        data = {'invoiceNo': 1, 'orderNo': 1, 'invoiceText': "IN"};
-        final result = await database.insert(SettingModel.tableName, data);
-        if (result == -1) {
-          throw GeneralException();
-        }
-      } else {
-        data = setting[0];
-      }
-
+      final records = await db.query(CustomerModel.tableName);
       return ApiResponse(
-        record: data,
+        record: records,
         status: Status.success.name,
       );
     } catch (e) {
@@ -289,49 +429,56 @@ class ApiClient extends Api {
   }
 
   @override
-  Future<ApiResponse> onGetOrderHead() async {
+  Future<ApiResponse> onGetPaymentMethod() async {
     try {
-      final database = await db;
+      final records = await db.query(PaymentMethodModel.tableName);
+      return ApiResponse(
+        record: records,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-      final orderHead = await database.query(OrderHead.orderHeadTmp);
+  @override
+  Future<ApiResponse> onCheckOutCart() async {
+    try {
+      final orderHead = Get.find<CartController>().orderHead.value;
 
-      final setting = Get.find<SettingController>().settingModel;
-
-      Map<String, Object?> response;
-
-      //if order head not exist
-      if (orderHead.isEmpty) {
-        //if order head does not exist create new orderhead
-        final data = {
-          'orderId': "${setting.value!.orderNo}",
-          'invoiceNo':
-              "${setting.value!.invoiceText}${invoiceFormater(setting.value!.invoiceNo)}",
-          'subtotal': 0.0,
-          'discountAmount': 0.0,
-          'discountPercentage': 0.0,
-          'taxAmount': 0.0,
-          'taxPercentage': 0.0,
-          'grandTotal': 0.0,
-          'date': formatDate(DateTime.now()),
-        };
-
-        final createHead = await database.insert(OrderHead.orderHeadTmp, data);
-        //if create new orderHead not success throw exception
-        if (createHead == -1) {
-          throw GeneralException();
-        }
-        response = data;
-      } else {
-        response = orderHead[0];
+      if (orderHead == null) {
+        throw GeneralException();
       }
 
-      //update setting when orderHead create success
-      setting.value!.orderNo++;
-      setting.value!.invoiceNo++;
-      await database.update(SettingModel.tableName, setting.value!.toMap());
+      final poshCash = {
+        'orderId': orderHead.orderId,
+        'invoiceNo': orderHead.invoiceNo,
+        'paymentCode': "CASH",
+        'paymentDesc': "CASH",
+        'amount': orderHead.grandTotal,
+        'date': orderHead.date,
+      };
+
+      await db.insert(PoshCash.tableName, poshCash);
+
+      // await db.execute("INSERT INTO order_head SELECT * FROM order_head_tmp");
+      // await db.execute("INSERT INTO order_tran SELECT * FROM order_tran_tmp");
+      // await db.execute("DELETE FROM order_head_tmp");
+      // await db.execute("DELETE FROM order_tran_tmp");
+
+      final fileScript =
+          await rootBundle.loadString("asset/sql/check_out_scripts.sql");
+
+      final listCheckOutScripts = fileScript.split(";");
+
+      for (var e in listCheckOutScripts) {
+        if (e.isNotEmpty) {
+          await db.execute(e.trim());
+        }
+      }
 
       return ApiResponse(
-        record: response,
+        record: Status.success.name,
         status: Status.success.name,
       );
     } catch (e) {

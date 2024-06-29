@@ -14,6 +14,7 @@ CREATE TABLE
         groupCode TEXT,
         description TEXT,
         description_2 TEXT,
+        qty REAL,
         unitPrice REAL,
         cost REAL,
         active INTEGER,
@@ -129,4 +130,9 @@ CREATE TABLE
         paymentDesc TEXT,
         amount REAL,
         date TEXT
+    );
+
+CREATE TABLE
+    IF NOT EXISTS wishlist(
+        code TEXT PRIMARY KEY NOT NULL
     )

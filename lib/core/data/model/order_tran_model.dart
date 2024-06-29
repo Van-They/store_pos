@@ -3,24 +3,24 @@ import 'package:store_pos/core/service/app_service.dart';
 class OrderTranModel {
   static const String orderTran = "order_tran";
   static const String orderTranTmp = "order_tran_tmp";
-  final String orderId;
-  final String invoiceNo;
-  final String code;
-  final String groupCode;
-  final String description;
-  final String description_2;
-  final double unitPrice;
-  final double qty;
-  final double taxAmount;
-  final double taxPercentage;
-  final double discountAmount;
-  final double discountPercentage;
-  final double extendPrice;
-  final double subtotal;
-  final double grandTotal;
-  final String imagePath;
-  final String date;
-  final String displayLang;
+  String orderId;
+  String invoiceNo;
+  String code;
+  String groupCode;
+  String description;
+  String description_2;
+  double unitPrice;
+  double qty;
+  double taxAmount;
+  double taxPercentage;
+  double discountAmount;
+  double discountPercentage;
+  double extendPrice;
+  double subtotal;
+  double grandTotal;
+  String imagePath;
+  String date;
+  String displayLang;
 
   OrderTranModel({
     required this.orderId,
@@ -98,6 +98,12 @@ class OrderTranModel {
         .map((e) => e.unitPrice * e.qty)
         .reduce((value, element) => value + element);
     return result;
+  }
+
+  static double calculateSubtotalByItem(OrderTranModel record) {
+    final unitPrice = record.unitPrice;
+    final qty = record.qty;
+    return unitPrice * qty;
   }
 
   @override

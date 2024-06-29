@@ -8,16 +8,16 @@ class PrimaryBtnWidget extends StatelessWidget {
     super.key,
     this.label = 'button',
     this.onTap,
-    this.padding,
+    this.margin,
     this.size,
     this.color = kPrimaryColor,
-    this.width=double.infinity,
+    this.width = double.infinity,
     this.height,
   });
 
   final String label;
   final VoidCallback? onTap;
-  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
   final Size? size;
   final double width;
   final double? height;
@@ -26,7 +26,7 @@ class PrimaryBtnWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? EdgeInsets.all(appSpace.scale),
+      padding: margin ?? EdgeInsets.all(appSpace.scale),
       child: FilledButton(
         style: FilledButton.styleFrom(
           backgroundColor: color,
@@ -37,10 +37,11 @@ class PrimaryBtnWidget extends StatelessWidget {
               appSpace.scale,
             ),
           ),
-          minimumSize: size ?? Size(
-            width,
-            height ?? 40.scale,
-          ),
+          minimumSize: size ??
+              Size(
+                width,
+                height ?? 40.scale,
+              ),
         ),
         onPressed: onTap ?? () {},
         child: TextWidget(text: label),

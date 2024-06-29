@@ -1,5 +1,4 @@
-
-class Customer {
+class CustomerModel {
   static const String tableName = "customer";
   String code;
   String firstName;
@@ -8,7 +7,7 @@ class Customer {
   String imagePath;
   String dob;
   String date;
-  Customer({
+  CustomerModel({
     required this.code,
     required this.firstName,
     required this.lastName,
@@ -30,8 +29,8 @@ class Customer {
     };
   }
 
-  factory Customer.fromMap(Map<String, dynamic> map) {
-    return Customer(
+  factory CustomerModel.fromMap(Map<String, dynamic> map) {
+    return CustomerModel(
       code: map['code'] ?? "",
       firstName: map['firstName'] ?? "",
       lastName: map['lastName'] ?? "",

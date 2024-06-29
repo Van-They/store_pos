@@ -73,7 +73,7 @@ class CartScreen extends GetView<CartController> {
                 ),
                 const Spacer(),
                 PrimaryBtnWidget(
-                  padding: EdgeInsets.zero,
+                  margin: EdgeInsets.zero,
                   label: '${'check_out'.tr} ($counter)',
                   onTap: () {
                     Get.toNamed(CheckOutScreen.routeName);

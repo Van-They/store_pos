@@ -27,25 +27,26 @@ class ExpandedAppBarWidget extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       scrolledUnderElevation: 0.0,
-      expandedHeight: expandHeight ?? 90.scale,
+      // expandedHeight: expandHeight ?? 90.scale,
       backgroundColor: kWhite,
       leading: IconButton(
         onPressed: onBack ?? () => Get.back(),
         icon: Icon(
           Icons.arrow_back_ios_new_rounded,
           size: 18.scale,
-          color: kPrimaryColor,
         ),
       ),
       automaticallyImplyLeading: false,
-      flexibleSpace: FlexibleSpaceBar(
-        stretchModes: const [StretchMode.fadeTitle],
-        title: title,
-        centerTitle: isCenterTitle,
-        collapseMode: CollapseMode.parallax,
-        titlePadding: titlePadding,
-        background: expandBackground,
-      ),
+      title: title,
+      centerTitle: isCenterTitle,
+      // flexibleSpace: FlexibleSpaceBar(
+      //   stretchModes: const [StretchMode.fadeTitle],
+      //   title: title,
+      //   centerTitle: isCenterTitle,
+      //   collapseMode: CollapseMode.parallax,
+      //   titlePadding: titlePadding,
+      //   background: expandBackground,
+      // ),
     );
   }
 }

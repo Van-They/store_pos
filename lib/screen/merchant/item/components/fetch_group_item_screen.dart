@@ -4,13 +4,13 @@ import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/data/model/group_item_model.dart';
 import 'package:store_pos/core/util/helper.dart';
-import 'package:store_pos/screen/merchant/group/components/group_set_up_screen.dart';
 import 'package:store_pos/screen/merchant/group/group_controller.dart';
+import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
 import 'package:store_pos/widget/custom_empty_widget.dart';
 import 'package:store_pos/widget/custom_error_widget.dart';
-import 'package:store_pos/widget/expanded_app_bar_widget.dart';
 import 'package:store_pos/widget/image_widget.dart';
+import 'package:store_pos/widget/input_text_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
 class FetchGroupItemScreen extends GetView<GroupController> {
@@ -20,85 +20,94 @@ class FetchGroupItemScreen extends GetView<GroupController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(left: appSpace.scale, right: appSpace.scale),
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            ExpandedAppBarWidget(
-              title: TextWidget(
-                text: 'group_item'.tr,
-                color: kPrimaryColor,
+      appBar: AppBarWidget(
+        title: 'group_item'.tr,
+        isBack: true,
+      ),
+      body: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            automaticallyImplyLeading: false,
+            titleSpacing: appSpace.scale,
+            toolbarHeight: 70.scale,
+            title: InputTextWidget(
+              maxLine: 1,
+              hintText: "${'search_group_here'.tr}...",
+              suffixIcon: Icon(
+                Icons.search,
+                size: 20.scale,
               ),
             ),
-            SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextWidget(text: 'list_group'.tr),
-                  BoxWidget(
-                    onTap: () => Get.toNamed(GroupSetupScreen.routeName),
-                    height: 45.scale,
-                    borderColor: kBgColor,
-                    padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-                    enableShadow: true,
-                    child: TextWidget(text: 'add_new'.tr),
+          ),
+          SliverToBoxAdapter(
+            child: controller.obx(
+              onError: (error) => const CustomErrorWidget(),
+              onEmpty: const CustomEmptyWidget(),
+              (state) {
+                final records = state ?? [];
+                return MasonryGridView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: records.length,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
+                  crossAxisSpacing: appSpace.scale,
+                  mainAxisSpacing: appSpace.scale,
+                  gridDelegate:
+                      const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
                   ),
-                ],
-              ),
+                  itemBuilder: (context, index) {
+                    final record = records[index];
+                    return _buildGroupItem(record);
+                  },
+                );
+              },
             ),
-            SliverFillRemaining(
-              child: controller.obx(
-                onError: (error) => const CustomErrorWidget(),
-                onEmpty: const CustomEmptyWidget(),
-                (state) {
-                  final records = state ?? [];
-                  return MasonryGridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: records.length,
-                    crossAxisSpacing: appSpace.scale,
-                    gridDelegate:
-                        SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: itemCanFitHorizontal(width: 150.scale),
-                    ),
-                    itemBuilder: (context, index) {
-                      final record = records[index];
-                      return _buildGroupItem(record);
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildGroupItem(GroupItemModel record) {
     return BoxWidget(
-      height: 70.scale,
+      height: 80.scale,
       onTap: () => Get.back(result: {"group_code": record.code}),
       enableShadow: true,
+      margin: EdgeInsets.only(top: 4.scale),
       child: Row(
         children: [
           ImageWidget(
             imgPath: record.imgPath,
-            width: 70.scale,
+            width: 80.scale,
           ),
           SizedBox(width: appSpace.scale),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              SizedBox(height: 4.scale),
               TextWidget(
-                text: record.code,
+                text: record.displayLang.contains("KH")
+                    ? record.description_2
+                    : record.description,
                 fontSize: 16.scale,
               ),
-              if (record.displayLang.contains("EN"))
-                TextWidget(text: record.description),
-              if (record.displayLang.contains("KH"))
-                TextWidget(text: record.description_2)
+              SizedBox(height: 4.scale),
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: appSpace.scale, vertical: 2.scale),
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.circular(appSpace.scale),
+                ),
+                child: TextWidget(
+                  text: "${'code'.tr}: ${record.code}",
+                  color: kWhite,
+                  fontSize: 12.scale,
+                ),
+              ),
             ],
           ),
         ],

@@ -61,7 +61,7 @@ class GroupItemWidget extends GetView {
                 PrimaryBtnWidget(
                   onTap: () {},
                   color: kLabel,
-                  padding: EdgeInsets.zero,
+                  margin: EdgeInsets.zero,
                   width: 90.scale,
                   height: 30.scale,
                   label: 'disable'.tr,

@@ -81,13 +81,11 @@ class HomeScreen extends GetView<HomeController> {
             onTap: () {
               Get.toNamed(CategoryScreen.routeName);
             },
-            padding: EdgeInsets.symmetric(
-              horizontal: 16.scale,
-              vertical: appSpace.scale,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
             radius: 0,
             child: Column(
               children: [
+                SizedBox(height: appSpace.scale),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -104,55 +102,42 @@ class HomeScreen extends GetView<HomeController> {
                   ],
                 ),
                 SizedBox(height: appSpace.scale),
-                Obx(() {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children:
-                        List.generate(controller.groupList.length, (index) {
-                      final record = controller.groupList[index];
-                      return Padding(
-                        padding: EdgeInsets.only(right: appSpace.scale),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.greenAccent,
-                                borderRadius:
-                                    BorderRadius.circular(appSpace.scale),
-                              ),
-                              width: 70.scale,
-                              height: 70.scale,
-                              child: ImageWidget(
-                                imgPath: record.imgPath,
-                              ),
+                Obx(
+                  () {
+                    return SizedBox(
+                      height: 90.scale,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.groupList.length,
+                        itemBuilder: (context, index) {
+                          final record = controller.groupList[index];
+                          return Container(
+                            margin: EdgeInsets.only(right: appSpace.scale),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.greenAccent,
+                                    borderRadius:
+                                        BorderRadius.circular(appSpace.scale),
+                                  ),
+                                  width: 70.scale,
+                                  height: 70.scale,
+                                  child: ImageWidget(
+                                    imgPath: record.imgPath,
+                                  ),
+                                ),
+                                TextWidget(text: record.description)
+                              ],
                             ),
-                            TextWidget(text: record.description)
-                          ],
-                        ),
-                      );
-                    }),
-                  );
-                }),
-
-                // SizedBox(
-                //   height: 100.scale,
-                //   child: ListView.builder(
-                //     scrollDirection: Axis.horizontal,
-                //     itemCount: 5,
-                //     itemBuilder: (context, index) {
-                //       return Container(
-                //         margin: EdgeInsets.only(right: appSpace.scale),
-                //         decoration: BoxDecoration(
-                //           color: Colors.blueAccent,
-                //           borderRadius: BorderRadius.circular(appSpace.scale),
-                //         ),
-                //         width: 160.scale,
-                //         height: double.infinity,
-                //       );
-                //     },
-                //   ),
-                // ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(height: appSpace.scale),
               ],
             ),
           ),
@@ -165,9 +150,9 @@ class HomeScreen extends GetView<HomeController> {
                 itemCount: records.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                crossAxisSpacing: 16.scale,
-                mainAxisSpacing: 16.scale,
-                padding: EdgeInsets.all(16.scale),
+                crossAxisSpacing: appSpace.scale,
+                mainAxisSpacing: appSpace.scale,
+                padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
                 gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: itemCanFitHorizontal(width: 150.scale),
                 ),
@@ -183,6 +168,7 @@ class HomeScreen extends GetView<HomeController> {
             ),
           ),
         ),
+        SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
       ],
     );
   }

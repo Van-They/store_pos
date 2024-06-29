@@ -22,6 +22,9 @@ class Translate extends Translations {
     'description_2': 'Description KH',
 
     //-----------------
+    'not_selected': 'Not selected',
+
+    //-----------------
     'button': 'Button',
     'create': 'Create',
     'delete': 'Delete',
@@ -39,6 +42,13 @@ class Translate extends Translations {
     'discount': 'Discount',
     'amount_to_pay': 'Amount to pay',
     'check_out': 'Check out',
+    'pay_now': 'Pay now',
+    'qty': "Qty",
+    'quantity': "Quantity",
+    'payment_type': "Payment type",
+    'to_customer': "To customer",
+    'product_list': "Product list",
+    'code': "Code",
 
     //-----------------
     'type_your_description_here': 'Type your description here',
@@ -58,6 +68,12 @@ class Translate extends Translations {
     'group_item': 'Group item',
     'group_setup': 'Group setup',
     'category': 'Category',
+
+     //-----------------
+     'wishlist': 'WishList',
+     'language': 'Language',
+     'dashboard': 'Dashboard',
+     'menu': 'Menu',
   };
 
   final Map<String, String> _khmer = {};

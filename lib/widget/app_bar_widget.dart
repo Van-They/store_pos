@@ -7,12 +7,15 @@ import 'package:store_pos/widget/text_widget.dart';
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppBarWidget({
     super.key,
+    this.centerTitle = true,
     required this.title,
     this.isBack = false,
+    this.onBack,
   });
 
   final String title;
-  final bool isBack;
+  final bool isBack, centerTitle;
+  final VoidCallback? onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +25,18 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         fontSize: 18.scale,
       ),
       scrolledUnderElevation: 0.0,
+      automaticallyImplyLeading: false,
       leading: isBack
           ? IconButton(
-              onPressed: () => Get.back(),
+              onPressed: onBack ?? () => Get.back(),
               icon: Icon(
-                Icons.arrow_back_ios_new_rounded,
+                Icons.arrow_back_ios_rounded,
                 size: 18.scale,
                 color: kPrimaryColor,
               ),
             )
-          : null,
-      centerTitle: true,
+          : const SizedBox.shrink(),
+      centerTitle: centerTitle,
       // leading: IconButton(
       //   onPressed: () => Get.back(),
       //   icon: Icon(

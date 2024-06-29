@@ -9,7 +9,6 @@ import 'package:store_pos/widget/custom_empty_widget.dart';
 import 'package:store_pos/widget/expanded_app_bar_widget.dart';
 import 'package:store_pos/widget/item_widget.dart';
 import 'package:store_pos/widget/loading_widget.dart';
-import 'package:store_pos/widget/slidable_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
 class ItemScreen extends StatefulWidget {
@@ -40,12 +39,12 @@ class _ItemScreenState extends State<ItemScreen> {
         ExpandedAppBarWidget(
           title: TextWidget(
             text: 'item'.tr,
-            color: kPrimaryColor,
+            fontSize: 18.scale,
           ),
         ),
         SliverToBoxAdapter(
           child: Padding(
-            padding:   EdgeInsets.symmetric(horizontal: appSpace.scale),
+            padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -62,29 +61,21 @@ class _ItemScreenState extends State<ItemScreen> {
             ),
           ),
         ),
-        SliverFillRemaining(
+        SliverToBoxAdapter(
           child: _controller.obx(
             (state) {
               final records = state ?? [];
               return ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: records.length,
+                shrinkWrap: true,
+                padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
                 itemBuilder: (context, index) {
                   final record = records[index];
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-                    child: SlidableWidget(
-                      onDelete: () {
-
-                      },
-                      onEdit: () {
-
-                      },
-                      child: ItemWidget(
-                        record: record,
-                        isList: true,
-                      ),
-                    ),
+                  return ItemWidget(
+                    record: record,
+                    margin: EdgeInsets.only(top: 10.scale),
+                    isList: true,
                   );
                 },
               );
@@ -94,6 +85,11 @@ class _ItemScreenState extends State<ItemScreen> {
             onEmpty: const CustomEmptyWidget(),
           ),
         ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: appSpace.scale,
+          ),
+        )
       ],
     );
   }

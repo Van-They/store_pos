@@ -7,7 +7,7 @@ import 'package:store_pos/screen/cart/cart_screen.dart';
 import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/home/home_screen.dart';
 import 'package:store_pos/screen/main/main_controller.dart';
-import 'package:store_pos/screen/merchant/main_merchant_screen.dart';
+import 'package:store_pos/screen/menu/MenuScreen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
           HomeScreen(),
           CategoryScreen(),
           CartScreen(),
-          MainMerchantScreen(),
+          MenuScreen(),
         ],
       ),
       bottomNavigationBar: Obx(

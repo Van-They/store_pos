@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:store_pos/core/data/model/customer.dart';
+import 'package:store_pos/core/data/model/customer_model.dart';
 import 'package:store_pos/core/data/model/payment_method_model.dart';
+import 'package:store_pos/core/data/model/setting_model.dart';
 
 class DbService {
   DbService._();
@@ -44,15 +45,16 @@ class DbService {
     }
     await batch.commit();
 
-    //todo error
-    // //pre data
-    // _onPrePopulateData();
+    await _onPrePopulateData(db);
   }
 
-  void _onPrePopulateData() async {
+  Future<void> _onPrePopulateData(Database db) async {
     try {
-      final db = await database;
-
+      final setting = {
+        'invoiceNo': 1,
+        'orderNo': 1,
+        'invoiceText': "INV",
+      };
       final customer = {
         'code': "CASH",
         'firstName': "General",
@@ -69,10 +71,9 @@ class DbService {
         'displayLang': "EN",
         'imagePath': "",
       };
-      final payResult = await db.insert(PaymentMethodModel.tableName, payment);
-      final custResult = await db.insert(Customer.tableName, customer);
-      print('pay======$payResult');
-      print('cust======$custResult');
+      await db.insert(SettingModel.tableName, setting);
+      await db.insert(PaymentMethodModel.tableName, payment);
+      await db.insert(CustomerModel.tableName, customer);
     } on Exception {
       rethrow;
     }
