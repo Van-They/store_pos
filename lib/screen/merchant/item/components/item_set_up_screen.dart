@@ -1,14 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/constant/constant.dart';
+import 'package:store_pos/core/service/image_storage_service.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/merchant/item/components/fetch_group_item_screen.dart';
 import 'package:store_pos/screen/merchant/item/item_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
-import 'package:store_pos/widget/components/image_cropper.dart';
 import 'package:store_pos/widget/components/pick_image.dart';
 import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/input_text_widget.dart';
@@ -25,19 +27,22 @@ class ItemSetUpScreen extends StatefulWidget {
 }
 
 class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
-  late ItemController _controller;
+  late ItemController _imgCtr;
   final ValueNotifier<Language> _disPlayLanguageListener =
       ValueNotifier(Language.kh);
+  final ValueNotifier<String> _imgListener = ValueNotifier('');
   final _groupCodeCtr = TextEditingController();
   final _itemCodeCtr = TextEditingController();
   final _itemCostCtr = TextEditingController();
+  final _itemQtyCtr = TextEditingController();
+  final _itemNewQtyCtr = TextEditingController();
   final _unitPriceCtr = TextEditingController();
   final _groupDescEnCtr = TextEditingController();
   final _groupDescKHCtr = TextEditingController();
   final _globalKey = GlobalKey<FormState>();
   @override
   void initState() {
-    _controller = Get.find<ItemController>();
+    _imgCtr = Get.find<ItemController>();
     super.initState();
   }
 
@@ -53,22 +58,25 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
         onTap: _onCreateItem,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(appSpace.scale),
+        padding: EdgeInsets.all(appPadding.scale),
         child: Form(
           key: _globalKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: appSpace.scale),
-              Obx(() {
-                return BoxWidget(
-                  onTap: _pickImage,
-                  height: 160.scale,
-                  child: ImageWidget(
-                    imgPath: _controller.imgPath.string,
-                  ),
-                );
-              }),
+              ValueListenableBuilder(
+                valueListenable: _imgListener,
+                builder: (context, value, child) {
+                  return BoxWidget(
+                    onTap: _pickImage,
+                    height: 160.scale,
+                    child: ImageWidget(
+                      imgPath: value,
+                    ),
+                  );
+                },
+              ),
               SizedBox(height: 15.scale),
               InputTextWidget(
                 validator: (p0) {
@@ -135,7 +143,7 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                         }
                         return null;
                       },
-                      controller: _itemCostCtr,
+                      controller: _itemQtyCtr,
                       labelOuter: 'qty'.tr,
                       hintText: 'item_qty'.tr,
                     ),
@@ -158,7 +166,7 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                           }
                           return null;
                         },
-                        controller: _unitPriceCtr,
+                        controller: _itemNewQtyCtr,
                         labelOuter: 'new_qty'.tr,
                         hintText: 'item_qty'.tr,
                       ),
@@ -266,29 +274,29 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
     if (img == null) {
       return;
     }
-    final imgCrop = await customCropImage(imgFile: img);
-    if (imgCrop == null) {
-      return;
-    }
-    // _controller.imgPath.value = imgCrop.path;
+    _imgListener.value = img.path;
   }
 
   void _onCreateItem() async {
     if (_globalKey.currentState!.validate()) {
-      showMessage(msg: "Please");
+      return;
     }
-
-    // final Map<String, dynamic> itemData = {
-    //   'code': _itemCode.text.trim(),
-    //   'groupCode': _groupCodeCtr.text.trim(),
-    //   'description': _groupDescEn.text.trim(),
-    //   'description_2': _groupDescKH.text.trim(),
-    //   'displayLang': _disPlayLanguageListener.value.name.toUpperCase(),
-    //   'imgPath': '',
-    // };
-    // final result = await _controller.onCreateItem(arg: itemData);
-    // if (result) {
-    //   Get.back();
-    // }
+    final imgUrl = await ImageStorageService.saveImageToSecureDir(
+        File(_imgListener.value));
+    final Map<String, dynamic> itemData = {
+      'code': _itemCodeCtr.text.trim(),
+      'groupCode': _groupCodeCtr.text.trim(),
+      'description': _groupDescEnCtr.text.trim(),
+      'description_2': _groupDescKHCtr.text.trim(),
+      'qty': _itemQtyCtr.text.trim(),
+      'cost': _itemCostCtr.text.trim(),
+      'unitPrice': _unitPriceCtr.text.trim(),
+      'displayLang': _disPlayLanguageListener.value.name.toUpperCase(),
+      'imgPath': imgUrl,
+    };
+    final result = await _imgCtr.onCreateItem(arg: itemData);
+    if (result) {
+      Get.back();
+    }
   }
 }

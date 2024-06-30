@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/constant/images.dart';
 import 'package:store_pos/core/util/helper.dart';
 
@@ -38,19 +39,50 @@ class ImageWidget extends StatelessWidget {
       );
     }
 
-    return Container(
-      width: width ?? double.infinity,
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: borderRadius ?? BorderRadius.circular(appSpace.scale),
-        image: DecorationImage(
-          repeat: ImageRepeat.noRepeat,
-          fit: fit,
-          image: FileImage(
-            File(imgPath),
+    return FutureBuilder<File>(
+      future: _onLoadingImage(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container(
+            width: width ?? double.infinity,
+            height: height,
+            decoration: BoxDecoration(
+              color: kShadow,
+              borderRadius: borderRadius ?? BorderRadius.circular(appSpace.scale),
+            ),
+          );
+        }
+        final data = snapshot.data;
+        if (data == null) {
+          return Container(
+            width: width ?? double.infinity,
+            height: height,
+            decoration: BoxDecoration(
+              color: kShadow,
+              borderRadius:
+                  borderRadius ?? BorderRadius.circular(appSpace.scale),
+            ),
+          );
+        }
+        return Container(
+          width: width ?? double.infinity,
+          height: height,
+          decoration: BoxDecoration(
+            borderRadius: borderRadius ?? BorderRadius.circular(appSpace.scale),
+            image: DecorationImage(
+              repeat: ImageRepeat.noRepeat,
+              fit: fit,
+              image: FileImage(
+                File(data.path),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
+  }
+
+  Future<File> _onLoadingImage() async {
+    return File(imgPath);
   }
 }

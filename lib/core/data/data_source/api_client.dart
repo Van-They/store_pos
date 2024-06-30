@@ -46,20 +46,18 @@ class ApiClient extends Api {
       final response = await db.insert(
         GroupItemModel.tableName,
         arg,
-        conflictAlgorithm: ConflictAlgorithm.ignore,
+        conflictAlgorithm: ConflictAlgorithm.rollback,
       );
       if (response == -1) {
-        throw GeneralException();
-      }
-      if (response == 0) {
-        throw ServerFailure('group_already_exist'.tr);
+        throw SqlException();
       }
 
       return ApiResponse(
         record: arg,
         status: Status.success.name,
       );
-    } on Exception {
+    } catch (e) {
+      ServerFailure('group_already_exist'.tr);
       rethrow;
     }
   }
@@ -67,58 +65,28 @@ class ApiClient extends Api {
   @override
   Future<ApiResponse> onGetGroupItem() async {
     try {
-      // final scrip =
-      //     await rootBundle.loadString("asset/sql/group_scripts/get_groups.sql");
-      //
-      // final response = await db.rawQuery(scrip);
-
-      final data = [
-        {
-          'code': "code",
-          'description': "description",
-          'description_2': "description_2",
-          'displayLang': "displayLang",
-          'active': 1,
-          'imgPath': "",
-        },
-        {
-          'code': "code",
-          'description': "description",
-          'description_2': "description_2",
-          'displayLang': "displayLang",
-          'active': 1,
-          'imgPath': "",
-        },
-        {
-          'code': "code",
-          'description': "description",
-          'description_2': "description_2",
-          'displayLang': "displayLang",
-          'active': 1,
-          'imgPath': "",
-        },
-        {
-          'code': "code",
-          'description': "description",
-          'description_2': "description_2",
-          'displayLang': "displayLang",
-          'active': 1,
-          'imgPath': "",
-        },
-        {
-          'code': "code",
-          'description': "description",
-          'description_2': "description_2",
-          'displayLang': "displayLang",
-          'active': 1,
-          'imgPath': "",
-        }
-      ];
+      final response = await db
+          .query(GroupItemModel.tableName);
       return ApiResponse(
-        record: data,
+        record: response,
         status: Status.success.name,
       );
-    } catch (e) {
+    } on Exception {
+      ServerFailure('something_went_wrong'.tr);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetGroupItemHome() async {
+    try {
+      final response = await db.query(GroupItemModel.tableName,
+          where: 'active=?', whereArgs: ['1'], limit: 10);
+      return ApiResponse(
+        record: response,
+        status: Status.success.name,
+      );
+    } on Exception {
       rethrow;
     }
   }
@@ -482,6 +450,61 @@ class ApiClient extends Api {
         status: Status.success.name,
       );
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onDeleteGroup({Map? arg}) async {
+    try {
+      final response = await db.query(ItemModel.tableName,
+          where: 'groupCode=?', whereArgs: [arg?['code']]);
+      if (response.isNotEmpty) {
+        throw SqlException();
+      }
+      await db.delete(GroupItemModel.tableName,
+          where: 'code=?', whereArgs: [arg?['code']]);
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } on Exception {
+      ServerFailure("can_not_delete_group_is_not_empty".tr);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onToggleDisableGroup({required Map<String, Object?> arg}) async {
+    try {
+      final response = await db.update(GroupItemModel.tableName, arg,
+          where: 'code=?', whereArgs: [arg['code']]);
+      print('==========$response');
+      if (response == -1) {
+        throw SqlException();
+      }
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } on Exception {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onUpdateGroup({required Map<String, Object?> arg}) async {
+    try {
+      final response = await db.update(GroupItemModel.tableName, arg,
+          where: 'code=?', whereArgs: [arg['code']]);
+      if (response == -1) {
+        throw SqlException();
+      }
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } on Exception {
       rethrow;
     }
   }

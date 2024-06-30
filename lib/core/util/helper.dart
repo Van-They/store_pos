@@ -23,7 +23,7 @@ extension ScaleFactor on int {
   }
 }
 
-const appPadding = 10.0;
+const appPadding = 16.0;
 const appSpace = 8.0;
 
 int itemCanFitHorizontal({required double width}) => Get.width ~/ width;
@@ -48,7 +48,7 @@ showMessage({String msg = '', Status status = Status.success}) {
     color = kWarningColor;
   }
   Get.rawSnackbar(
-    messageText: TextWidget(text: msg),
+    messageText: TextWidget(text: msg,color: kWhite),
     duration: const Duration(milliseconds: 1500),
     backgroundColor: color,
   );

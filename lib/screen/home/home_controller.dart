@@ -34,7 +34,7 @@ class HomeController extends GetxController with StateMixin<List<ItemModel>> {
   Future<void> onGetGroup({Map? arg}) async {
     try {
       isLoading.value = true;
-      await groupItemRepo.onGetGroupItem().then((value) {
+      await groupItemRepo.onGetGroupItemHome().then((value) {
         value.fold((l) => throw GeneralException(), (r) {
           final record = r.record;
           if (record.isNotEmpty) {

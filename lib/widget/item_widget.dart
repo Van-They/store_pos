@@ -29,7 +29,7 @@ class ItemWidget extends GetView<CartController> {
   @override
   Widget build(BuildContext context) {
     if (isList) {
-      return BoxWidget(
+      return Container(
         margin: margin ?? EdgeInsets.only(top: appSpace.scale),
         height: 100.scale,
         child: SlidableWidget(

@@ -21,7 +21,16 @@ abstract class Api {
   Future<ApiResponse> onUpdateCart({required String code, required double qty});
 
   Future<ApiResponse> onGetCustomer();
+
   Future<ApiResponse> onGetPaymentMethod();
 
   Future<ApiResponse> onCheckOutCart();
+
+  Future<ApiResponse> onDeleteGroup({Map? arg});
+
+  Future<ApiResponse> onToggleDisableGroup({required Map<String, Object?> arg});
+
+  Future<ApiResponse> onUpdateGroup({required Map<String, Object?> arg});
+
+  Future<ApiResponse> onGetGroupItemHome();
 }

@@ -4,7 +4,7 @@ import 'package:store_pos/core/data/model/item_model.dart';
 import 'package:store_pos/core/repository/item_repo.dart';
 
 class ItemController extends GetxController with StateMixin<List<ItemModel>> {
-  RxString imgPath = ''.obs;
+  
 
   final itemRepo = Get.find<ItemRepo>();
 

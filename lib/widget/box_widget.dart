@@ -17,9 +17,9 @@ class BoxWidget extends StatelessWidget {
     this.alignment = Alignment.center,
     this.backgroundColor = kWhite,
     this.borderColor = kWhite,
-    this.shadowColor = kborderColor,
+    this.shadowColor = kShadow,
     this.enableShadow = false,
-    this.blueRadius = 1.0,
+    this.blueRadius = 4,
   });
 
   final EdgeInsetsGeometry? padding, margin;
@@ -50,7 +50,7 @@ class BoxWidget extends StatelessWidget {
               boxShadow: enableShadow
                   ? [
                       BoxShadow(
-                        offset: const Offset(0, 0.5),
+                        offset: const Offset(0, 0),
                         blurRadius: blueRadius,
                         color: shadowColor,
                       )

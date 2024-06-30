@@ -47,7 +47,82 @@ class GroupItemRepo {
         ),
       );
     } on GeneralException {
-      return Left(ServerFailure(''));
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<String>>> onDeleteGroup(
+      {required Map arg}) async {
+    try {
+      final result = await api.onDeleteGroup(arg: arg);
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      return Right(
+        RepoResponse(
+          record: result.status,
+        ),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<String>>> onUpdateGroup(
+      {required Map<String, Object?> arg}) async {
+    try {
+      final result = await api.onUpdateGroup(arg: arg);
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      return Right(
+        RepoResponse(
+          record: result.status,
+        ),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<List<GroupItemModel>>>>
+      onGetGroupItemHome() async {
+    try {
+      final result = await api.onGetGroupItemHome();
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+
+      final List<GroupItemModel> records = [];
+
+      for (var e in result.record) {
+        records.add(GroupItemModel.fromMap(e));
+      }
+
+      return Right(
+        RepoResponse(
+          record: records,
+        ),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<String>>> onToggleDisableGroup(
+      {required Map<String, dynamic> arg}) async {
+    try {
+      final result = await api.onToggleDisableGroup(arg: arg);
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      return Right(
+        RepoResponse(
+          record: result.status,
+        ),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
     }
   }
 }

@@ -45,7 +45,10 @@ void main() async {
           initialRoute: MainScreen.routeName,
           themeMode: ThemeMode.light,
           theme: ThemeData(
+            useMaterial3: true,
             scaffoldBackgroundColor: kWhite,
+            dialogBackgroundColor: kWhite,
+            buttonTheme: const ButtonThemeData(splashColor: kPrimaryColor),
             appBarTheme: const AppBarTheme(backgroundColor: kWhite),
           ),
         );

@@ -7,6 +7,7 @@ import 'package:store_pos/core/data/model/group_item_model.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/primary_btn_widget.dart';
+import 'package:store_pos/widget/slidable_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
 import 'box_widget.dart';
@@ -15,61 +16,82 @@ class GroupItemWidget extends GetView {
   const GroupItemWidget({
     super.key,
     required this.record,
+    this.margin,
+    this.onDelete,
+    this.onEdit,
+    this.onDisable,
   });
 
   final GroupItemModel record;
+  final EdgeInsetsGeometry? margin;
+  final VoidCallback? onDelete, onEdit, onDisable;
 
   @override
   Widget build(BuildContext context) {
-    return BoxWidget(
-      margin: EdgeInsets.only(top: appSpace.scale),
-      padding: EdgeInsets.zero,
-      enableShadow: true,
-      height: 105.scale,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ImageWidget(
-            imgPath: record.imgPath,
-            height: double.infinity,
-            width: 105.scale,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: appSpace.scale),
-                if (record.displayLang.contains("KH"))
-                  TextWidget(text: record.description_2),
-                if (record.displayLang.contains("EN"))
-                  TextWidget(text: record.description),
-                SizedBox(height: 4.scale),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-                  decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(appSpace.scale),
-                  ),
-                  child: TextWidget(
-                    text: record.code,
-                    color: kWhite,
-                    fontSize: 12.scale,
-                  ),
+    return Container(
+      margin: margin ?? EdgeInsets.only(top: appSpace.scale),
+      height: 100.scale,
+      child: SlidableWidget(
+        onDelete: onDelete,
+        onEdit: onEdit,
+        child: BoxWidget(
+          height: double.infinity,
+          width: double.infinity,
+          enableShadow: true,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(1),
+                child: ImageWidget(
+                  imgPath: record.imgPath,
+                  height: double.infinity,
+                  width: 100.scale,
                 ),
-                const Spacer(),
-                PrimaryBtnWidget(
-                  onTap: () {},
-                  color: kLabel,
-                  margin: EdgeInsets.zero,
-                  width: 90.scale,
-                  height: 30.scale,
-                  label: 'disable'.tr,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 4.scale),
+                    TextWidget(
+                      text: record.displayLang.contains("KH")
+                          ? record.description_2
+                          : record.description,
+                      fontSize: 16.scale,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor,
+                        borderRadius: BorderRadius.circular(appSpace.scale),
+                      ),
+                      child: TextWidget(
+                        text: '${'code'.tr}: ${record.code}',
+                        color: kWhite,
+                        fontSize: 12.scale,
+                      ),
+                    ),
+                    const Spacer(),
+                     SizedBox(
+                       width: 80.scale,
+                       height: 30.scale,
+                       child: PrimaryBtnWidget(
+                         onTap:onDisable,
+                         color: record.active == 1 ? kPrimaryColor : kLabel,
+                         margin: EdgeInsets.zero,
+                         label: 'disable'.tr,
+                       ),
+                     ),
+                    SizedBox(height: 2.scale),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

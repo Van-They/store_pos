@@ -27,9 +27,7 @@ class _ItemScreenState extends State<ItemScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-          padding: EdgeInsets.only(left: appSpace.scale, right: appSpace.scale),
-          child: _buildItemList()),
+      body: _buildItemList(),
     );
   }
 

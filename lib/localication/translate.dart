@@ -11,6 +11,13 @@ class Translate extends Translations {
     'hello': 'Hello',
 
     //-----------------
+    'yes': 'Yes',
+    'no': 'No',
+    'info': 'Info',
+    'deleted': 'Deleted',
+
+
+    //-----------------
     'disable': 'Disable',
     'active': 'Active',
 
@@ -20,6 +27,11 @@ class Translate extends Translations {
     'item_code': 'Item code',
     'description': 'Description EN',
     'description_2': 'Description KH',
+    'cropper': 'Cropper',
+    'search_group': 'Search group',
+    'add_group': 'Add group',
+    'group_already_exist': 'Group already exist',
+    'do_you_want_to_delete': 'Do you want to delete',
 
     //-----------------
     'not_selected': 'Not selected',
@@ -49,11 +61,14 @@ class Translate extends Translations {
     'to_customer': "To customer",
     'product_list': "Product list",
     'code': "Code",
+    'please_input_group_code': "Please input group code",
+    'please_input_group_description': "Please input group description",
 
     //-----------------
     'type_your_description_here': 'Type your description here',
     'type_your': 'Type your',
     'here': 'here',
+    'display_language': 'Display language',
 
     //-----------------
     'item': 'Item',
@@ -67,13 +82,19 @@ class Translate extends Translations {
     'list_item': 'List item',
     'group_item': 'Group item',
     'group_setup': 'Group setup',
+    'item_setup': 'Item setup',
+    'item_qty': 'Item qty',
+    'item_cost': 'Item cost',
+    'no_records': 'No records',
+    'cost': 'Cost',
+    'unit_price': 'Unit price',
     'category': 'Category',
 
-     //-----------------
-     'wishlist': 'WishList',
-     'language': 'Language',
-     'dashboard': 'Dashboard',
-     'menu': 'Menu',
+    //-----------------
+    'wishlist': 'WishList',
+    'language': 'Language',
+    'dashboard': 'Dashboard',
+    'menu': 'Menu',
   };
 
   final Map<String, String> _khmer = {};

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/exception/exceptions.dart';
 
 Future<CroppedFile?> customCropImage({XFile? imgFile}) async {
@@ -12,19 +14,23 @@ Future<CroppedFile?> customCropImage({XFile? imgFile}) async {
           compressQuality: 100,
           uiSettings: [
             AndroidUiSettings(
-              toolbarTitle: 'Cropper',
-              toolbarColor: Colors.deepOrange,
+              toolbarTitle: 'cropper'.tr,
+              toolbarColor: kPrimaryColor,
               toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.square,
               lockAspectRatio: false,
               aspectRatioPresets: [
                 CropAspectRatioPreset.ratio16x9,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.square,
               ],
             ),
             IOSUiSettings(
-              title: 'Cropper',
+              title: 'cropper'.tr,
               aspectRatioPresets: [
                 CropAspectRatioPreset.ratio16x9,
+                CropAspectRatioPreset.ratio7x5,
+                CropAspectRatioPreset.square,
               ],
             ),
           ]);
