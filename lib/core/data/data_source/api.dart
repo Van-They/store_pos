@@ -33,4 +33,6 @@ abstract class Api {
   Future<ApiResponse> onUpdateGroup({required Map<String, Object?> arg});
 
   Future<ApiResponse> onGetGroupItemHome();
+
+  Future<ApiResponse> onDeleteItem(String code);
 }

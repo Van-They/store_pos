@@ -10,7 +10,11 @@ class AppService {
       return value;
     }
 
-    return value.toDouble();
+    if(value is int){
+      return value.toDouble();
+    }
+
+    return double.parse(value);
   }
 
   static int convertToInt(value) {
@@ -23,6 +27,9 @@ class AppService {
     if (value is int) {
       return value;
     }
-    return value.toInt();
+    if(value is double){
+      return value.toInt();
+    }
+    return int.parse(value);
   }
 }

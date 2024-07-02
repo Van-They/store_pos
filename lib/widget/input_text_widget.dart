@@ -55,7 +55,7 @@ class InputTextWidget extends StatelessWidget {
             showMessage(msg: 'not_allow_to_edit'.tr,status: Status.warning);
           }:null,
           child: AbsorbPointer(
-            absorbing: readOnly,
+            absorbing: false,
             child: TextFormField(
               autofocus: autofocus,
               controller: controller,

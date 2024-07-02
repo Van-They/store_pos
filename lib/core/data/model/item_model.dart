@@ -1,4 +1,6 @@
 
+import 'package:store_pos/core/service/app_service.dart';
+
 class ItemModel {
   static const String tableName = "item";
   final String code;
@@ -47,10 +49,10 @@ class ItemModel {
       description: map['description'] ?? "",
       description_2: map['description_2'] ?? "",
       displayLang: map['displayLang'] ?? "",
-      active: map['active'] ?? 1,
-      qty: map['qty'] ?? 0.0,
-      unitPrice: map['unitPrice'] ?? 0.0,
-      cost: map['cost'] ?? 0.0,
+      active: AppService.convertToInt(map['active'] ?? 1),
+      qty: AppService.convertToDouble(map['qty'] ?? 0.0),
+      unitPrice: AppService.convertToDouble(map['unitPrice'] ?? 0.0),
+      cost: AppService.convertToDouble(map['cost'] ?? 0.0),
       imgPath: map['imgPath'] ?? "",
     );
   }

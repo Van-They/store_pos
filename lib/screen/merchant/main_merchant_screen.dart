@@ -26,6 +26,7 @@ class _MainMerchantScreenState extends State<MainMerchantScreen> {
     SalesData(DateTime(2013), 32),
     SalesData(DateTime(2014), 40)
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +37,7 @@ class _MainMerchantScreenState extends State<MainMerchantScreen> {
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.all(appSpace.scale),
+        padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -49,8 +50,6 @@ class _MainMerchantScreenState extends State<MainMerchantScreen> {
             //           yValueMapper: (SalesData sales, _) => sales.sales)
             //     ]),
             TextWidget(text: 'menu'.tr),
-            TextWidget(text: 'preference'.tr),
-            TextWidget(text: 'report'.tr),
             ListTile(
               onTap: () {
                 Get.toNamed(ItemScreen.routeName);
@@ -75,6 +74,7 @@ class _MainMerchantScreenState extends State<MainMerchantScreen> {
               dense: true,
               title: TextWidget(text: 'group_item'.tr),
             ),
+            TextWidget(text: 'customer'.tr),
             ListTile(
               leading: Icon(
                 Icons.abc,
@@ -84,6 +84,44 @@ class _MainMerchantScreenState extends State<MainMerchantScreen> {
               dense: true,
               title: TextWidget(text: 'customer'.tr),
             ),
+            TextWidget(text: 'preference'.tr),
+            ListTile(
+              leading: Icon(
+                Icons.abc,
+                size: 22.scale,
+              ),
+              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
+              dense: true,
+              title: TextWidget(text: 'company'.tr),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.abc,
+                size: 22.scale,
+              ),
+              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
+              dense: true,
+              title: TextWidget(text: 'setting'.tr),
+            ),
+            TextWidget(text: 'payment'.tr),
+            ListTile(
+              leading: Icon(
+                Icons.abc,
+                size: 22.scale,
+              ),
+              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
+              dense: true,
+              title: TextWidget(text: 'expand'.tr),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.abc,
+                size: 22.scale,
+              ),
+              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
+              dense: true,
+              title: TextWidget(text: 'income'.tr),
+            ),
             ListTile(
               leading: Icon(
                 Icons.abc,
@@ -92,6 +130,16 @@ class _MainMerchantScreenState extends State<MainMerchantScreen> {
               trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
               dense: true,
               title: TextWidget(text: 'payment'.tr),
+            ),
+            TextWidget(text: 'report'.tr),
+            ListTile(
+              leading: Icon(
+                Icons.abc,
+                size: 22.scale,
+              ),
+              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
+              dense: true,
+              title: TextWidget(text: 'report'.tr),
             ),
           ],
         ),

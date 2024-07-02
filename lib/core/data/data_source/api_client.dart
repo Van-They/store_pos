@@ -65,8 +65,7 @@ class ApiClient extends Api {
   @override
   Future<ApiResponse> onGetGroupItem() async {
     try {
-      final response = await db
-          .query(GroupItemModel.tableName);
+      final response = await db.query(GroupItemModel.tableName);
       return ApiResponse(
         record: response,
         status: Status.success.name,
@@ -97,19 +96,17 @@ class ApiClient extends Api {
       final result = await db.insert(
         ItemModel.tableName,
         arg,
-        conflictAlgorithm: ConflictAlgorithm.ignore,
+        conflictAlgorithm: ConflictAlgorithm.rollback,
       );
       if (result == -1) {
-        return ApiResponse(
-          record: Status.failed.name,
-          status: Status.failed.name,
-        );
+        throw GeneralException();
       }
       return ApiResponse(
         record: Status.success.name,
         status: Status.success.name,
       );
     } catch (e) {
+      showMessage(msg: 'item_already_exist'.tr,status: Status.failed);
       rethrow;
     }
   }
@@ -117,70 +114,7 @@ class ApiClient extends Api {
   @override
   Future<ApiResponse> onGetItem() async {
     try {
-      // final result = await _db.query(ItemModel.tableName);
-      final result = [
-        ItemModel(
-          code: "00A",
-          groupCode: '001',
-          description: "Wing small",
-          description_2: "ស្លាបតូច",
-          unitPrice: 10,
-          cost: 8,
-          displayLang: "KH",
-          imgPath: '',
-        ),
-        ItemModel(
-          code: "00B",
-          groupCode: '001',
-          description: "Wing Big",
-          description_2: "ស្លាបធំ",
-          unitPrice: 15,
-          cost: 10,
-          displayLang: "KH",
-          imgPath: '',
-        ),
-        ItemModel(
-          code: "00C",
-          groupCode: '001',
-          description: "Stand",
-          description_2: "ជើង",
-          unitPrice: 15,
-          cost: 10,
-          displayLang: "KH",
-          imgPath: '',
-        ),
-        ItemModel(
-          code: "00D",
-          groupCode: '002',
-          description: "Remote",
-          description_2: "ក្បាលបញ្ញា",
-          unitPrice: 15,
-          cost: 10,
-          displayLang: "KH",
-          imgPath: '',
-        ),
-        ItemModel(
-          code: "00E",
-          groupCode: '002',
-          description: "Spray head",
-          description_2: "ក្បាលបាញ់",
-          unitPrice: 15,
-          cost: 10,
-          displayLang: "KH",
-          imgPath: '',
-        ),
-        ItemModel(
-          code: "00F",
-          groupCode: '002',
-          description: "Hand wing",
-          description_2: "ដៃស្លាប",
-          unitPrice: 15,
-          cost: 10,
-          displayLang: "KH",
-          imgPath: '',
-        ),
-      ];
-
+      final result = await db.query(ItemModel.tableName);
       return ApiResponse(
         record: result,
         status: Status.success.name,
@@ -475,7 +409,8 @@ class ApiClient extends Api {
   }
 
   @override
-  Future<ApiResponse> onToggleDisableGroup({required Map<String, Object?> arg}) async {
+  Future<ApiResponse> onToggleDisableGroup(
+      {required Map<String, Object?> arg}) async {
     try {
       final response = await db.update(GroupItemModel.tableName, arg,
           where: 'code=?', whereArgs: [arg['code']]);
@@ -505,6 +440,32 @@ class ApiClient extends Api {
         status: Status.success.name,
       );
     } on Exception {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onDeleteItem(String code) async {
+    try {
+      final orderTranTmp = await db.query(OrderTranModel.orderTranTmp,
+          where: 'code=?', whereArgs: [code]);
+      if (orderTranTmp.isNotEmpty) {
+        throw SqlException();
+      }
+
+      final orderTran = await db
+          .query(OrderTranModel.orderTran, where: 'code=?', whereArgs: [code]);
+      if (orderTran.isNotEmpty) {
+        throw GeneralException();
+      }
+
+      await db.delete(ItemModel.tableName, where: 'code=?', whereArgs: [code]);
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } on Exception {
+      ServerFailure("can_not_delete_item_has_transaction".tr);
       rethrow;
     }
   }

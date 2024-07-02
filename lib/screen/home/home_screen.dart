@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/home/home_controller.dart';
@@ -23,24 +25,6 @@ class HomeScreen extends GetView<HomeController> {
     controller.onGetHomeItems();
     controller.onGetGroup();
     return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0.0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextWidget(text: 'Cambodia Modern Drone', fontSize: 18.scale),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.notifications_active_rounded,
-                size: 24.scale,
-              ),
-            ),
-          ],
-        ),
-        titleSpacing: appSpace.scale,
-        toolbarHeight: kToolbarHeight,
-      ),
       body: _buildItemList(),
     );
   }
@@ -48,12 +32,44 @@ class HomeScreen extends GetView<HomeController> {
   _buildItemList() {
     return CustomScrollView(
       slivers: [
+        SliverAppBar(
+          titleSpacing: appSpace.scale,
+          toolbarHeight: kToolbarHeight + (appSpace.scale),
+          title: Padding(
+            padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextWidget(
+                      text: 'Good morning...',
+                      fontSize: 18.scale,
+                      color: kPrimaryColor,
+                    ),
+                    TextWidget(text: 'Vanthey Thorng', fontSize: 24.scale,color: Colors.black.withOpacity(0.8),),
+                  ],
+                ),
+                CircleAvatar(
+                  backgroundColor: Colors.grey,
+                  radius: 20.scale,
+                  child: Icon(
+                    FontAwesomeIcons.user,
+                    size: 20.scale,
+                    color: kWhite,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         SliverToBoxAdapter(
           child: Stack(
             alignment: Alignment.center,
             children: [
               Container(
-                margin: EdgeInsets.all(appSpace.scale),
+                margin: EdgeInsets.symmetric(horizontal: appPadding.scale),
                 decoration: BoxDecoration(
                   color: Colors.greenAccent,
                   borderRadius: BorderRadius.circular(appSpace.scale),
@@ -76,12 +92,13 @@ class HomeScreen extends GetView<HomeController> {
             ],
           ),
         ),
+        SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
         SliverToBoxAdapter(
           child: BoxWidget(
             onTap: () {
               Get.toNamed(CategoryScreen.routeName);
             },
-            padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+            padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
             radius: 0,
             child: Column(
               children: [
@@ -152,7 +169,7 @@ class HomeScreen extends GetView<HomeController> {
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisSpacing: appSpace.scale,
                 mainAxisSpacing: appSpace.scale,
-                padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+                padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
                 gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: itemCanFitHorizontal(width: 150.scale),
                 ),

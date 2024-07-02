@@ -22,12 +22,33 @@ class MenuScreen extends GetView {
           children: [
             ListTile(
               leading: Icon(
+                Icons.dashboard_outlined,
+                size: 24.scale,
+              ),
+              onTap: () {
+                Get.toNamed(MainMerchantScreen.routeName);
+              },
+              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
+              dense: true,
+              title: TextWidget(text: 'dashboard'.tr),
+            ),
+            ListTile(
+              leading: Icon(
                 FontAwesomeIcons.heart,
                 size: 22.scale,
               ),
               trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
               dense: true,
               title: TextWidget(text: 'wishlist'.tr),
+            ),
+            ListTile(
+              leading: Icon(
+                FontAwesomeIcons.box,
+                size: 22.scale,
+              ),
+              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
+              dense: true,
+              title: TextWidget(text: 'stock'.tr),
             ),
             ListTile(
               leading: Icon(
@@ -40,15 +61,30 @@ class MenuScreen extends GetView {
             ),
             ListTile(
               leading: Icon(
-                Icons.dashboard_outlined,
-                size: 24.scale,
+                Icons.payment_rounded,
+                size: 22.scale,
               ),
-              onTap: () {
-                Get.toNamed(MainMerchantScreen.routeName);
-              },
               trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
               dense: true,
-              title: TextWidget(text: 'dashboard'.tr),
+              title: TextWidget(text: 'expanse'.tr),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.currency_exchange,
+                size: 22.scale,
+              ),
+              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
+              dense: true,
+              title: TextWidget(text: 'currency'.tr),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.exit_to_app_rounded,
+                size: 24.scale,
+              ),
+              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
+              dense: true,
+              title: TextWidget(text: 'exit'.tr),
             ),
           ],
         ),

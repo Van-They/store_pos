@@ -11,6 +11,7 @@ import 'package:store_pos/screen/merchant/group/components/group_set_up_screen.d
 import 'package:store_pos/screen/merchant/group/group_item_screen.dart';
 import 'package:store_pos/screen/merchant/item/components/fetch_group_item_screen.dart';
 import 'package:store_pos/screen/merchant/item/components/item_set_up_screen.dart';
+import 'package:store_pos/screen/merchant/item/item_controller.dart';
 import 'package:store_pos/screen/merchant/item/item_screen.dart';
 import 'package:store_pos/screen/merchant/main_merchant_screen.dart';
 
@@ -38,6 +39,7 @@ List<GetPage<dynamic>> appRoute = [
   GetPage(
     name: ItemScreen.routeName,
     page: () => const ItemScreen(),
+    binding: BindingsBuilder.put(() => ItemController())
   ),
   GetPage(
     name: ItemSetUpScreen.routeName,

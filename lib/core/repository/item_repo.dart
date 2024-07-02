@@ -19,15 +19,15 @@ class ItemRepo {
         throw GeneralException();
       }
 
-      // final List<ItemModel> records = [];
+      final List<ItemModel> records = [];
 
-      // for (var e in result.record) {
-      //   records.add(ItemModel.fromMap(e));
-      // }
+      for (var e in result.record) {
+        records.add(ItemModel.fromMap(e));
+      }
 
       return Right(
         RepoResponse(
-          record: result.record,
+          record: records,
         ),
       );
     } on GeneralException {
@@ -44,7 +44,7 @@ class ItemRepo {
       }
       return Right(
         RepoResponse(
-          record: '',
+          record: result.status,
         ),
       );
     } on GeneralException {
@@ -59,16 +59,32 @@ class ItemRepo {
         throw GeneralException();
       }
 
-      // final List<ItemModel> records = [];
-      //
-      // for (var e in result.record) {
-      //   records.add(ItemModel.fromMap(e));
-      // }
+      final List<ItemModel> records = [];
+
+      for (var e in result.record) {
+        records.add(ItemModel.fromMap(e));
+      }
 
       return Right(
         RepoResponse(
-          record: result.record,
+          record: records,
         ),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<String>>> onDeleteItem(
+      String code) async {
+    try {
+      final result = await api.onDeleteItem(code);
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+
+      return Right(
+        RepoResponse(record: result.record),
       );
     } on GeneralException {
       return Left(ServerFailure('failed'.tr));

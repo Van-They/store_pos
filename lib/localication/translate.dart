@@ -16,7 +16,6 @@ class Translate extends Translations {
     'info': 'Info',
     'deleted': 'Deleted',
 
-
     //-----------------
     'disable': 'Disable',
     'active': 'Active',
@@ -63,6 +62,12 @@ class Translate extends Translations {
     'code': "Code",
     'please_input_group_code': "Please input group code",
     'please_input_group_description': "Please input group description",
+    'please_input_code': "Please input code",
+    'please_input_qty': "Please input qty",
+    'please_input_cost': "Please input cost",
+    'please_input_price': "Please input price",
+    'please_input_description': "Please input description",
+    'please_select_group_code': "Please select group code",
 
     //-----------------
     'type_your_description_here': 'Type your description here',

@@ -23,42 +23,33 @@ class ImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (imgPath.isEmpty) {
-      return Container(
-        width: width ?? double.infinity,
-        height: height,
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          image: DecorationImage(
-            image: const AssetImage(no_photo),
-            repeat: ImageRepeat.noRepeat,
-            fit: fit,
-          ),
-          borderRadius: borderRadius ?? BorderRadius.circular(appSpace.scale),
-        ),
-      );
-    }
-
-    return FutureBuilder<File>(
-      future: _onLoadingImage(),
+    return FutureBuilder(
+      future: _validateImage(imgPath),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
-            width: width ?? double.infinity,
-            height: height,
-            decoration: BoxDecoration(
-              color: kShadow,
-              borderRadius: borderRadius ?? BorderRadius.circular(appSpace.scale),
+            color: kWhite,
+            alignment: Alignment.center,
+            child: SizedBox(
+              width: 18.scale,
+              height: 18.scale,
+              child: const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(kPrimaryColor),
+              ),
             ),
           );
         }
-        final data = snapshot.data;
-        if (data == null) {
+        if (snapshot.data == null) {
           return Container(
             width: width ?? double.infinity,
             height: height,
             decoration: BoxDecoration(
-              color: kShadow,
+              color: Colors.grey,
+              image: DecorationImage(
+                image: const AssetImage(no_photo),
+                repeat: ImageRepeat.noRepeat,
+                fit: fit,
+              ),
               borderRadius:
                   borderRadius ?? BorderRadius.circular(appSpace.scale),
             ),
@@ -73,7 +64,7 @@ class ImageWidget extends StatelessWidget {
               repeat: ImageRepeat.noRepeat,
               fit: fit,
               image: FileImage(
-                File(data.path),
+                snapshot.data!,
               ),
             ),
           ),
@@ -82,7 +73,11 @@ class ImageWidget extends StatelessWidget {
     );
   }
 
-  Future<File> _onLoadingImage() async {
-    return File(imgPath);
+  Future<File?> _validateImage(String path) async {
+    final file = File(path);
+    if (await file.exists()) {
+      return file;
+    }
+    return null;
   }
 }

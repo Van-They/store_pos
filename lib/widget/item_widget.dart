@@ -136,7 +136,6 @@ class ItemWidget extends GetView<CartController> {
                     padding: EdgeInsets.only(left: appSpace.scale),
                     child: TextWidget(
                       fontSize: 16.scale,
-                      fontWeight: FontWeight.w500,
                       text: record.description,
                     ),
                   ),
@@ -154,41 +153,28 @@ class ItemWidget extends GetView<CartController> {
                 onTap: () {
                   controller.toggleCart(record);
                 },
-                child: GetBuilder<CartController>(
-                  builder: (controller) {
-                    final records = controller.state ?? [];
-                    final currentItem = records
-                        .indexWhere((element) => element.code == record.code);
-                    if (currentItem != -1) {
-                      return Container(
-                        padding: EdgeInsets.all(4.scale),
-                        margin: EdgeInsets.only(right: appSpace.scale),
-                        decoration: const BoxDecoration(
-                          color: kErrorColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.remove,
-                          color: kWhite,
-                          size: 20.scale,
-                        ),
-                      );
-                    }
-                    return Container(
-                      padding: EdgeInsets.all(4.scale),
-                      margin: EdgeInsets.only(right: appSpace.scale),
-                      decoration: const BoxDecoration(
-                        color: kSecondaryColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        color: kWhite,
-                        size: 20.scale,
-                      ),
-                    );
-                  },
-                ),
+                child: GetBuilder<CartController>(builder: (controller) {
+                  final records = controller.state ?? [];
+                  final isCurrent =
+                      records.any((element) => element.code == record.code);
+                  return Container(
+                    padding: EdgeInsets.all(4.scale),
+                    margin: EdgeInsets.only(right: appSpace.scale),
+                    decoration: BoxDecoration(
+                      color: isCurrent ? kErrorColor : kSecondaryColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: isCurrent? Icon(
+                      Icons.remove,
+                      color: kWhite,
+                      size: 20.scale,
+                    ):Icon(
+                      Icons.add,
+                      color: kWhite,
+                      size: 20.scale,
+                    ),
+                  );
+                }),
               )
             ],
           ),

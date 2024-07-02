@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -17,37 +18,25 @@ import 'package:store_pos/widget/input_text_widget.dart';
 import 'package:store_pos/widget/primary_btn_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
-class ItemSetUpScreen extends StatefulWidget {
+class ItemSetUpScreen extends GetView<ItemController> {
   const ItemSetUpScreen({super.key, this.isUpdate = false});
+
   static const String routeName = '/ItemSetUpScreen';
   final bool isUpdate;
 
   @override
-  State<ItemSetUpScreen> createState() => _ItemSetUpScreenState();
-}
-
-class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
-  late ItemController _imgCtr;
-  final ValueNotifier<Language> _disPlayLanguageListener =
-      ValueNotifier(Language.kh);
-  final ValueNotifier<String> _imgListener = ValueNotifier('');
-  final _groupCodeCtr = TextEditingController();
-  final _itemCodeCtr = TextEditingController();
-  final _itemCostCtr = TextEditingController();
-  final _itemQtyCtr = TextEditingController();
-  final _itemNewQtyCtr = TextEditingController();
-  final _unitPriceCtr = TextEditingController();
-  final _groupDescEnCtr = TextEditingController();
-  final _groupDescKHCtr = TextEditingController();
-  final _globalKey = GlobalKey<FormState>();
-  @override
-  void initState() {
-    _imgCtr = Get.find<ItemController>();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final ValueNotifier<Language> languageListener = ValueNotifier(Language.kh);
+    final ValueNotifier<String> imgListener = ValueNotifier('');
+    final groupCodeCtr = TextEditingController();
+    final itemCodeCtr = TextEditingController();
+    final itemCostCtr = TextEditingController();
+    final itemQtyCtr = TextEditingController();
+    final itemNewQtyCtr = TextEditingController();
+    final unitPriceCtr = TextEditingController();
+    final groupDescEnCtr = TextEditingController();
+    final groupDescKHCtr = TextEditingController();
+    final globalKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBarWidget(
         title: 'item_set_up'.tr,
@@ -55,21 +44,54 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
       ),
       bottomNavigationBar: PrimaryBtnWidget(
         label: 'create'.tr,
-        onTap: _onCreateItem,
+        onTap: () async {
+          if (!globalKey.currentState!.validate()) {
+            return;
+          }
+          final impPath = await ImageStorageService.initImgPathTmp(
+            File(imgListener.value),
+          );
+          final Map<String, dynamic> itemData = {
+            'code': itemCodeCtr.text.trim(),
+            'groupCode': groupCodeCtr.text.trim(),
+            'description': groupDescEnCtr.text.trim(),
+            'description_2': groupDescKHCtr.text.trim(),
+            'qty': itemQtyCtr.text.trim(),
+            'cost': itemCostCtr.text.trim(),
+            'active':1,
+            'unitPrice': unitPriceCtr.text.trim(),
+            'displayLang': languageListener.value.name.toUpperCase(),
+            'imgPath': impPath,
+          };
+          final result = await controller.onCreateItem(arg: itemData);
+          if (result) {
+            await ImageStorageService.saveImageToSecureDir(
+              File(imgListener.value),
+              path: impPath,
+            );
+            Get.back();
+          }
+        },
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(appPadding.scale),
         child: Form(
-          key: _globalKey,
+          key: globalKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: appSpace.scale),
               ValueListenableBuilder(
-                valueListenable: _imgListener,
+                valueListenable: imgListener,
                 builder: (context, value, child) {
                   return BoxWidget(
-                    onTap: _pickImage,
+                    onTap: () async {
+                      final img = await customPickImageGallery();
+                      if (img == null) {
+                        return;
+                      }
+                      imgListener.value = img.path;
+                    },
                     height: 160.scale,
                     child: ImageWidget(
                       imgPath: value,
@@ -85,14 +107,14 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                   }
                   return null;
                 },
-                controller: _itemCodeCtr,
+                controller: itemCodeCtr,
                 labelOuter: 'item_code'.tr,
                 hintText: '${'type_your'.tr} ${'item_code'.tr} ${'here'}...',
               ),
               SizedBox(height: 15.scale),
               TextWidget(text: 'display_language'.tr),
               ValueListenableBuilder(
-                valueListenable: _disPlayLanguageListener,
+                valueListenable: languageListener,
                 builder: (context, value, child) {
                   return Row(
                     children: [
@@ -106,7 +128,7 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                               EdgeInsets.only(right: appSpace.scale),
                           dense: true,
                           onChanged: (value) {
-                            _disPlayLanguageListener.value = Language.kh;
+                            languageListener.value = Language.kh;
                           },
                           fillColor:
                               const MaterialStatePropertyAll(kPrimaryColor),
@@ -121,7 +143,7 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                                 EdgeInsets.only(right: appSpace.scale),
                             groupValue: Language.en,
                             onChanged: (value) {
-                              _disPlayLanguageListener.value = Language.en;
+                              languageListener.value = Language.en;
                             },
                             fillColor:
                                 const MaterialStatePropertyAll(kPrimaryColor)),
@@ -143,13 +165,13 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                         }
                         return null;
                       },
-                      controller: _itemQtyCtr,
+                      controller: itemQtyCtr,
                       labelOuter: 'qty'.tr,
                       hintText: 'item_qty'.tr,
                     ),
                   ),
-                  if (widget.isUpdate) SizedBox(width: appSpace.scale),
-                  if (widget.isUpdate)
+                  if (isUpdate) SizedBox(width: appSpace.scale),
+                  if (isUpdate)
                     Expanded(
                       child: InputTextWidget(
                         textInputType: TextInputType.number,
@@ -166,7 +188,7 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                           }
                           return null;
                         },
-                        controller: _itemNewQtyCtr,
+                        controller: itemNewQtyCtr,
                         labelOuter: 'new_qty'.tr,
                         hintText: 'item_qty'.tr,
                       ),
@@ -178,13 +200,20 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                 children: [
                   Expanded(
                     child: InputTextWidget(
+                      textInputType: TextInputType.number,
+                      inputFormatter: [
+                        FilteringTextInputFormatter.deny('-'),
+                        FilteringTextInputFormatter.deny(','),
+                        FilteringTextInputFormatter.deny(' '),
+                        FilteringTextInputFormatter.deny('..'),
+                      ],
                       validator: (p0) {
                         if (p0 == null || p0.isEmpty) {
                           return "please_input_cost".tr;
                         }
                         return null;
                       },
-                      controller: _itemCostCtr,
+                      controller: itemCostCtr,
                       labelOuter: 'cost'.tr,
                       hintText: 'item_cost'.tr,
                     ),
@@ -205,7 +234,7 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                         }
                         return null;
                       },
-                      controller: _unitPriceCtr,
+                      controller: unitPriceCtr,
                       labelOuter: 'unit_price'.tr,
                       hintText: 'unit_price'.tr,
                     ),
@@ -214,7 +243,7 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
               ),
               SizedBox(height: 15.scale),
               InputTextWidget(
-                controller: _groupCodeCtr,
+                controller: groupCodeCtr,
                 readOnly: true,
                 validator: (p0) {
                   if (p0 == null || p0.isEmpty) {
@@ -225,7 +254,7 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                 onTap: () {
                   Get.toNamed(FetchGroupItemScreen.routeName)!.then((value) {
                     if (value != null) {
-                      _groupCodeCtr.text = value['group_code'];
+                      groupCodeCtr.text = value['group_code'];
                     }
                   });
                 },
@@ -244,7 +273,7 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                   }
                   return null;
                 },
-                controller: _groupDescEnCtr,
+                controller: groupDescEnCtr,
                 labelOuter: 'description'.tr,
                 hintText: '${'type_your_description_here'.tr}...',
                 maxLine: 2,
@@ -257,7 +286,7 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
                   }
                   return null;
                 },
-                controller: _groupDescKHCtr,
+                controller: groupDescKHCtr,
                 labelOuter: 'description_2'.tr,
                 hintText: '${'type_your_description_here'.tr}...',
                 maxLine: 2,
@@ -267,36 +296,5 @@ class _ItemSetUpScreenState extends State<ItemSetUpScreen> {
         ),
       ),
     );
-  }
-
-  void _pickImage() async {
-    final img = await customPickImageGallery();
-    if (img == null) {
-      return;
-    }
-    _imgListener.value = img.path;
-  }
-
-  void _onCreateItem() async {
-    if (_globalKey.currentState!.validate()) {
-      return;
-    }
-    final imgUrl = await ImageStorageService.saveImageToSecureDir(
-        File(_imgListener.value));
-    final Map<String, dynamic> itemData = {
-      'code': _itemCodeCtr.text.trim(),
-      'groupCode': _groupCodeCtr.text.trim(),
-      'description': _groupDescEnCtr.text.trim(),
-      'description_2': _groupDescKHCtr.text.trim(),
-      'qty': _itemQtyCtr.text.trim(),
-      'cost': _itemCostCtr.text.trim(),
-      'unitPrice': _unitPriceCtr.text.trim(),
-      'displayLang': _disPlayLanguageListener.value.name.toUpperCase(),
-      'imgPath': imgUrl,
-    };
-    final result = await _imgCtr.onCreateItem(arg: itemData);
-    if (result) {
-      Get.back();
-    }
   }
 }

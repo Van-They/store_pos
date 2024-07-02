@@ -4,30 +4,29 @@ import 'package:store_pos/core/data/model/item_model.dart';
 import 'package:store_pos/core/repository/item_repo.dart';
 
 class ItemController extends GetxController with StateMixin<List<ItemModel>> {
-  
-
   final itemRepo = Get.find<ItemRepo>();
 
   @override
   void onInit() {
-    onGetGroupItem();
+    onGetItem();
     super.onInit();
   }
 
-  Future<void> onGetGroupItem() async {
+  Future<void> onGetItem() async {
     try {
-      change(state, status: RxStatus.loading());
+      change(null, status: RxStatus.loading());
       final result = await itemRepo.onGetItem();
       result.fold((l) {
-        change(state, status: RxStatus.empty());
+        throw Exception();
       }, (r) {
         if (r.record.isEmpty) {
-          change(r.record, status: RxStatus.empty());
+          change([], status: RxStatus.empty());
           return;
         }
         change(r.record, status: RxStatus.success());
       });
     } on Exception {
+      change([], status: RxStatus.error());
       return;
     }
   }
@@ -37,7 +36,7 @@ class ItemController extends GetxController with StateMixin<List<ItemModel>> {
       change(state, status: RxStatus.loading());
       final result = await itemRepo.onCreateItem(arg: arg);
       result.fold((l) {
-        change(state, status: RxStatus.error());
+        throw Exception();
       }, (r) {
         final newItem = ItemModel.fromMap(arg);
         final data = state ?? [];
@@ -47,6 +46,28 @@ class ItemController extends GetxController with StateMixin<List<ItemModel>> {
       return true;
     } on Exception {
       return false;
+    }
+  }
+
+  Future<void> onDeleteItem(String code) async {
+    try {
+      final result = await itemRepo.onDeleteItem(code);
+      result.fold((l) {
+        change(state, status: RxStatus.error());
+      }, (r) {
+        final data = state ?? [];
+        final index = data.indexWhere((element) => element.code == code);
+        if (index != -1) {
+          data.removeAt(index);
+        }
+        if (data.isEmpty) {
+          change(data, status: RxStatus.empty());
+          return;
+        }
+        change(data, status: RxStatus.success());
+      });
+    } on Exception {
+      rethrow;
     }
   }
 }
