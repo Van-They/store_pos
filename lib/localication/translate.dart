@@ -8,6 +8,38 @@ class Translate extends Translations {
       };
 
   final Map<String, String> _english = {
+    //-----------------
+    'active': 'Active',
+    'add_to_cart': 'Add To Cart',
+    'add_group': 'Add group',
+    'add_item': 'Add item',
+    'add_new': 'Add new',
+    'amount_to_pay': 'Amount to pay',
+
+    //-----------------
+    'button': 'Button',
+
+    //-----------------
+    'cropper': 'Cropper',
+    'create': 'Create',
+    'code': "Code",
+    'cost': 'Cost',
+    'category': 'Category',
+    'customer': 'Customer',
+
+
+    'report': 'Report',
+    'payment': 'Payment',
+    'preference': 'Preference',
+    'currency': 'Currency',
+    'expanse': 'Expanse',
+    'setting': 'Setting',
+    'company': 'Company',
+    'income': 'Income',
+    'stock': 'Stock',
+    'exit': 'Exit',
+    'search_item_here': 'Search item here',
+
     'hello': 'Hello',
 
     //-----------------
@@ -18,17 +50,16 @@ class Translate extends Translations {
 
     //-----------------
     'disable': 'Disable',
-    'active': 'Active',
 
     //-----------------
-    'add_to_cart': 'Add To Cart',
+
     'group_code': 'Group code',
     'item_code': 'Item code',
     'description': 'Description EN',
     'description_2': 'Description KH',
-    'cropper': 'Cropper',
+
     'search_group': 'Search group',
-    'add_group': 'Add group',
+
     'group_already_exist': 'Group already exist',
     'do_you_want_to_delete': 'Do you want to delete',
 
@@ -36,10 +67,9 @@ class Translate extends Translations {
     'not_selected': 'Not selected',
 
     //-----------------
-    'button': 'Button',
-    'create': 'Create',
+
     'delete': 'Delete',
-    'add_new': 'Add new',
+
     'select': 'Select',
     'failed': 'Failed',
     'save': 'Save',
@@ -51,7 +81,7 @@ class Translate extends Translations {
     //-----------------
     'subtotal': 'Subtotal',
     'discount': 'Discount',
-    'amount_to_pay': 'Amount to pay',
+
     'check_out': 'Check out',
     'pay_now': 'Pay now',
     'qty': "Qty",
@@ -59,7 +89,7 @@ class Translate extends Translations {
     'payment_type': "Payment type",
     'to_customer': "To customer",
     'product_list': "Product list",
-    'code': "Code",
+
     'please_input_group_code': "Please input group code",
     'please_input_group_description': "Please input group description",
     'please_input_code': "Please input code",
@@ -74,6 +104,11 @@ class Translate extends Translations {
     'type_your': 'Type your',
     'here': 'here',
     'display_language': 'Display language',
+
+    //-----------------
+    'good_morning': 'Good morning',
+    'good_afternoon': 'Good afternoon',
+    'good_evening': 'Good evening',
 
     //-----------------
     'item': 'Item',
@@ -91,9 +126,8 @@ class Translate extends Translations {
     'item_qty': 'Item qty',
     'item_cost': 'Item cost',
     'no_records': 'No records',
-    'cost': 'Cost',
+
     'unit_price': 'Unit price',
-    'category': 'Category',
 
     //-----------------
     'wishlist': 'WishList',

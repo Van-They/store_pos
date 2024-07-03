@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
@@ -8,6 +9,7 @@ import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/home/home_screen.dart';
 import 'package:store_pos/screen/main/main_controller.dart';
 import 'package:store_pos/screen/menu/MenuScreen.dart';
+import 'package:store_pos/widget/box_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -21,6 +23,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final _controller = MainController();
   late PageController _pageCtr;
+
   @override
   void initState() {
     _pageCtr = PageController(initialPage: _controller.currentIndex.value);
@@ -52,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: false,
           showUnselectedLabels: false,
+          backgroundColor: kWhite,
           selectedItemColor: kPrimaryColor,
           currentIndex: _controller.currentIndex.value,
           onTap: (value) {
@@ -79,6 +83,13 @@ class _MainScreenState extends State<MainScreen> {
           size: 24.scale,
         ),
         label: 'category'.tr,
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(
+          Icons.search_rounded,
+          size: 24.scale,
+        ),
+        label: 'find'.tr,
       ),
       BottomNavigationBarItem(
         icon: GetBuilder<CartController>(

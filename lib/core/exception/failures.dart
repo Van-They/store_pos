@@ -5,6 +5,8 @@ import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
+import '../../main.dart';
+
 abstract class Failure {
   final String message;
 
@@ -13,17 +15,22 @@ abstract class Failure {
 
 class ServerFailure extends Failure {
   ServerFailure(super.message) {
-    showMessage(msg: message,status: Status.failed);
-    // Get.rawSnackbar(
-    //   animationDuration: const Duration(milliseconds: 120),
-    //   messageText: TextWidget(
-    //     text: message,
-    //     color: kWhite,
-    //   ),
-    //   borderRadius: appSpace.scale,
-    //   backgroundColor: kErrorColor,
-    //   margin: EdgeInsets.fromLTRB(appSpace.scale, 0, appSpace.scale, 4.scale),
-    //   dismissDirection: DismissDirection.down,
-    // );
+    if (scaffoldMessageKey.currentState != null) {
+      scaffoldMessageKey.currentState?.showSnackBar(
+        SnackBar(
+          backgroundColor: kWarningColor,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(milliseconds: 500),
+          showCloseIcon: true,
+          elevation: 0,
+          margin: EdgeInsets.only(
+            left: appSpace.scale,
+            right: appSpace.scale,
+            bottom: appSpace.scale,
+          ),
+          content: TextWidget(text: message),
+        ),
+      );
+    }
   }
 }

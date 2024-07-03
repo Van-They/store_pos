@@ -72,40 +72,38 @@ class ItemScreen extends GetView<ItemController> {
             ),
           ),
           SliverFillRemaining(
-            child: controller.obx(
-              (state) {
-                final records = state ?? [];
-                return ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: records.length,
-                  shrinkWrap: true,
-                  padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
-                  itemBuilder: (context, index) {
-                    final record = records[index];
-                    return ItemWidget(
-                      record: record,
-                      onEdit: () {},
-                      onDelete: () {
-                        showYesNoDialog(
-                          content:
-                              '${'do_you_want_to_delete'.tr} ${record.code}?',
-                          onConfirm: () async {
-                            await controller
-                                .onDeleteItem(record.code)
-                                .whenComplete(() => Get.back());
-                          },
-                        );
-                      },
-                      margin: EdgeInsets.only(top: 10.scale),
-                      isList: true,
-                    );
-                  },
-                );
-              },
-              onLoading: const LoadingWidget(),
-              onError: (error) => const CustomEmptyWidget(),
-              onEmpty: const CustomEmptyWidget(),
-            ),
+            child: Obx(() {
+              final records = controller.itemList;
+              if(controller.isLoading.value){
+                return const LoadingWidget();
+              }
+              return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: records.length,
+                shrinkWrap: true,
+                padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
+                itemBuilder: (context, index) {
+                  final record = records[index];
+                  return ItemWidget(
+                    record: record,
+                    onEdit: () {},
+                    onDelete: () {
+                      showYesNoDialog(
+                        content:
+                            '${'do_you_want_to_delete'.tr} ${record.code}?',
+                        onConfirm: () async {
+                          await controller
+                              .onDeleteItem(record.code)
+                              .whenComplete(() => Get.back());
+                        },
+                      );
+                    },
+                    margin: EdgeInsets.only(top: 10.scale),
+                    isList: true,
+                  );
+                },
+              );
+            }),
           ),
           SliverToBoxAdapter(
             child: SizedBox(

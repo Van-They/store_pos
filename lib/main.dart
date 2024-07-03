@@ -36,7 +36,7 @@ void main() async {
           getPages: appRoute,
           initialBinding: Injection(),
           navigatorKey: _navKey,
-          scaffoldMessengerKey: _scaffoldMessageKey,
+          scaffoldMessengerKey: scaffoldMessageKey,
           translations: Translate(),
           defaultTransition: Transition.rightToLeft,
           transitionDuration: const Duration(milliseconds: 150),
@@ -59,4 +59,4 @@ void main() async {
 
 final _navKey = GlobalKey<NavigatorState>();
 
-final _scaffoldMessageKey = GlobalKey<ScaffoldMessengerState>();
+final scaffoldMessageKey = GlobalKey<ScaffoldMessengerState>();

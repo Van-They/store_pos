@@ -456,7 +456,10 @@ class ApiClient extends Api {
       final orderTran = await db
           .query(OrderTranModel.orderTran, where: 'code=?', whereArgs: [code]);
       if (orderTran.isNotEmpty) {
-        throw GeneralException();
+        return ApiResponse(
+          record: Status.success.name,
+          status: Status.failed.name,
+        );
       }
 
       await db.delete(ItemModel.tableName, where: 'code=?', whereArgs: [code]);
@@ -465,7 +468,6 @@ class ApiClient extends Api {
         status: Status.success.name,
       );
     } on Exception {
-      ServerFailure("can_not_delete_item_has_transaction".tr);
       rethrow;
     }
   }

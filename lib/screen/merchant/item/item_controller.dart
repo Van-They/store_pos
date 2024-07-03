@@ -3,7 +3,16 @@ import 'package:get/get.dart';
 import 'package:store_pos/core/data/model/item_model.dart';
 import 'package:store_pos/core/repository/item_repo.dart';
 
-class ItemController extends GetxController with StateMixin<List<ItemModel>> {
+class ItemController extends GetxController{
+  RxList<ItemModel> itemList = <ItemModel>[].obs;
+
+  RxBool isLoading = false.obs;
+  RxBool isLoadingMore = false.obs;
+  RxBool isScrolled = false.obs;
+  RxBool isSearching = false.obs;
+  RxBool isAddingNew = false.obs;
+  RxBool isUpdating = false.obs;
+
   final itemRepo = Get.find<ItemRepo>();
 
   @override
@@ -14,38 +23,34 @@ class ItemController extends GetxController with StateMixin<List<ItemModel>> {
 
   Future<void> onGetItem() async {
     try {
-      change(null, status: RxStatus.loading());
+      isLoading.value = true;
       final result = await itemRepo.onGetItem();
       result.fold((l) {
         throw Exception();
       }, (r) {
-        if (r.record.isEmpty) {
-          change([], status: RxStatus.empty());
-          return;
-        }
-        change(r.record, status: RxStatus.success());
+        itemList.value = r.record;
       });
-    } on Exception {
-      change([], status: RxStatus.error());
-      return;
+    } finally {
+      isLoading.value = false;
     }
   }
 
   Future<bool> onCreateItem({required Map<String, dynamic> arg}) async {
     try {
-      change(state, status: RxStatus.loading());
+      isAddingNew.value = true;
       final result = await itemRepo.onCreateItem(arg: arg);
       result.fold((l) {
         throw Exception();
       }, (r) {
         final newItem = ItemModel.fromMap(arg);
-        final data = state ?? [];
-        data.add(newItem);
-        change(data, status: RxStatus.success());
+        itemList.add(newItem);
+        itemList.refresh();
       });
       return true;
     } on Exception {
       return false;
+    }finally{
+      isAddingNew.value = false;
     }
   }
 
@@ -53,18 +58,10 @@ class ItemController extends GetxController with StateMixin<List<ItemModel>> {
     try {
       final result = await itemRepo.onDeleteItem(code);
       result.fold((l) {
-        change(state, status: RxStatus.error());
+
       }, (r) {
-        final data = state ?? [];
-        final index = data.indexWhere((element) => element.code == code);
-        if (index != -1) {
-          data.removeAt(index);
-        }
-        if (data.isEmpty) {
-          change(data, status: RxStatus.empty());
-          return;
-        }
-        change(data, status: RxStatus.success());
+        itemList.removeWhere((element) => element.code==code);
+        itemList.refresh();
       });
     } on Exception {
       rethrow;

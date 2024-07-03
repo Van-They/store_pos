@@ -44,18 +44,18 @@ class HomeScreen extends GetView<HomeController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextWidget(
-                      text: 'Good morning...',
-                      fontSize: 18.scale,
+                      text: _greeting(),
+                      fontSize: 20.scale,
                       color: kPrimaryColor,
                     ),
-                    TextWidget(text: 'Vanthey Thorng', fontSize: 24.scale,color: Colors.black.withOpacity(0.8),),
+                    TextWidget(text: 'Vanthey Thorng', fontSize: 22.scale,color: Colors.black.withOpacity(0.8),),
                   ],
                 ),
                 CircleAvatar(
                   backgroundColor: Colors.grey,
                   radius: 20.scale,
                   child: Icon(
-                    FontAwesomeIcons.user,
+                    Icons.notifications_active,
                     size: 20.scale,
                     color: kWhite,
                   ),
@@ -188,5 +188,16 @@ class HomeScreen extends GetView<HomeController> {
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
       ],
     );
+  }
+
+  String _greeting() {
+    final hour = TimeOfDay.fromDateTime(DateTime.now()).hour;
+    if(hour>=12 && hour<=1){
+      return 'good_morning'.tr;
+    }
+    if(hour>=12&&hour<=13){
+      return 'good_afternoon'.tr;
+    }
+    return 'good_evening'.tr;
   }
 }

@@ -7,7 +7,10 @@ import 'package:store_pos/core/repository/item_repo.dart';
 
 class HomeController extends GetxController with StateMixin<List<ItemModel>> {
   RxList<GroupItemModel> groupList = <GroupItemModel>[].obs;
+  RxList<ItemModel> itemList = <ItemModel>[].obs;
   RxBool isLoading = false.obs;
+  RxBool isLoadingMore = false.obs;
+  RxBool isLoadingScrolled = false.obs;
 
   final GroupItemRepo groupItemRepo = Get.find<GroupItemRepo>();
   final ItemRepo repo = Get.find<ItemRepo>();

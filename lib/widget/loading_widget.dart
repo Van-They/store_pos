@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 
 class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({super.key});
+  const LoadingWidget({super.key, this.label});
+
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class LoadingWidget extends StatelessWidget {
             strokeCap: StrokeCap.round,
             color: kPrimaryColor,
           ),
-          Text('loading'.tr),
+          Text(label ?? 'loading'.tr),
         ],
       ),
     );
