@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:store_pos/core/constant/colors.dart';
+import 'package:store_pos/widget/empty_widget.dart';
+import 'package:store_pos/widget/loading_more_widget.dart';
 import 'package:store_pos/widget/loading_widget.dart';
 
 class CustomScrollWidget extends StatelessWidget {
@@ -33,9 +35,24 @@ class CustomScrollWidget extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         controller: controller,
         slivers: [
-          if(isLoading)
+          if (isLoading)
             const SliverFillRemaining(
               child: LoadingWidget(),
+            ),
+          if (!isLoading && isEmpty)
+            const SliverFillRemaining(
+              child: EmptyWidget(),
+            ),
+          if (!isEmpty && !isLoading)
+            SliverToBoxAdapter(
+              child: child,
+            ),
+          if (isLoadingMore && !isLoading)
+            SliverToBoxAdapter(
+              child: LoadingMoreWidget(
+                isScrolled: isScrolled,
+                isLoading: isLoadingMore,
+              ),
             ),
         ],
       ),

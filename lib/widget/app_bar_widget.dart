@@ -24,7 +24,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: TextWidget(
         text: title,
-        fontSize: 18.scale,
+        fontWeight: FontWeight.w600,
+        fontSize: 20.scale,
       ),
       scrolledUnderElevation: 0.0,
       automaticallyImplyLeading: false,

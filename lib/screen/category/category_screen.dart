@@ -20,7 +20,7 @@ class CategoryScreen extends GetView<GroupController> {
   Widget build(BuildContext context) {
     controller.onGetGroupItem();
     return Scaffold(
-      appBar: const AppBarWidget(title: 'category'),
+      appBar: AppBarWidget(title: 'category'.tr),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
         child:  CustomScrollView(

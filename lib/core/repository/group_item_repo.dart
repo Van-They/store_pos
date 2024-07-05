@@ -56,15 +56,15 @@ class GroupItemRepo {
     try {
       final result = await api.onDeleteGroup(arg: arg);
       if (result.status != 'success') {
-        throw GeneralException();
+        return Left(ServerFailure(result.msg!.tr));
       }
       return Right(
         RepoResponse(
           record: result.status,
         ),
       );
-    } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+    } on Exception {
+      rethrow;
     }
   }
 

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
-import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
@@ -18,7 +16,7 @@ class ServerFailure extends Failure {
     if (scaffoldMessageKey.currentState != null) {
       scaffoldMessageKey.currentState?.showSnackBar(
         SnackBar(
-          backgroundColor: kWarningColor,
+          backgroundColor: kErrorColor,
           behavior: SnackBarBehavior.floating,
           duration: const Duration(milliseconds: 500),
           showCloseIcon: true,

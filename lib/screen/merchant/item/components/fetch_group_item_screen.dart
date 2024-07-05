@@ -34,7 +34,7 @@ class FetchGroupItemScreen extends GetView<GroupController> {
             toolbarHeight: 70.scale,
             title: InputTextWidget(
               maxLine: 1,
-              hintText: "${'search_group_here'.tr}...",
+              hintText: "${'search_group'.tr}...",
               suffixIcon: Icon(
                 Icons.search,
                 size: 20.scale,

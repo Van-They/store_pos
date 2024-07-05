@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:store_pos/core/constant/colors.dart';
@@ -48,7 +47,11 @@ class HomeScreen extends GetView<HomeController> {
                       fontSize: 20.scale,
                       color: kPrimaryColor,
                     ),
-                    TextWidget(text: 'Vanthey Thorng', fontSize: 22.scale,color: Colors.black.withOpacity(0.8),),
+                    TextWidget(
+                      text: 'Vanthey Thorng',
+                      fontSize: 22.scale,
+                      color: Colors.black.withOpacity(0.8),
+                    ),
                   ],
                 ),
                 CircleAvatar(
@@ -192,10 +195,10 @@ class HomeScreen extends GetView<HomeController> {
 
   String _greeting() {
     final hour = TimeOfDay.fromDateTime(DateTime.now()).hour;
-    if(hour>=12 && hour<=1){
+    if (hour >= 12 && hour <= 1) {
       return 'good_morning'.tr;
     }
-    if(hour>=12&&hour<=13){
+    if (hour >= 12 && hour <= 13) {
       return 'good_afternoon'.tr;
     }
     return 'good_evening'.tr;

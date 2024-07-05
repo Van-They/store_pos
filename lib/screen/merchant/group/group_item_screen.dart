@@ -118,6 +118,7 @@ class GroupItemScreen extends GetView<GroupController> {
                             final path = record.imgPath;
                             final result = await controller
                                 .onDeleteGroup(arg: {"code": record.code});
+                            Get.back();
                             if (result) {
                               await ImageStorageService.onClearCache(path)
                                   .whenComplete(() => Get.back());

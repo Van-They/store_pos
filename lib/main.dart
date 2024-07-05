@@ -23,10 +23,13 @@ void main() async {
       ),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const MaterialApp(
-            home: Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Container(
+              color: kWhite,
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(kPrimaryColor),
               ),
             ),
           );

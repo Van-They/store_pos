@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -58,7 +57,7 @@ class ItemSetUpScreen extends GetView<ItemController> {
             'description_2': groupDescKHCtr.text.trim(),
             'qty': itemQtyCtr.text.trim(),
             'cost': itemCostCtr.text.trim(),
-            'active':1,
+            'active': 1,
             'unitPrice': unitPriceCtr.text.trim(),
             'displayLang': languageListener.value.name.toUpperCase(),
             'imgPath': impPath,

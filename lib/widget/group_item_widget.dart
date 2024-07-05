@@ -6,7 +6,6 @@ import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/data/model/group_item_model.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/widget/image_widget.dart';
-import 'package:store_pos/widget/primary_btn_widget.dart';
 import 'package:store_pos/widget/slidable_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 

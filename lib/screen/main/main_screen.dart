@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
@@ -9,7 +8,6 @@ import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/home/home_screen.dart';
 import 'package:store_pos/screen/main/main_controller.dart';
 import 'package:store_pos/screen/menu/MenuScreen.dart';
-import 'package:store_pos/widget/box_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

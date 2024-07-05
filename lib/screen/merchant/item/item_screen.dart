@@ -7,7 +7,7 @@ import 'package:store_pos/screen/merchant/item/item_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
 import 'package:store_pos/widget/components/custom_dialog.dart';
-import 'package:store_pos/widget/custom_empty_widget.dart';
+import 'package:store_pos/widget/empty_widget.dart';
 import 'package:store_pos/widget/input_text_widget.dart';
 import 'package:store_pos/widget/item_widget.dart';
 import 'package:store_pos/widget/loading_widget.dart';
@@ -74,9 +74,14 @@ class ItemScreen extends GetView<ItemController> {
           SliverFillRemaining(
             child: Obx(() {
               final records = controller.itemList;
-              if(controller.isLoading.value){
+              if (controller.isLoading.value) {
                 return const LoadingWidget();
               }
+
+              if(records.isEmpty){
+                return const EmptyWidget();
+              }
+
               return ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: records.length,

@@ -28,6 +28,12 @@ class Translate extends Translations {
     'customer': 'Customer',
 
 
+    'end_of_records': 'End of records',
+    'empty': 'Empty',
+
+
+
+
     'report': 'Report',
     'payment': 'Payment',
     'preference': 'Preference',
@@ -59,9 +65,11 @@ class Translate extends Translations {
     'description_2': 'Description KH',
 
     'search_group': 'Search group',
+    'search_item': 'Search item',
 
     'group_already_exist': 'Group already exist',
     'do_you_want_to_delete': 'Do you want to delete',
+    'can_not_delete_group_is_not_empty': 'Can not delete group is not empty',
 
     //-----------------
     'not_selected': 'Not selected',

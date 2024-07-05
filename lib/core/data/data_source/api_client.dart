@@ -106,7 +106,7 @@ class ApiClient extends Api {
         status: Status.success.name,
       );
     } catch (e) {
-      showMessage(msg: 'item_already_exist'.tr,status: Status.failed);
+      showMessage(msg: 'item_already_exist'.tr, status: Status.failed);
       rethrow;
     }
   }
@@ -394,16 +394,29 @@ class ApiClient extends Api {
       final response = await db.query(ItemModel.tableName,
           where: 'groupCode=?', whereArgs: [arg?['code']]);
       if (response.isNotEmpty) {
-        throw SqlException();
+        return ApiResponse(
+          record: Status.failed.name,
+          msg: 'can_not_delete_group_is_not_empty',
+          status: Status.failed.name,
+        );
       }
-      await db.delete(GroupItemModel.tableName,
-          where: 'code=?', whereArgs: [arg?['code']]);
+      final result = await db.delete(
+        GroupItemModel.tableName,
+        where: 'code=?',
+        whereArgs: [arg?['code']],
+      );
+      if (result != -1) {
+        return ApiResponse(
+          record: Status.success.name,
+          status: Status.success.name,
+        );
+      }
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.failed.name,
+        msg: 'can_not_delete_group_is_not_empty',
+        status: Status.failed.name,
       );
     } on Exception {
-      ServerFailure("can_not_delete_group_is_not_empty".tr);
       rethrow;
     }
   }

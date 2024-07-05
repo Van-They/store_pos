@@ -1,7 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
-import 'package:store_pos/core/data/model/sales_data.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/merchant/group/group_item_screen.dart';
 import 'package:store_pos/screen/merchant/item/item_screen.dart';
@@ -9,30 +9,17 @@ import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
-class MainMerchantScreen extends StatefulWidget {
+class MainMerchantScreen extends StatelessWidget {
   const MainMerchantScreen({super.key});
 
   static const String routeName = "/MainMerchantScreen";
-
-  @override
-  State<MainMerchantScreen> createState() => _MainMerchantScreenState();
-}
-
-class _MainMerchantScreenState extends State<MainMerchantScreen> {
-  final List<SalesData> chartData = [
-    SalesData(DateTime(2010), 35),
-    SalesData(DateTime(2011), 28),
-    SalesData(DateTime(2012), 34),
-    SalesData(DateTime(2013), 32),
-    SalesData(DateTime(2014), 40)
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
         title: 'dashboard'.tr,
-        centerTitle: false,
+        centerTitle: true,
         isBack: true,
       ),
       body: SingleChildScrollView(
@@ -41,107 +28,99 @@ class _MainMerchantScreenState extends State<MainMerchantScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SfCartesianChart(
-            //     primaryXAxis: const DateTimeAxis(),
-            //     series: <CartesianSeries>[
-            //       LineSeries<SalesData, DateTime>(
-            //           dataSource: chartData,
-            //           xValueMapper: (SalesData sales, _) => sales.year,
-            //           yValueMapper: (SalesData sales, _) => sales.sales)
-            //     ]),
-            TextWidget(text: 'menu'.tr),
-            ListTile(
-              onTap: () {
-                Get.toNamed(ItemScreen.routeName);
-              },
-              leading: Icon(
-                Icons.abc,
-                size: 22.scale,
-              ),
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
-              dense: true,
-              title: TextWidget(text: 'item'.tr),
+            TextWidget(
+              text: 'menu'.tr,
+              fontSize: 18.scale,
+              fontWeight: FontWeight.bold,
+              color: kBlack,
             ),
-            ListTile(
-              onTap: () {
-                Get.toNamed(GroupItemScreen.routeName);
-              },
-              leading: Icon(
-                Icons.abc,
-                size: 22.scale,
-              ),
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
-              dense: true,
-              title: TextWidget(text: 'group_item'.tr),
+            _buildMenu(
+              title: 'item'.tr,
+              onTap: () => Get.toNamed(ItemScreen.routeName),
             ),
-            TextWidget(text: 'customer'.tr),
-            ListTile(
-              leading: Icon(
-                Icons.abc,
-                size: 22.scale,
-              ),
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
-              dense: true,
-              title: TextWidget(text: 'customer'.tr),
+            _buildMenu(
+              title: 'group_item'.tr,
+              onTap: () => Get.toNamed(GroupItemScreen.routeName),
             ),
-            TextWidget(text: 'preference'.tr),
-            ListTile(
-              leading: Icon(
-                Icons.abc,
-                size: 22.scale,
-              ),
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
-              dense: true,
-              title: TextWidget(text: 'company'.tr),
+            SizedBox(height: appSpace.scale),
+            TextWidget(
+              text: 'customer'.tr,
+              fontSize: 18.scale,
+              fontWeight: FontWeight.bold,
+              color: kBlack,
             ),
-            ListTile(
-              leading: Icon(
-                Icons.abc,
-                size: 22.scale,
-              ),
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
-              dense: true,
-              title: TextWidget(text: 'setting'.tr),
+            _buildMenu(
+              title: 'customer'.tr,
+              onTap: () {},
             ),
-            TextWidget(text: 'payment'.tr),
-            ListTile(
-              leading: Icon(
-                Icons.abc,
-                size: 22.scale,
-              ),
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
-              dense: true,
-              title: TextWidget(text: 'expand'.tr),
+            SizedBox(height: appSpace.scale),
+            TextWidget(
+              text: 'preference'.tr,
+              fontSize: 18.scale,
+              fontWeight: FontWeight.bold,
+              color: kBlack,
             ),
-            ListTile(
-              leading: Icon(
-                Icons.abc,
-                size: 22.scale,
-              ),
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
-              dense: true,
-              title: TextWidget(text: 'income'.tr),
+            _buildMenu(
+              title: 'company'.tr,
+              onTap: () {},
             ),
-            ListTile(
-              leading: Icon(
-                Icons.abc,
-                size: 22.scale,
-              ),
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
-              dense: true,
-              title: TextWidget(text: 'payment'.tr),
+            _buildMenu(
+              title: 'setting'.tr,
+              onTap: () {},
             ),
-            TextWidget(text: 'report'.tr),
-            ListTile(
-              leading: Icon(
-                Icons.abc,
-                size: 22.scale,
-              ),
-              trailing: Icon(Icons.arrow_forward_ios_rounded, size: 18.scale),
-              dense: true,
-              title: TextWidget(text: 'report'.tr),
+            SizedBox(height: appSpace.scale),
+            TextWidget(
+              text: 'payment'.tr,
+              fontSize: 18.scale,
+              fontWeight: FontWeight.bold,
+              color: kBlack,
+            ),
+            _buildMenu(
+              title: 'expand'.tr,
+              onTap: () {},
+            ),
+            _buildMenu(
+              title: 'income'.tr,
+              onTap: () {},
+            ),
+            _buildMenu(
+              title: 'payment'.tr,
+              onTap: () {},
+            ),
+            SizedBox(height: appSpace.scale),
+            TextWidget(
+              text: 'report'.tr,
+              fontSize: 18.scale,
+              fontWeight: FontWeight.bold,
+              color: kBlack,
+            ),
+            _buildMenu(
+              title: 'report'.tr,
+              onTap: () {},
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMenu({
+    VoidCallback? onTap,
+    required String title,
+    double? height,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AbsorbPointer(
+        child: SizedBox(
+          height: height ?? 40.scale,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextWidget(text: title),
+              Icon(Icons.arrow_forward_ios_rounded, size: 18.scale)
+            ],
+          ),
         ),
       ),
     );
