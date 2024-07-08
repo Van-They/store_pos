@@ -73,11 +73,12 @@ class Translate extends Translations {
 
     //-----------------
     'not_selected': 'Not selected',
+    'not_allow_to_edit': 'Not allow to edit',
 
     //-----------------
 
     'delete': 'Delete',
-
+    'update': 'Update',
     'select': 'Select',
     'failed': 'Failed',
     'save': 'Save',

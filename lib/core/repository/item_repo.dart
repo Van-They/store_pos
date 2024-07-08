@@ -89,4 +89,20 @@ class ItemRepo {
       return Left(ServerFailure('can_not_delete_item_has_transaction'.tr));
     }
   }
+
+  Future<Either<Failure, RepoResponse<String>>> onUpdateItem({required Map<String, dynamic> arg}) async {
+    try {
+      final result = await api.onUpdateItem(arg: arg);
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      return Right(
+        RepoResponse(
+          record: result.status,
+        ),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
 }

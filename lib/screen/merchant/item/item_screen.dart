@@ -78,7 +78,7 @@ class ItemScreen extends GetView<ItemController> {
                 return const LoadingWidget();
               }
 
-              if(records.isEmpty){
+              if (records.isEmpty) {
                 return const EmptyWidget();
               }
 
@@ -91,7 +91,23 @@ class ItemScreen extends GetView<ItemController> {
                   final record = records[index];
                   return ItemWidget(
                     record: record,
-                    onEdit: () {},
+                    onEdit: () {
+                      Get.toNamed(
+                        ItemSetUpScreen.routeName,
+                        arguments: {
+                          'isUpdate': true,
+                          'imgPath': record.imgPath,
+                          'code': record.code,
+                          'group_code': record.groupCode,
+                          'qty': '${record.qty}',
+                          'cost': '${record.cost}',
+                          'price': '${record.unitPrice}',
+                          'description': record.description,
+                          'description_2': record.description_2,
+                          'display_language': record.displayLang,
+                        },
+                      );
+                    },
                     onDelete: () {
                       showYesNoDialog(
                         content:

@@ -7,6 +7,7 @@ import 'package:store_pos/screen/merchant/group/group_item_screen.dart';
 import 'package:store_pos/screen/merchant/item/item_screen.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
+import 'package:store_pos/widget/hr.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
 class MainMerchantScreen extends StatelessWidget {
@@ -55,7 +56,26 @@ class MainMerchantScreen extends StatelessWidget {
             ),
             SizedBox(height: appSpace.scale),
             TextWidget(
-              text: 'preference'.tr,
+              text: 'report'.tr,
+              fontSize: 18.scale,
+              fontWeight: FontWeight.bold,
+              color: kBlack,
+            ),
+            _buildMenu(
+              title: 'daily_sale'.tr,
+              onTap: () {},
+            ),
+            _buildMenu(
+              title: 'poscash'.tr,
+              onTap: () {},
+            ),
+            _buildMenu(
+              title: 'invoice'.tr,
+              onTap: () {},
+            ),
+            SizedBox(height: appSpace.scale),
+            TextWidget(
+              text: 'setting'.tr,
               fontSize: 18.scale,
               fontWeight: FontWeight.bold,
               color: kBlack,
@@ -65,37 +85,24 @@ class MainMerchantScreen extends StatelessWidget {
               onTap: () {},
             ),
             _buildMenu(
-              title: 'setting'.tr,
-              onTap: () {},
-            ),
-            SizedBox(height: appSpace.scale),
-            TextWidget(
-              text: 'payment'.tr,
-              fontSize: 18.scale,
-              fontWeight: FontWeight.bold,
-              color: kBlack,
-            ),
-            _buildMenu(
-              title: 'expand'.tr,
+              title: 'home_slider'.tr,
               onTap: () {},
             ),
             _buildMenu(
-              title: 'income'.tr,
+              title: 'configure'.tr,
               onTap: () {},
             ),
             _buildMenu(
               title: 'payment'.tr,
               onTap: () {},
             ),
-            SizedBox(height: appSpace.scale),
-            TextWidget(
-              text: 'report'.tr,
-              fontSize: 18.scale,
-              fontWeight: FontWeight.bold,
-              color: kBlack,
+            _buildMenu(
+              title: 'import_item'.tr,
+              onTap: () {},
             ),
             _buildMenu(
-              title: 'report'.tr,
+              title: 'export_item'.tr,
+              isLast: true,
               onTap: () {},
             ),
           ],
@@ -104,23 +111,28 @@ class MainMerchantScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMenu({
-    VoidCallback? onTap,
-    required String title,
-    double? height,
-  }) {
+  Widget _buildMenu(
+      {VoidCallback? onTap,
+      required String title,
+      double? height,
+      bool isLast = false}) {
     return GestureDetector(
       onTap: onTap,
       child: AbsorbPointer(
-        child: SizedBox(
-          height: height ?? 40.scale,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextWidget(text: title),
-              Icon(Icons.arrow_forward_ios_rounded, size: 18.scale)
-            ],
-          ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: height ?? 40.scale,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextWidget(text: title),
+                  Icon(Icons.arrow_forward_ios_rounded, size: 18.scale)
+                ],
+              ),
+            ),
+            if (!isLast) const Hr(),
+          ],
         ),
       ),
     );

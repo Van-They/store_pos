@@ -83,13 +83,6 @@ class _MainScreenState extends State<MainScreen> {
         label: 'category'.tr,
       ),
       BottomNavigationBarItem(
-        icon: Icon(
-          Icons.search_rounded,
-          size: 24.scale,
-        ),
-        label: 'find'.tr,
-      ),
-      BottomNavigationBarItem(
         icon: GetBuilder<CartController>(
           builder: (controller) {
             final cartItem = controller.state ?? [];

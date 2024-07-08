@@ -25,16 +25,29 @@ class ItemSetUpScreen extends GetView<ItemController> {
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<Language> languageListener = ValueNotifier(Language.kh);
-    final ValueNotifier<String> imgListener = ValueNotifier('');
-    final groupCodeCtr = TextEditingController();
-    final itemCodeCtr = TextEditingController();
-    final itemCostCtr = TextEditingController();
-    final itemQtyCtr = TextEditingController();
+    final arguments = Get.arguments ?? {};
+    final isUpdate = arguments['isUpdate'] ?? false;
+    final recordImgPath = arguments['imgPath'] ?? '';
+    final recordCode = arguments['code'];
+    final recordGroupCode = arguments['group_code'];
+    final recordDesc = arguments['description'];
+    final recordDesc2 = arguments['description_2'];
+    final recordDisLang = arguments['display_language'] ?? 'KH';
+    final recordQty = arguments['qty'] ?? '0';
+    final recordCost = arguments['cost'] ?? '0';
+    final recordPrice = arguments['price'] ?? '0';
+    final language = recordDisLang == "EN" ? Language.en : Language.kh;
+
+    final ValueNotifier<Language> languageListener = ValueNotifier(language);
+    final ValueNotifier<String> imgListener = ValueNotifier(recordImgPath);
+    final groupCodeCtr = TextEditingController(text: recordGroupCode);
+    final itemCodeCtr = TextEditingController(text: recordCode);
+    final itemCostCtr = TextEditingController(text: recordCost);
+    final itemQtyCtr = TextEditingController(text: recordQty);
     final itemNewQtyCtr = TextEditingController();
-    final unitPriceCtr = TextEditingController();
-    final groupDescEnCtr = TextEditingController();
-    final groupDescKHCtr = TextEditingController();
+    final unitPriceCtr = TextEditingController(text: recordPrice);
+    final groupDescEnCtr = TextEditingController(text: recordDesc);
+    final groupDescKHCtr = TextEditingController(text: recordDesc2);
     final globalKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBarWidget(
@@ -42,11 +55,41 @@ class ItemSetUpScreen extends GetView<ItemController> {
         isBack: true,
       ),
       bottomNavigationBar: PrimaryBtnWidget(
-        label: 'create'.tr,
+        label: isUpdate ? 'update'.tr : 'create'.tr,
         onTap: () async {
           if (!globalKey.currentState!.validate()) {
             return;
           }
+
+          if (isUpdate) {
+            var pathUpdate = recordImgPath;
+            if (imgListener.value != recordImgPath) {
+              pathUpdate = await ImageStorageService.saveImageToSecureDir(
+                File(imgListener.value),
+                path: recordImgPath,
+              );
+            }
+            final Map<String, dynamic> itemData = {
+              'code': itemCodeCtr.text.trim(),
+              'groupCode': groupCodeCtr.text.trim(),
+              'description': groupDescEnCtr.text.trim(),
+              'description_2': groupDescKHCtr.text.trim(),
+              'qty': itemQtyCtr.text.trim(),
+              'cost': itemCostCtr.text.trim(),
+              'active': 1,
+              'unitPrice': unitPriceCtr.text.trim(),
+              'displayLang': languageListener.value.name.toUpperCase(),
+              'imgPath': pathUpdate,
+            };
+
+            final result = await controller.onUpdateItem(arg: itemData);
+            if (result) {
+              Get.back();
+            }
+
+            return;
+          }
+
           final impPath = await ImageStorageService.initImgPathTmp(
             File(imgListener.value),
           );
@@ -100,6 +143,15 @@ class ItemSetUpScreen extends GetView<ItemController> {
               ),
               SizedBox(height: 15.scale),
               InputTextWidget(
+                readOnly: isUpdate,
+                onTap: () {
+                  if (isUpdate) {
+                    showMessage(
+                      msg: 'not_allow_to_edit'.tr,
+                      status: Status.failed,
+                    );
+                  }
+                },
                 validator: (p0) {
                   if (p0 == null || p0.isEmpty) {
                     return "please_input_code".tr;
@@ -170,28 +222,28 @@ class ItemSetUpScreen extends GetView<ItemController> {
                     ),
                   ),
                   if (isUpdate) SizedBox(width: appSpace.scale),
-                  if (isUpdate)
-                    Expanded(
-                      child: InputTextWidget(
-                        textInputType: TextInputType.number,
-                        readOnly: true,
-                        inputFormatter: [
-                          FilteringTextInputFormatter.deny('-'),
-                          FilteringTextInputFormatter.deny(','),
-                          FilteringTextInputFormatter.deny(' '),
-                          FilteringTextInputFormatter.deny('..'),
-                        ],
-                        validator: (p0) {
-                          if (p0 == null || p0.isEmpty) {
-                            return "please_input_new_qty".tr;
-                          }
-                          return null;
-                        },
-                        controller: itemNewQtyCtr,
-                        labelOuter: 'new_qty'.tr,
-                        hintText: 'item_qty'.tr,
-                      ),
-                    ),
+                  // if (isUpdate)
+                  //   Expanded(
+                  //     child: InputTextWidget(
+                  //       textInputType: TextInputType.number,
+                  //       readOnly: true,
+                  //       inputFormatter: [
+                  //         FilteringTextInputFormatter.deny('-'),
+                  //         FilteringTextInputFormatter.deny(','),
+                  //         FilteringTextInputFormatter.deny(' '),
+                  //         FilteringTextInputFormatter.deny('..'),
+                  //       ],
+                  //       validator: (p0) {
+                  //         if (p0 == null || p0.isEmpty) {
+                  //           return "please_input_new_qty".tr;
+                  //         }
+                  //         return null;
+                  //       },
+                  //       controller: itemNewQtyCtr,
+                  //       labelOuter: 'new_qty'.tr,
+                  //       hintText: 'item_qty'.tr,
+                  //     ),
+                  //   ),
                 ],
               ),
               SizedBox(height: 15.scale),

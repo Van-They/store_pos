@@ -44,7 +44,7 @@ class GroupSetupScreen extends GetView<GroupController> {
         isBack: true,
       ),
       bottomNavigationBar: PrimaryBtnWidget(
-        label: 'create'.tr,
+        label: isUpdate ? 'update'.tr : 'create'.tr,
         onTap: () async {
           if (!keyForm.currentState!.validate()) {
             return;
@@ -126,6 +126,12 @@ class GroupSetupScreen extends GetView<GroupController> {
               InputTextWidget(
                 controller: groupCodeCtr,
                 readOnly: isUpdate,
+                onTap: () {
+                  if (isUpdate) {
+                    showMessage(
+                        status: Status.failed, msg: 'not_allow_to_edit'.tr);
+                  }
+                },
                 labelOuter: 'group_code'.tr,
                 hintText: '${'type_your'.tr} ${'group_code'.tr} ${'here'}...',
                 validator: (p0) {

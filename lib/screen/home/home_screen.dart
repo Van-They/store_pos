@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:store_pos/core/constant/colors.dart';
@@ -8,9 +9,9 @@ import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/home/home_controller.dart';
 import 'package:store_pos/screen/merchant/group/group_item_screen.dart';
 import 'package:store_pos/widget/box_widget.dart';
+import 'package:store_pos/widget/empty_widget.dart';
 import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/item_widget.dart';
-import 'package:store_pos/widget/loading_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -21,8 +22,6 @@ class HomeScreen extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     Get.put<HomeController>(HomeController());
-    controller.onGetHomeItems();
-    controller.onGetGroup();
     return Scaffold(
       body: _buildItemList(),
     );
@@ -37,7 +36,6 @@ class HomeScreen extends GetView<HomeController> {
           title: Padding(
             padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,6 +52,17 @@ class HomeScreen extends GetView<HomeController> {
                     ),
                   ],
                 ),
+                const Spacer(),
+                CircleAvatar(
+                  backgroundColor: Colors.grey,
+                  radius: 20.scale,
+                  child: Icon(
+                    FontAwesomeIcons.magnifyingGlass,
+                    color: kWhite,
+                    size: 18.scale,
+                  ),
+                ),
+                SizedBox(width: appSpace.scale),
                 CircleAvatar(
                   backgroundColor: Colors.grey,
                   radius: 20.scale,
@@ -163,9 +172,12 @@ class HomeScreen extends GetView<HomeController> {
           ),
         ),
         SliverToBoxAdapter(
-          child: controller.obx(
-            (state) {
-              final records = state ?? [];
+          child: Obx(
+            () {
+              final records = controller.itemList.obs.value;
+              if (records.isEmpty) {
+                return const EmptyWidget();
+              }
               return MasonryGridView.builder(
                 itemCount: records.length,
                 shrinkWrap: true,
@@ -182,10 +194,6 @@ class HomeScreen extends GetView<HomeController> {
                 },
               );
             },
-            onLoading: const LoadingWidget(),
-            onEmpty: const Center(
-              child: Text('Empty'),
-            ),
           ),
         ),
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),

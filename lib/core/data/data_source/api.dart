@@ -35,4 +35,8 @@ abstract class Api {
   Future<ApiResponse> onGetGroupItemHome();
 
   Future<ApiResponse> onDeleteItem(String code);
+
+  Future<ApiResponse> toggleWishlist(String code);
+
+  Future<ApiResponse> onUpdateItem({required Map<String, dynamic> arg});
 }

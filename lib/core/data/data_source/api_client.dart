@@ -427,7 +427,6 @@ class ApiClient extends Api {
     try {
       final response = await db.update(GroupItemModel.tableName, arg,
           where: 'code=?', whereArgs: [arg['code']]);
-      print('==========$response');
       if (response == -1) {
         throw SqlException();
       }
@@ -476,6 +475,43 @@ class ApiClient extends Api {
       }
 
       await db.delete(ItemModel.tableName, where: 'code=?', whereArgs: [code]);
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } on Exception {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> toggleWishlist(String code) async {
+    try {
+      // final script = await rootBundle.loadString('/asset/sql/wish_list.sql');
+
+      final result = await db.insert('wishlist', {"code": code},
+          conflictAlgorithm: ConflictAlgorithm.rollback);
+
+      if (result == -1) {
+        throw GeneralException();
+      }
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } on Exception {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onUpdateItem({required Map<String, dynamic> arg}) async {
+    try {
+      final response = await db.update(ItemModel.tableName, arg,
+          where: 'code=?', whereArgs: [arg['code']]);
+      if (response == -1) {
+        throw SqlException();
+      }
       return ApiResponse(
         record: Status.success.name,
         status: Status.success.name,

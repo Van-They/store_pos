@@ -50,46 +50,41 @@ class InputTextWidget extends StatelessWidget {
       children: [
         if (labelOuter.isNotEmpty) TextWidget(text: labelOuter),
         if (labelOuter.isNotEmpty) SizedBox(height: 4.scale),
-        GestureDetector(
-          onTap: readOnly?(){
-            showMessage(msg: 'not_allow_to_edit'.tr,status: Status.warning);
-          }:null,
-          child: AbsorbPointer(
-            absorbing: false,
-            child: TextFormField(
-              autofocus: autofocus,
-              controller: controller,
-              keyboardType: textInputType,
-              inputFormatters: inputFormatter,
-              obscureText: obscureText,
-              validator: validator,
-              cursorColor: Colors.blueAccent,
-              cursorErrorColor: Colors.red,
-              readOnly: readOnly,
-              maxLength: maxLength,
-              maxLines: maxLine,
-              obscuringCharacter: '*',
-              onTap: onTap,
-              onTapOutside: (event) => FocusScope.of(context).unfocus(),
-              decoration: InputDecoration(
-                contentPadding: contentPadding ?? EdgeInsets.all(appSpace.scale),
-                isDense: isDense,
-                hintText: hintText,
-                suffixIcon: suffixIcon,
-                fillColor: kShadow,
-                filled: true,
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(appSpace.scale),
-                  borderSide: const BorderSide(color: Colors.red),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(appSpace.scale),
-                  borderSide: const BorderSide(color: kPrimaryColor),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(appSpace.scale),
-                ),
+        AbsorbPointer(
+          absorbing: false,
+          child: TextFormField(
+            autofocus: autofocus,
+            controller: controller,
+            keyboardType: textInputType,
+            inputFormatters: inputFormatter,
+            obscureText: obscureText,
+            validator: validator,
+            cursorColor: Colors.blueAccent,
+            cursorErrorColor: Colors.red,
+            readOnly: readOnly,
+            maxLength: maxLength,
+            maxLines: maxLine,
+            obscuringCharacter: '*',
+            onTap: onTap,
+            onTapOutside: (event) => FocusScope.of(context).unfocus(),
+            decoration: InputDecoration(
+              contentPadding: contentPadding ?? EdgeInsets.all(appSpace.scale),
+              isDense: isDense,
+              hintText: hintText,
+              suffixIcon: suffixIcon,
+              fillColor: kShadow,
+              filled: true,
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(appSpace.scale),
+                borderSide: const BorderSide(color: Colors.red),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(appSpace.scale),
+                borderSide: const BorderSide(color: kPrimaryColor),
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(appSpace.scale),
               ),
             ),
           ),

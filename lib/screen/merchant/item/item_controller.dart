@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:store_pos/core/data/model/item_model.dart';
 import 'package:store_pos/core/repository/item_repo.dart';
 
-class ItemController extends GetxController{
+class ItemController extends GetxController {
   RxList<ItemModel> itemList = <ItemModel>[].obs;
 
   RxBool isLoading = false.obs;
@@ -49,7 +49,7 @@ class ItemController extends GetxController{
       return true;
     } on Exception {
       return false;
-    }finally{
+    } finally {
       isAddingNew.value = false;
     }
   }
@@ -57,14 +57,32 @@ class ItemController extends GetxController{
   Future<void> onDeleteItem(String code) async {
     try {
       final result = await itemRepo.onDeleteItem(code);
-      result.fold((l) {
-
-      }, (r) {
-        itemList.removeWhere((element) => element.code==code);
+      result.fold((l) {}, (r) {
+        itemList.removeWhere((element) => element.code == code);
         itemList.refresh();
       });
     } on Exception {
       rethrow;
+    }
+  }
+
+  Future<bool> onUpdateItem({required Map<String, dynamic> arg}) async {
+    try {
+      final result = await itemRepo.onUpdateItem(arg: arg);
+      result.fold((l) {
+        throw Exception();
+      }, (r) {
+        final newGroup = ItemModel.fromMap(arg);
+        final data = itemList.obs.value ?? [];
+        final index = data.indexWhere((element) => element.code == arg['code']);
+        if (index != -1) {
+          data[index] = newGroup;
+          itemList.refresh();
+        }
+      });
+      return true;
+    } on Exception {
+      return false;
     }
   }
 }
