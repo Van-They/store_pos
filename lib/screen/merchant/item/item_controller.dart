@@ -73,7 +73,7 @@ class ItemController extends GetxController {
         throw Exception();
       }, (r) {
         final newGroup = ItemModel.fromMap(arg);
-        final data = itemList.obs.value ?? [];
+        final data = itemList.obs.value;
         final index = data.indexWhere((element) => element.code == arg['code']);
         if (index != -1) {
           data[index] = newGroup;

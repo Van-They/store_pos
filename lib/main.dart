@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/data/data_source/api.dart';
@@ -10,6 +11,10 @@ import 'package:store_pos/screen/main/main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(
     FutureBuilder(
       future: Future(
@@ -49,10 +54,10 @@ void main() async {
           themeMode: ThemeMode.light,
           theme: ThemeData(
             useMaterial3: true,
-            scaffoldBackgroundColor: kWhite,
+            scaffoldBackgroundColor: kBgColor,
             dialogBackgroundColor: kWhite,
             buttonTheme: const ButtonThemeData(splashColor: kPrimaryColor),
-            appBarTheme: const AppBarTheme(backgroundColor: kWhite),
+            appBarTheme: const AppBarTheme(backgroundColor: kBgColor),
           ),
         );
       },

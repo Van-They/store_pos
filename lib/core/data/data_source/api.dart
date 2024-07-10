@@ -39,4 +39,9 @@ abstract class Api {
   Future<ApiResponse> toggleWishlist(String code);
 
   Future<ApiResponse> onUpdateItem({required Map<String, dynamic> arg});
+
+  Future<ApiResponse> onGetHomeSldier();
+  Future<ApiResponse> onInsertHomeSlder({Map? arg});
+  Future<ApiResponse> onDeleteHomeSlider({Map? arg});
+  
 }

@@ -27,12 +27,8 @@ class Translate extends Translations {
     'category': 'Category',
     'customer': 'Customer',
 
-
     'end_of_records': 'End of records',
     'empty': 'Empty',
-
-
-
 
     'report': 'Report',
     'payment': 'Payment',
@@ -47,6 +43,13 @@ class Translate extends Translations {
     'search_item_here': 'Search item here',
 
     'hello': 'Hello',
+    'home': 'Home',
+    'poscash': 'Pos cash',
+    'home_slider': 'Home slider',
+    'configure': 'Configure',
+    'import_item': 'Import item',
+    'export_item': 'Export item',
+    'daily_sale': 'Daily sale',
 
     //-----------------
     'yes': 'Yes',

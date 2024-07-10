@@ -51,8 +51,8 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: Obx(
         () => BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
           backgroundColor: kWhite,
           selectedItemColor: kPrimaryColor,
           currentIndex: _controller.currentIndex.value,

@@ -1,10 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
-import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/widget/text_widget.dart';
 

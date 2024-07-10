@@ -520,4 +520,58 @@ class ApiClient extends Api {
       rethrow;
     }
   }
+
+  @override
+  Future<ApiResponse> onDeleteHomeSlider({Map? arg}) async {
+    //  try {
+    //   final response = await db.update(ItemModel.tableName, arg,
+    //       where: 'code=?', whereArgs: [arg?['code']]);
+    //   if (response == -1) {
+    //     throw SqlException();
+    //   }
+    //   return ApiResponse(
+    //     record: Status.success.name,
+    //     status: Status.success.name,
+    //   );
+    // } on Exception {
+    //   rethrow;
+    // }
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResponse> onGetHomeSldier() async {
+    // try {
+    //   final response = await db.update(ItemModel.tableName, arg,
+    //       where: 'code=?', whereArgs: [arg['code']]);
+    //   if (response == -1) {
+    //     throw SqlException();
+    //   }
+    //   return ApiResponse(
+    //     record: Status.success.name,
+    //     status: Status.success.name,
+    //   );
+    // } on Exception {
+    //   rethrow;
+    // }
+      throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResponse> onInsertHomeSlder({Map? arg}) async {
+    // try {
+    //   final response = await db.update(ItemModel.tableName, arg,
+    //       where: 'code=?', whereArgs: [arg['code']]);
+    //   if (response == -1) {
+    //     throw SqlException();
+    //   }
+    //   return ApiResponse(
+    //     record: Status.success.name,
+    //     status: Status.success.name,
+    //   );
+    // } on Exception {
+    //   rethrow;
+    // }
+      throw UnimplementedError();
+  }
 }

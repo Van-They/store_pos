@@ -18,5 +18,6 @@ Future<dynamic> customPickImageGallery({bool isEnableCropp = false}) async {
 }
 
 Future<XFile?> customPickImageCamera() async {
-  return await ImagePicker().pickImage(source: ImageSource.camera);
+  return await ImagePicker()
+      .pickImage(source: ImageSource.camera, imageQuality: 80);
 }

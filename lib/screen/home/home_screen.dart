@@ -76,6 +76,7 @@ class HomeScreen extends GetView<HomeController> {
             ),
           ),
         ),
+        SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
         SliverToBoxAdapter(
           child: Stack(
             alignment: Alignment.center,
@@ -83,7 +84,10 @@ class HomeScreen extends GetView<HomeController> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: appPadding.scale),
                 decoration: BoxDecoration(
-                  color: Colors.greenAccent,
+                  image: const DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage('asset/images/img_not_available.jpg'),
+                  ),
                   borderRadius: BorderRadius.circular(appSpace.scale),
                 ),
                 width: double.infinity,
@@ -107,6 +111,7 @@ class HomeScreen extends GetView<HomeController> {
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
         SliverToBoxAdapter(
           child: BoxWidget(
+            backgroundColor: kTransparent,
             onTap: () {
               Get.toNamed(CategoryScreen.routeName);
             },
@@ -134,7 +139,7 @@ class HomeScreen extends GetView<HomeController> {
                 Obx(
                   () {
                     return SizedBox(
-                      height: 90.scale,
+                      height: 120.scale,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: controller.groupList.length,
@@ -142,22 +147,42 @@ class HomeScreen extends GetView<HomeController> {
                           final record = controller.groupList[index];
                           return Container(
                             margin: EdgeInsets.only(right: appSpace.scale),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
+                            child: Stack(
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.greenAccent,
                                     borderRadius:
-                                        BorderRadius.circular(appSpace.scale),
+                                        BorderRadius.circular(4.scale),
                                   ),
-                                  width: 70.scale,
-                                  height: 70.scale,
+                                  width: 120.scale,
+                                  height: double.infinity,
                                   child: ImageWidget(
                                     imgPath: record.imgPath,
                                   ),
                                 ),
-                                TextWidget(text: record.description)
+                                Positioned(
+                                  bottom: 0,
+                                  child: Container(
+                                    width: 120.scale,
+                                    height: 30.scale,
+                                    decoration: BoxDecoration(
+                                      color: kPrimaryColor.withOpacity(0.5),
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(
+                                          appSpace.scale,
+                                        ),
+                                        bottomRight: Radius.circular(
+                                          appSpace.scale,
+                                        ),
+                                      ),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: TextWidget(
+                                      text: record.description,
+                                      color: kWhite,
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                           );
@@ -166,11 +191,11 @@ class HomeScreen extends GetView<HomeController> {
                     );
                   },
                 ),
-                SizedBox(height: appSpace.scale),
               ],
             ),
           ),
         ),
+        SliverToBoxAdapter(child: SizedBox(height: appPadding.scale)),
         SliverToBoxAdapter(
           child: Obx(
             () {
