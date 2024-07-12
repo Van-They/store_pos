@@ -1,4 +1,11 @@
 class AppService {
+  static String converToString(value) {
+    if (value == null) {
+      return '';
+    }
+    return '$value';
+  }
+
   static double convertToDouble(value) {
     if (value == null) {
       return 0.0;
@@ -10,7 +17,7 @@ class AppService {
       return value;
     }
 
-    if(value is int){
+    if (value is int) {
       return value.toDouble();
     }
 
@@ -27,7 +34,7 @@ class AppService {
     if (value is int) {
       return value;
     }
-    if(value is double){
+    if (value is double) {
       return value.toInt();
     }
     return int.parse(value);

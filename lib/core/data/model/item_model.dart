@@ -1,4 +1,3 @@
-
 import 'package:store_pos/core/service/app_service.dart';
 
 class ItemModel {
@@ -44,11 +43,11 @@ class ItemModel {
 
   factory ItemModel.fromMap(Map<String, dynamic> map) {
     return ItemModel(
-      code: map['code'] ?? "",
-      groupCode: map['groupCode'] ?? "",
-      description: map['description'] ?? "",
-      description_2: map['description_2'] ?? "",
-      displayLang: map['displayLang'] ?? "",
+      code: AppService.converToString(map['code'] ?? ""),
+      groupCode: AppService.converToString(map['groupCode'] ?? ""),
+      description: AppService.converToString(map['description'] ?? ""),
+      description_2: AppService.converToString(map['description_2'] ?? ""),
+      displayLang: AppService.converToString(map['displayLang'] ?? ""),
       active: AppService.convertToInt(map['active'] ?? 1),
       qty: AppService.convertToDouble(map['qty'] ?? 0.0),
       unitPrice: AppService.convertToDouble(map['unitPrice'] ?? 0.0),
@@ -56,5 +55,4 @@ class ItemModel {
       imgPath: map['imgPath'] ?? "",
     );
   }
-
 }

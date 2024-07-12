@@ -9,6 +9,8 @@ import 'package:store_pos/screen/main/main_screen.dart';
 import 'package:store_pos/screen/menu/MenuScreen.dart';
 import 'package:store_pos/screen/merchant/group/components/group_set_up_screen.dart';
 import 'package:store_pos/screen/merchant/group/group_item_screen.dart';
+import 'package:store_pos/screen/merchant/import_item/import_item_controller.dart';
+import 'package:store_pos/screen/merchant/import_item/import_item_screen.dart';
 import 'package:store_pos/screen/merchant/item/components/fetch_group_item_screen.dart';
 import 'package:store_pos/screen/merchant/item/components/item_set_up_screen.dart';
 import 'package:store_pos/screen/merchant/item/item_controller.dart';
@@ -37,10 +39,9 @@ List<GetPage<dynamic>> appRoute = [
     page: () => const MenuScreen(),
   ),
   GetPage(
-    name: ItemScreen.routeName,
-    page: () => const ItemScreen(),
-    binding: BindingsBuilder.put(() => ItemController())
-  ),
+      name: ItemScreen.routeName,
+      page: () => const ItemScreen(),
+      binding: BindingsBuilder.put(() => ItemController())),
   GetPage(
     name: ItemSetUpScreen.routeName,
     page: () => const ItemSetUpScreen(),
@@ -72,5 +73,10 @@ List<GetPage<dynamic>> appRoute = [
   GetPage(
     name: FetchGroupItemScreen.routeName,
     page: () => const FetchGroupItemScreen(),
+  ),
+  GetPage(
+    name: ImportItemScreen.routeName,
+    binding: BindingsBuilder.put(() => ImportItemController()),
+    page: () => const ImportItemScreen(),
   ),
 ];

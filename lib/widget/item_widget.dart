@@ -16,18 +16,104 @@ class ItemWidget extends GetView<CartController> {
     super.key,
     required this.record,
     this.isList = false,
+    this.isNotSlideAble = false,
     this.onDelete,
     this.onEdit,
     this.margin,
+    this.isCheck = false,
+    this.notifyCheck,
   });
 
   final ItemModel record;
-  final bool isList;
+  final bool isList, isCheck;
   final VoidCallback? onDelete, onEdit;
   final EdgeInsetsGeometry? margin;
+  final bool isNotSlideAble;
+  final Function(bool?)? notifyCheck;
 
   @override
   Widget build(BuildContext context) {
+    if (isNotSlideAble && isList) {
+      ValueNotifier<bool> isCheck = ValueNotifier(false);
+      return Container(
+        margin: margin ?? EdgeInsets.only(top: appSpace.scale),
+        child: BoxWidget(
+          height: 110.scale,
+          enableShadow: true,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ImageWidget(
+                imgPath: record.imgPath,
+                height: double.infinity,
+                width: 100.scale,
+              ),
+              SizedBox(width: appSpace.scale),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 4.scale),
+                  TextWidget(
+                    maxLine: 2,
+                    fontSize: 16.scale,
+                    text: record.displayLang.contains("KH")
+                        ? record.description_2
+                        : record.description,
+                  ),
+                  SizedBox(height: appSpace.scale),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: appSpace.scale, vertical: 2.scale),
+                    decoration: BoxDecoration(
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(appSpace.scale),
+                    ),
+                    child: TextWidget(
+                      text: "${'code'.tr}: ${record.code}",
+                      color: kWhite,
+                      fontSize: 12.scale,
+                    ),
+                  ),
+                  SizedBox(height: 4.scale),
+                  TextWidget(text: "${'qty'.tr}: ${record.qty}"),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: appSpace.scale,
+                      top: 4.scale,
+                    ),
+                    child: TextWidget(
+                      text: '\$${record.unitPrice}',
+                      color: kErrorColor,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Container(
+                alignment: Alignment.center,
+                height: double.infinity,
+                child: ValueListenableBuilder(
+                  valueListenable: isCheck,
+                  builder: (context, value, child) {
+                    return Checkbox(
+                      activeColor: kPrimaryColor,
+                      value: value,
+                      onChanged: (check) {
+                        isCheck.value = !value;
+                        if (notifyCheck != null) {
+                          notifyCheck!(isCheck.value);
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     if (isList) {
       return Container(
         margin: margin ?? EdgeInsets.only(top: appSpace.scale),
@@ -164,15 +250,17 @@ class ItemWidget extends GetView<CartController> {
                       color: isCurrent ? kErrorColor : kSecondaryColor,
                       shape: BoxShape.circle,
                     ),
-                    child: isCurrent? Icon(
-                      Icons.remove,
-                      color: kWhite,
-                      size: 20.scale,
-                    ):Icon(
-                      Icons.add,
-                      color: kWhite,
-                      size: 20.scale,
-                    ),
+                    child: isCurrent
+                        ? Icon(
+                            Icons.remove,
+                            color: kWhite,
+                            size: 20.scale,
+                          )
+                        : Icon(
+                            Icons.add,
+                            color: kWhite,
+                            size: 20.scale,
+                          ),
                   );
                 }),
               )

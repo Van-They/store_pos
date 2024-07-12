@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/merchant/group/group_item_screen.dart';
+import 'package:store_pos/screen/merchant/import_item/import_item_screen.dart';
 import 'package:store_pos/screen/merchant/item/item_screen.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
@@ -98,7 +98,9 @@ class MainMerchantScreen extends StatelessWidget {
             ),
             _buildMenu(
               title: 'import_item'.tr,
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(ImportItemScreen.routeName);
+              },
             ),
             _buildMenu(
               title: 'export_item'.tr,

@@ -59,6 +59,8 @@ class Translate extends Translations {
 
     //-----------------
     'disable': 'Disable',
+    'upload_data': 'Upload Data',
+    'pick_file': 'Pick File',
 
     //-----------------
 

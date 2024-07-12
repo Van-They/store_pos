@@ -10,14 +10,16 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle = true,
     required this.title,
     this.isBack = false,
+    this.onReset,
+    this.isReset = false,
     this.onBack,
     this.onSearch,
     this.isSearch = false,
   });
 
   final String title;
-  final bool isBack, centerTitle, isSearch;
-  final VoidCallback? onBack, onSearch;
+  final bool isBack, centerTitle, isSearch, isReset;
+  final VoidCallback? onBack, onSearch, onReset;
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +55,19 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             onPressed: onSearch,
             icon: Icon(
               Icons.search,
+              color: kPrimaryColor,
               size: 20.scale,
             ),
-          )
+          ),
+        if (isReset)
+          IconButton(
+            onPressed: onReset,
+            icon: Icon(
+              Icons.restart_alt_rounded,
+              color: kPrimaryColor,
+              size: 24.scale,
+            ),
+          ),
       ],
     );
   }
