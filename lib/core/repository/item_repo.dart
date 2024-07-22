@@ -90,7 +90,8 @@ class ItemRepo {
     }
   }
 
-  Future<Either<Failure, RepoResponse<String>>> onUpdateItem({required Map<String, dynamic> arg}) async {
+  Future<Either<Failure, RepoResponse<String>>> onUpdateItem(
+      {required Map<String, dynamic> arg}) async {
     try {
       final result = await api.onUpdateItem(arg: arg);
       if (result.status != 'success') {
@@ -99,6 +100,70 @@ class ItemRepo {
       return Right(
         RepoResponse(
           record: result.status,
+        ),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<List<ItemModel>>>> onGetItemByCategory({
+    Map? arg,
+  }) async {
+    try {
+      final result = await api.onGetItemByCategory(arg: arg);
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      final List<ItemModel> record = [];
+
+      for (var e in result.record) {
+        record.add(ItemModel.fromMap(e));
+      }
+
+      return Right(
+        RepoResponse(
+          record: record,
+        ),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<List<ItemModel>>>> onGetWishList(
+      {Map? arg}) async {
+    final result = await api.onGetWishList(arg: arg);
+    try {
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      final List<ItemModel> record = [];
+
+      for (var e in result.record) {
+        record.add(ItemModel.fromMap(e));
+      }
+
+      return Right(
+        RepoResponse(
+          record: record,
+        ),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<String>>> onToggleWishList(
+      {Map? arg}) async {
+    final result = await api.onToggleWishList(arg: arg);
+    try {
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      return Right(
+        RepoResponse(
+          record: result.record,
         ),
       );
     } on GeneralException {

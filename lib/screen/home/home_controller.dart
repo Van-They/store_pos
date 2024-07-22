@@ -15,6 +15,7 @@ class HomeController extends GetxController {
   final GroupItemRepo groupItemRepo = Get.find<GroupItemRepo>();
   final ItemRepo repo = Get.find<ItemRepo>();
 
+
   @override
   void onInit() {
     super.onInit();

@@ -43,5 +43,10 @@ abstract class Api {
   Future<ApiResponse> onGetHomeSldier();
   Future<ApiResponse> onInsertHomeSlder({Map? arg});
   Future<ApiResponse> onDeleteHomeSlider({Map? arg});
+
+  Future<ApiResponse> onGetItemByCategory({Map? arg});
+
+  Future<ApiResponse> onGetWishList({Map? arg});
   
+  Future<ApiResponse> onToggleWishList({Map? arg});
 }

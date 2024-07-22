@@ -554,7 +554,7 @@ class ApiClient extends Api {
     // } on Exception {
     //   rethrow;
     // }
-      throw UnimplementedError();
+    throw UnimplementedError();
   }
 
   @override
@@ -572,6 +572,75 @@ class ApiClient extends Api {
     // } on Exception {
     //   rethrow;
     // }
-      throw UnimplementedError();
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<ApiResponse> onGetItemByCategory({Map? arg}) async {
+    try {
+      final response = await db.query(
+        ItemModel.tableName,
+        where: "groupCode=?",
+        whereArgs: [
+          arg?['code'],
+        ],
+      );
+      return ApiResponse(
+        record: response,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetWishList({Map? arg}) async {
+    try {
+      //wishlist
+      const query =
+          "SELECT * FROM ${ItemModel.tableName} t JOIN ON wishlist w WHERE t.code==w.code";
+      final response = await db.rawQuery(query);
+      return ApiResponse(
+        record: response,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onToggleWishList({Map? arg}) async {
+    try {
+      const table = "wishlist";
+      final isExit = await db.query(
+        table,
+        where: "code=?",
+        whereArgs: [arg?['code']],
+      );
+      if (isExit.isNotEmpty) {
+        await db.delete(
+          table,
+          where: 'code=?',
+          whereArgs: [arg?['code']],
+        );
+        return ApiResponse(
+          record: "Delete",
+          status: Status.success.name,
+        );
+      }
+      await db.insert(
+        table,
+        {"code": arg?['code']},
+        conflictAlgorithm: ConflictAlgorithm.rollback,
+      );
+      return ApiResponse(
+        record: "Insert",
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 }

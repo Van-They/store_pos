@@ -5,6 +5,7 @@ import 'package:store_pos/core/data/model/order_head_model.dart';
 import 'package:store_pos/core/data/model/order_tran_model.dart';
 import 'package:store_pos/core/data/model/payment_method_model.dart';
 import 'package:store_pos/core/repository/cart_repo.dart';
+import 'package:store_pos/core/repository/item_repo.dart';
 
 class CartController extends GetxController
     with StateMixin<List<OrderTranModel>> {
@@ -16,12 +17,17 @@ class CartController extends GetxController
   var paymentName = 'not_selected'.tr.obs;
 
   final cartRepo = Get.find<CartRepo>();
+  final itemRepo = Get.find<ItemRepo>();
 
   @override
   void onInit() {
     onGetOrderHead();
     onGetItemCart();
     super.onInit();
+  }
+
+  void onGetWishList() async {
+    //Todo get wishlist item
   }
 
   void onGetOrderHead() async {

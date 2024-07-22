@@ -41,6 +41,7 @@ class Translate extends Translations {
     'stock': 'Stock',
     'exit': 'Exit',
     'search_item_here': 'Search item here',
+    'home_slide_set_up': 'Home slide setup',
 
     'hello': 'Hello',
     'home': 'Home',
@@ -61,6 +62,7 @@ class Translate extends Translations {
     'disable': 'Disable',
     'upload_data': 'Upload Data',
     'pick_file': 'Pick File',
+    'upload_image': 'Upload Image',
 
     //-----------------
 
@@ -68,7 +70,6 @@ class Translate extends Translations {
     'item_code': 'Item code',
     'description': 'Description EN',
     'description_2': 'Description KH',
-
     'search_group': 'Search group',
     'search_item': 'Search item',
 
