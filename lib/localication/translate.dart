@@ -18,6 +18,7 @@ class Translate extends Translations {
 
     //-----------------
     'button': 'Button',
+    'browse_by_category': 'Browse by Categories',
 
     //-----------------
     'cropper': 'Cropper',
@@ -149,6 +150,7 @@ class Translate extends Translations {
     'language': 'Language',
     'dashboard': 'Dashboard',
     'menu': 'Menu',
+    'not_allow_quantity_smaller_than_one': 'No allow quantity smaller than one',
   };
 
   final Map<String, String> _khmer = {};

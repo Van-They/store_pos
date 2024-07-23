@@ -13,10 +13,23 @@ import 'package:store_pos/widget/loading_widget.dart';
 import 'package:store_pos/widget/primary_btn_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
-class CartScreen extends GetView<CartController> {
+class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
 
   static const String routeName = '/CartScreen';
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  late CartController controller;
+
+  @override
+  void initState() {
+    controller = Get.find<CartController>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

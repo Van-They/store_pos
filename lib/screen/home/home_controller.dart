@@ -15,14 +15,6 @@ class HomeController extends GetxController {
   final GroupItemRepo groupItemRepo = Get.find<GroupItemRepo>();
   final ItemRepo repo = Get.find<ItemRepo>();
 
-
-  @override
-  void onInit() {
-    super.onInit();
-    onGetHomeItems();
-    onGetGroup();
-  }
-
   Future<void> onGetHomeItems({Map? arg}) async {
     try {
       isLoading.value = true;

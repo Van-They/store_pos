@@ -12,15 +12,28 @@ import 'package:store_pos/widget/custom_error_widget.dart';
 import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
-class CategoryScreen extends GetView<GroupController> {
+class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
 
   static const String routeName = '/CategoryScreen';
 
   @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+  late GroupController _controller;
+
+  @override
+  void initState() {
+    _controller = Get.find<GroupController>();
+    _controller.onGetGroupItem();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final arg = Get.arguments ?? {};
-    controller.onGetGroupItem();
     return Scaffold(
       appBar: AppBarWidget(
         title: 'category'.tr,
@@ -32,7 +45,7 @@ class CategoryScreen extends GetView<GroupController> {
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverFillRemaining(
-              child: controller.obx(
+              child: _controller.obx(
                 onError: (error) => const CustomErrorWidget(),
                 onEmpty: const CustomEmptyWidget(),
                 (state) {
