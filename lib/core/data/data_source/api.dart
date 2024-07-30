@@ -51,4 +51,5 @@ abstract class Api {
   Future<ApiResponse> onToggleWishList({Map? arg});
 
   Future<ApiResponse> onCreateImportItem({required Map<String, dynamic> arg});
+  Future<ApiResponse> onCreateBatchItems({required List<Map<String,dynamic>> itemList});
 }

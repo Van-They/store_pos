@@ -661,4 +661,22 @@ class ApiClient extends Api {
       rethrow;
     }
   }
+
+  @override
+  Future<ApiResponse> onCreateBatchItems({required List<Map<String,dynamic>> itemList})  async{
+    try {
+      final batch = db.batch();
+      for(var i in itemList){
+        batch.insert(ItemModel.tableName, i,conflictAlgorithm: ConflictAlgorithm.ignore);
+      }
+      final response = await batch.commit(noResult: false,continueOnError: true);
+      //will return error item in response
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
