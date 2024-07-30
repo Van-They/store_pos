@@ -42,7 +42,7 @@ class CheckOutScreen extends GetView<CartController> {
             Container(
               decoration: BoxDecoration(
                 color: kWhite,
-                border: Border.all(color: kborderColor),
+                border: Border.all(color: kBorderColor),
                 borderRadius: BorderRadius.circular(appSpace),
               ),
               child: ListTile(
@@ -80,7 +80,7 @@ class CheckOutScreen extends GetView<CartController> {
             Container(
               decoration: BoxDecoration(
                 color: kWhite,
-                border: Border.all(color: kborderColor),
+                border: Border.all(color: kBorderColor),
                 borderRadius: BorderRadius.circular(appSpace),
               ),
               child: ListTile(

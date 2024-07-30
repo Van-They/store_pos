@@ -90,13 +90,13 @@ class ItemCartWidget extends GetView<CartController> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(4),
-                                border: Border.all(color: kborderColor),
+                                border: Border.all(color: kBorderColor),
                               ),
                               width: 30.scale,
                               height: 30.scale,
                               child: Icon(
                                 Icons.remove,
-                                color: kborderColor,
+                                color: kBorderColor,
                                 size: 18.scale,
                               ),
                             ),
@@ -113,13 +113,13 @@ class ItemCartWidget extends GetView<CartController> {
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(4),
-                                border: Border.all(color: kborderColor),
+                                border: Border.all(color: kBorderColor),
                               ),
                               width: 30.scale,
                               height: 30.scale,
                               child: Icon(
                                 Icons.add,
-                                color: kborderColor,
+                                color: kBorderColor,
                                 size: 18.scale,
                               ),
                             ),

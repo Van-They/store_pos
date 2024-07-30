@@ -643,4 +643,22 @@ class ApiClient extends Api {
       rethrow;
     }
   }
+
+  @override
+  Future<ApiResponse> onCreateImportItem(
+      {required Map<String, dynamic> arg}) async {
+    try {
+      final response = await db.insert(ItemModel.tableName, arg,
+          conflictAlgorithm: ConflictAlgorithm.ignore);
+      if (response == -1) {
+        throw GeneralException();
+      }
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

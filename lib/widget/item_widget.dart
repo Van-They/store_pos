@@ -88,26 +88,26 @@ class ItemWidget extends GetView<CartController> {
                   ),
                 ],
               ),
-              const Spacer(),
-              Container(
-                alignment: Alignment.center,
-                height: double.infinity,
-                child: ValueListenableBuilder(
-                  valueListenable: isCheck,
-                  builder: (context, value, child) {
-                    return Checkbox(
-                      activeColor: kPrimaryColor,
-                      value: value,
-                      onChanged: (check) {
-                        isCheck.value = !value;
-                        if (notifyCheck != null) {
-                          notifyCheck!(isCheck.value);
-                        }
-                      },
-                    );
-                  },
-                ),
-              ),
+              // const Spacer(),
+              // Container(
+              //   alignment: Alignment.center,
+              //   height: double.infinity,
+              //   child: ValueListenableBuilder(
+              //     valueListenable: isCheck,
+              //     builder: (context, value, child) {
+              //       return Checkbox(
+              //         activeColor: kPrimaryColor,
+              //         value: value,
+              //         onChanged: (check) {
+              //           isCheck.value = !value;
+              //           if (notifyCheck != null) {
+              //             notifyCheck!(isCheck.value);
+              //           }
+              //         },
+              //       );
+              //     },
+              //   ),
+              // ),
             ],
           ),
         ),

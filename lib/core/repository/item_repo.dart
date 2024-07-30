@@ -170,4 +170,19 @@ class ItemRepo {
       return Left(ServerFailure('failed'.tr));
     }
   }
+
+  Future<Either<Failure, RepoResponse<String>>> onCreateImportItem(
+      {required Map<String, dynamic> arg}) async {
+    final result = await api.onCreateImportItem(arg: arg);
+    try {
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      return Right(
+        RepoResponse(record: result.record),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
 }

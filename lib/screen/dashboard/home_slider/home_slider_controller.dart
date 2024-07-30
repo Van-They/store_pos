@@ -3,7 +3,7 @@ import 'package:store_pos/core/repository/merchant_menu_repo.dart';
 
 class HomeSliderController extends GetxController {
   RxList<String> imgSlider = <String>[].obs;
-
+  RxBool isFile = false.obs;
   final MerchantMenuRepo _repo = Get.find<MerchantMenuRepo>();
 
   @override

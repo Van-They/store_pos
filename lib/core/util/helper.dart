@@ -7,6 +7,7 @@ import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
 final _screenDimention = Get.width < Get.height ? Get.width : Get.height;
+
 double _scaleFactor(size, [double factor = 0.5]) {
   return size + ((_screenDimention / 350 * size) - size) * factor;
 }
@@ -27,9 +28,11 @@ const appPadding = 16.0;
 const appSpace = 8.0;
 
 int itemCanFitHorizontal({required double width}) => Get.width ~/ width;
+
 int itemCanFitVertical({required double height}) => Get.height ~/ height;
 
 final Logger logger = _logger();
+
 Logger _logger() => Logger(
       printer: PrettyPrinter(methodCount: 1, errorMethodCount: 1),
     );
@@ -48,7 +51,7 @@ showMessage({String msg = '', Status status = Status.success}) {
     color = kWarningColor;
   }
   Get.rawSnackbar(
-    messageText: TextWidget(text: msg,color: kWhite),
+    messageText: TextWidget(text: msg, color: kWhite),
     duration: const Duration(milliseconds: 1500),
     backgroundColor: color,
   );

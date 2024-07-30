@@ -17,31 +17,31 @@ class HomeController extends GetxController {
 
   Future<void> onGetHomeItems({Map? arg}) async {
     try {
-      isLoading.value = true;
+
       await repo.onGetHomeItems(arg: arg).then((value) {
         value.fold((l) => throw GeneralException(), (r) {
           itemList.value = r.record;
+          itemList.refresh();
+          print('=======i');
         });
       });
     } on GeneralException {
       rethrow;
-    } finally {
-      isLoading.value = false;
     }
   }
 
   Future<void> onGetGroup({Map? arg}) async {
     try {
-      isLoading.value = true;
+
       await groupItemRepo.onGetGroupItemHome().then((value) {
         value.fold((l) => throw GeneralException(), (r) {
           groupList.value = r.record;
+          itemList.refresh();
+          print('=======g');
         });
       });
     } on GeneralException {
       rethrow;
-    } finally {
-      isLoading.value = false;
     }
   }
 }

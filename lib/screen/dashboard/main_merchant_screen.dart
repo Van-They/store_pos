@@ -4,6 +4,7 @@ import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/dashboard/group/group_item_screen.dart';
 import 'package:store_pos/screen/dashboard/home_slider/home_slider_screen.dart';
+import 'package:store_pos/screen/dashboard/import_group_item/import_group_item_screen.dart';
 import 'package:store_pos/screen/dashboard/import_item/import_item_screen.dart';
 import 'package:store_pos/screen/dashboard/item/item_screen.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
@@ -26,90 +27,124 @@ class MainMerchantScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
+        padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextWidget(
-              text: 'menu'.tr,
-              fontSize: 18.scale,
-              fontWeight: FontWeight.bold,
-              color: kBlack,
-            ),
-            _buildMenu(
-              title: 'item'.tr,
-              onTap: () => Get.toNamed(ItemScreen.routeName),
-            ),
-            _buildMenu(
-              title: 'group_item'.tr,
-              onTap: () => Get.toNamed(GroupItemScreen.routeName),
-            ),
-            SizedBox(height: appSpace.scale),
-            TextWidget(
-              text: 'customer'.tr,
-              fontSize: 18.scale,
-              fontWeight: FontWeight.bold,
-              color: kBlack,
-            ),
-            _buildMenu(
-              title: 'customer'.tr,
-              onTap: () {},
-            ),
-            SizedBox(height: appSpace.scale),
-            TextWidget(
-              text: 'report'.tr,
-              fontSize: 18.scale,
-              fontWeight: FontWeight.bold,
-              color: kBlack,
-            ),
-            _buildMenu(
-              title: 'daily_sale'.tr,
-              onTap: () {},
-            ),
-            _buildMenu(
-              title: 'poscash'.tr,
-              onTap: () {},
-            ),
-            _buildMenu(
-              title: 'invoice'.tr,
-              onTap: () {},
+            BoxWidget(
+              padding: EdgeInsets.all(appSpace.scale),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    text: 'preference'.tr,
+                    fontSize: 18.scale,
+                    fontWeight: FontWeight.bold,
+                    color: kBlack,
+                  ),
+                  _buildMenu(
+                    title: 'home_slider'.tr,
+                    onTap: () {
+                      Get.toNamed(HomeSliderScreen.routeName);
+                    },
+                  ),
+                  _buildMenu(
+                    title: 'payment_method'.tr,
+                    onTap: () {},
+                  ),
+                  _buildMenu(
+                    title: 'item'.tr,
+                    onTap: () => Get.toNamed(ItemScreen.routeName),
+                  ),
+                  _buildMenu(
+                    title: 'group_item'.tr,
+                    onTap: () => Get.toNamed(GroupItemScreen.routeName),
+                  ),
+                  _buildMenu(
+                    title: 'company'.tr,
+                    onTap: () {},
+                  ),
+                  _buildMenu(
+                    title: 'configure'.tr,
+                    isLast: true,
+                    onTap: () {},
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: appSpace.scale),
-            TextWidget(
-              text: 'setting'.tr,
-              fontSize: 18.scale,
-              fontWeight: FontWeight.bold,
-              color: kBlack,
+            BoxWidget(
+              padding: EdgeInsets.all(appSpace.scale),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    text: 'customer'.tr,
+                    fontSize: 18.scale,
+                    fontWeight: FontWeight.bold,
+                    color: kBlack,
+                  ),
+                  _buildMenu(title: 'customer'.tr, onTap: () {}, isLast: true),
+                ],
+              ),
             ),
-            _buildMenu(
-              title: 'company'.tr,
-              onTap: () {},
+            SizedBox(height: appSpace.scale),
+            BoxWidget(
+              padding: EdgeInsets.all(appSpace.scale),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    text: 'report'.tr,
+                    fontSize: 18.scale,
+                    fontWeight: FontWeight.bold,
+                    color: kBlack,
+                  ),
+                  _buildMenu(
+                    title: 'daily_sale'.tr,
+                    onTap: () {},
+                  ),
+                  _buildMenu(
+                    title: 'cash_register'.tr,
+                    onTap: () {},
+                  ),
+                  _buildMenu(
+                    title: 'invoice_register'.tr,
+                    onTap: () {},
+                    isLast: true,
+                  ),
+                ],
+              ),
             ),
-            _buildMenu(
-              title: 'home_slider'.tr,
-              onTap: () {
-                Get.toNamed(HomeSliderScreen.routeName);
-              },
+            SizedBox(height: appSpace.scale),
+            BoxWidget(
+              padding: EdgeInsets.all(appSpace.scale),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    text: 'import_data'.tr,
+                    fontSize: 18.scale,
+                    fontWeight: FontWeight.bold,
+                    color: kBlack,
+                  ),
+                  _buildMenu(
+                    title: 'import_group_item'.tr,
+                    onTap: () {
+                      Get.toNamed(ImportGroupItemScreen.routeName);
+                    },
+                  ),
+                  _buildMenu(
+                    title: 'import_item'.tr,
+                    isLast: true,
+                    onTap: () {
+                      Get.toNamed(ImportItemScreen.routeName);
+                    },
+                  ),
+                ],
+              ),
             ),
-            _buildMenu(
-              title: 'configure'.tr,
-              onTap: () {},
-            ),
-            _buildMenu(
-              title: 'payment'.tr,
-              onTap: () {},
-            ),
-            _buildMenu(
-              title: 'import_item'.tr,
-              onTap: () {
-                Get.toNamed(ImportItemScreen.routeName);
-              },
-            ),
-            _buildMenu(
-              title: 'export_item'.tr,
-              isLast: true,
-              onTap: () {},
-            ),
+            SizedBox(height: appSpace.scale),
           ],
         ),
       ),
@@ -126,13 +161,24 @@ class MainMerchantScreen extends StatelessWidget {
       child: AbsorbPointer(
         child: Column(
           children: [
+            SizedBox(height: (appSpace / 2).scale),
             SizedBox(
-              height: height ?? 40.scale,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              height: height ?? (isLast ? 35.scale : 40.scale),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextWidget(text: title),
-                  Icon(Icons.arrow_forward_ios_rounded, size: 18.scale)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextWidget(text: title),
+                      // Icon(Icons.arrow_forward_ios_rounded, size: 18.scale)
+                    ],
+                  ),
+                  TextWidget(
+                    text: 'do something',
+                    fontSize: 12.scale,
+                    color: kLabel,
+                  ),
                 ],
               ),
             ),

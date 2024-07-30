@@ -120,6 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: appSpace.scale),
               GetBuilder<HomeController>(
                 builder: (controller) {
+                  print('=======b');
                   return SizedBox(
                     height: 60.scale,
                     child: ListView.builder(

@@ -1,5 +1,5 @@
 import 'package:image_picker/image_picker.dart';
-import 'package:store_pos/core/service/image_cropper.dart';
+import 'package:store_pos/core/service/image_cropper_service.dart';
 import 'package:store_pos/core/util/extentions.dart';
 
 Future<dynamic> customPickImageGallery({bool isEnableCropp = false}) async {

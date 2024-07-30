@@ -14,6 +14,8 @@ class Translate extends Translations {
     'add_group': 'Add group',
     'add_item': 'Add item',
     'add_new': 'Add new',
+    'add_on': 'Add On',
+    'add_image': 'Add Image',
     'amount_to_pay': 'Amount to pay',
 
     //-----------------
@@ -27,6 +29,9 @@ class Translate extends Translations {
     'cost': 'Cost',
     'category': 'Category',
     'customer': 'Customer',
+
+    //-----------------
+    'download_data': 'Download Data',
 
     'end_of_records': 'End of records',
     'empty': 'Empty',
@@ -69,6 +74,7 @@ class Translate extends Translations {
 
     'group_code': 'Group code',
     'item_code': 'Item code',
+    'import_data': 'Import data',
     'description': 'Description EN',
     'description_2': 'Description KH',
     'search_group': 'Search group',
@@ -144,12 +150,18 @@ class Translate extends Translations {
     'no_records': 'No records',
 
     'unit_price': 'Unit price',
+    'recent_sale': 'Recent sale',
+    'invoice_register': 'Invoice register',
+    'cash_register': 'Cash register',
+    'item_sale': 'Item sale',
+    'payment_method': 'Payment method',
 
     //-----------------
     'wishlist': 'WishList',
     'language': 'Language',
     'dashboard': 'Dashboard',
     'menu': 'Menu',
+    'import_group_item': 'Import group item',
     'not_allow_quantity_smaller_than_one': 'No allow quantity smaller than one',
   };
 

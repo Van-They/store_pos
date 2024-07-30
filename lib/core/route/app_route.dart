@@ -6,6 +6,8 @@ import 'package:store_pos/screen/cart/components/select_payment_screen.dart';
 import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/category/components/fetch_item_by_category_screen.dart';
 import 'package:store_pos/screen/dashboard/home_slider/home_slider_controller.dart';
+import 'package:store_pos/screen/dashboard/import_group_item/import_group_item_controller.dart';
+import 'package:store_pos/screen/dashboard/import_group_item/import_group_item_screen.dart';
 import 'package:store_pos/screen/home/home_screen.dart';
 import 'package:store_pos/screen/main/main_screen.dart';
 import 'package:store_pos/screen/menu/menu_screen.dart';
@@ -95,6 +97,11 @@ List<GetPage<dynamic>> appRoute = [
     name: ImportItemScreen.routeName,
     binding: BindingsBuilder.put(() => ImportItemController()),
     page: () => const ImportItemScreen(),
+  ),
+  GetPage(
+    name: ImportGroupItemScreen.routeName,
+    binding: BindingsBuilder.put(() => ImportGroupItemController()),
+    page: () => const ImportGroupItemScreen(),
   ),
   GetPage(
     name: HomeSliderScreen.routeName,

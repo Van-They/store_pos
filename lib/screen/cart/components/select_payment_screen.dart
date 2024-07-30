@@ -39,7 +39,7 @@ class SelectPaymentScreen extends GetView<CartController> {
                 child: Container(
                   decoration: const BoxDecoration(
                     border: Border(
-                      top: BorderSide(color: kborderColor),
+                      top: BorderSide(color: kBorderColor),
                     ),
                   ),
                   child: Padding(
