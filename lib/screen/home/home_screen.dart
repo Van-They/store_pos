@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:store_pos/core/constant/colors.dart';
+import 'package:store_pos/core/data/model/group_item_model.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/category/components/fetch_item_by_category_screen.dart';
@@ -56,7 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
         _buildImageSlider(listSlider, indicator),
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
-        _buildCategory(),
+        Obx(() {
+          final groupList = _controller.groupList;
+          return  _buildCategory(groupList);
+        }),
         SliverToBoxAdapter(child: SizedBox(height: appPadding.scale)),
         _buildItem(),
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
@@ -66,9 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   SliverToBoxAdapter _buildItem() {
     return SliverToBoxAdapter(
-      child: GetBuilder<HomeController>(
-        builder: (controller) {
-          final records = _controller.itemList.obs.value;
+      child: Obx(
+        () {
+          final records = _controller.itemList;
           if (records.isEmpty) {
             return const SizedBox.shrink();
           }
@@ -92,8 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  SliverToBoxAdapter _buildCategory() {
-    final groupList = _controller.groupList;
+  SliverToBoxAdapter _buildCategory(RxList<GroupItemModel> groupList) {
     if (groupList.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
     }
@@ -118,56 +123,50 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: appSpace.scale),
-              GetBuilder<HomeController>(
-                builder: (controller) {
-                  print('=======b');
-                  return SizedBox(
-                    height: 60.scale,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: groupList.length,
-                      itemBuilder: (context, index) {
-                        final record = groupList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Get.toNamed(
-                              FetchItemByCategory.routeName,
-                              arguments: {"title": record.code},
-                            );
-                          },
-                          child: BoxWidget(
-                            width: 130.scale,
-                            enableShadow: true,
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(4.scale),
-                                  ),
-                                  width: 60.scale,
-                                  height: double.infinity,
-                                  child: ImageWidget(
-                                    imgPath: record.imgPath,
-                                  ),
-                                ),
-                                SizedBox(width: appSpace.scale),
-                                Flexible(
-                                  child: TextWidget(
-                                    text: record.description,
-                                    maxLine: 2,
-                                    color: kSecondaryColor,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+              SizedBox(
+                height: 60.scale,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: groupList.length,
+                  itemBuilder: (context, index) {
+                    final record = groupList[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Get.toNamed(
+                          FetchItemByCategory.routeName,
+                          arguments: {"title": record.code},
                         );
                       },
-                    ),
-                  );
-                },
-              )
+                      child: BoxWidget(
+                        width: 130.scale,
+                        enableShadow: true,
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4.scale),
+                              ),
+                              width: 60.scale,
+                              height: double.infinity,
+                              child: ImageWidget(
+                                imgPath: record.imgPath,
+                              ),
+                            ),
+                            SizedBox(width: appSpace.scale),
+                            Flexible(
+                              child: TextWidget(
+                                text: record.description,
+                                maxLine: 2,
+                                color: kSecondaryColor,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),

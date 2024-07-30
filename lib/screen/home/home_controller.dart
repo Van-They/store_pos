@@ -21,8 +21,6 @@ class HomeController extends GetxController {
       await repo.onGetHomeItems(arg: arg).then((value) {
         value.fold((l) => throw GeneralException(), (r) {
           itemList.value = r.record;
-          itemList.refresh();
-          print('=======i');
         });
       });
     } on GeneralException {
@@ -36,8 +34,6 @@ class HomeController extends GetxController {
       await groupItemRepo.onGetGroupItemHome().then((value) {
         value.fold((l) => throw GeneralException(), (r) {
           groupList.value = r.record;
-          itemList.refresh();
-          print('=======g');
         });
       });
     } on GeneralException {
