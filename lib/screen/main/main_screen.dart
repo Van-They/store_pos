@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
@@ -48,19 +49,32 @@ class _MainScreenState extends State<MainScreen> {
           MenuScreen(),
         ],
       ),
-      bottomNavigationBar: Obx(
-        () => BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          backgroundColor: kWhite,
-          selectedItemColor: kPrimaryColor,
-          currentIndex: _controller.currentIndex.value,
-          onTap: (value) {
-            _controller.changeIndex(value);
-            _pageCtr.jumpToPage(value);
-          },
-          items: _buildBottomNavItems(),
+      bottomNavigationBar: ClipRRect(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20.scale),
+          topLeft: Radius.circular(20.scale),
+        ),
+        child: Obx(
+          () => BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            unselectedItemColor: kPrimaryColor.withOpacity(0.5),
+            backgroundColor: kWhite,
+            selectedItemColor: kPrimaryColor,
+            iconSize: 24.scale,
+            elevation: 4,
+            currentIndex: _controller.currentIndex.value,
+            onTap: (value) {
+              _controller.changeIndex(value);
+              _pageCtr.animateToPage(
+                value,
+                duration: const Duration(milliseconds: 120),
+                curve: Curves.bounceInOut,
+              );
+            },
+            items: _buildBottomNavItems(),
+          ),
         ),
       ),
     );
@@ -69,17 +83,15 @@ class _MainScreenState extends State<MainScreen> {
   List<BottomNavigationBarItem> _buildBottomNavItems() {
     return [
       BottomNavigationBarItem(
-        icon: Icon(
-          Icons.home_rounded,
-          size: 24.scale,
-        ),
+        icon: _controller.currentIndex.value == 0
+            ? const Icon(Icons.home_rounded)
+            : const Icon(Icons.home_outlined),
         label: 'home'.tr,
       ),
       BottomNavigationBarItem(
-        icon: Icon(
-          Icons.category_rounded,
-          size: 24.scale,
-        ),
+        icon: _controller.currentIndex.value == 1
+            ? const Icon(Icons.category_rounded)
+            : const Icon(Icons.category_outlined),
         label: 'category'.tr,
       ),
       BottomNavigationBarItem(
@@ -90,20 +102,18 @@ class _MainScreenState extends State<MainScreen> {
               isLabelVisible: cartItem.isNotEmpty,
               count: cartItem.length,
               offset: Offset(5.scale, -5.scale),
-              child: Icon(
-                Icons.shopping_bag_rounded,
-                size: 24.scale,
-              ),
+              child: _controller.currentIndex.value == 2
+                  ? const Icon(Icons.shopping_bag_rounded)
+                  : const Icon(Icons.shopping_bag_outlined),
             );
           },
         ),
         label: 'cart'.tr,
       ),
       BottomNavigationBarItem(
-        icon: Icon(
-          Icons.menu_rounded,
-          size: 24.scale,
-        ),
+        icon: _controller.currentIndex.value == 3
+            ? const Icon(Icons.menu_rounded)
+            : const Icon(Icons.menu_outlined),
         label: 'menu'.tr,
       ),
     ];

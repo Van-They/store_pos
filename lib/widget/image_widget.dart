@@ -28,14 +28,17 @@ class ImageWidget extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
-            color: kWhite,
-            alignment: Alignment.center,
-            child: SizedBox(
-              width: 18.scale,
-              height: 18.scale,
-              child: const CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(kPrimaryColor),
+            width: width ?? double.infinity,
+            height: height,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              image: DecorationImage(
+                image: const AssetImage(no_photo),
+                repeat: ImageRepeat.noRepeat,
+                fit: fit,
               ),
+              borderRadius:
+              borderRadius ?? BorderRadius.circular(appSpace.scale),
             ),
           );
         }

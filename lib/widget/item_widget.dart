@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
@@ -180,24 +182,30 @@ class ItemWidget extends GetView<CartController> {
     }
     return BoxWidget(
       padding: EdgeInsets.only(bottom: appSpace.scale),
-      borderRadius: BorderRadius.all(Radius.circular(appSpace.scale)),
+      borderRadius: BorderRadius.all(Radius.circular(16.scale)),
       enableShadow: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
-              ImageWidget(
-                imgPath: record.imgPath,
-                height: 130.scale,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(appSpace.scale),
-                  topRight: Radius.circular(appSpace.scale),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: 4.scale,
+                  right: 4.scale,
+                  top: 4.scale,
+                ),
+                child: ImageWidget(
+                  imgPath: record.imgPath,
+                  height: 130.scale,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      10.scale,
+                    ),
+                  ),
                 ),
               ),
               Positioned(
-                top: 1.scale,
-                right: 1.scale,
                 child: CircleAvatar(
                   backgroundColor: kWhite,
                   radius: 14.scale,
@@ -215,54 +223,64 @@ class ItemWidget extends GetView<CartController> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: appSpace.scale),
-                    child: TextWidget(
-                      fontSize: 16.scale,
-                      text: record.description,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: appSpace.scale),
+                      child: TextWidget(
+                        maxLine: 2,
+                        fontSize: 15.scale,
+                        fontWeight: FontWeight.w400,
+                        height: 1.4,
+                        text: record.description,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: appSpace.scale),
-                    child: TextWidget(
-                      text: '\$${record.unitPrice}',
-                      fontSize: 15.scale,
-                      color: kSecondaryColor,
+                    SizedBox(height: 4.scale),
+                    Padding(
+                      padding: EdgeInsets.only(left: appSpace.scale),
+                      child: TextWidget(
+                        text: '\$${record.unitPrice}',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15.scale,
+                        color: kErrorColor,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               GestureDetector(
                 onTap: () {
                   controller.toggleCart(record);
                 },
-                child: GetBuilder<CartController>(builder: (controller) {
-                  final records = controller.state ?? [];
-                  final isCurrent =
-                      records.any((element) => element.code == record.code);
-                  return Container(
-                    padding: EdgeInsets.all(4.scale),
-                    margin: EdgeInsets.only(right: appSpace.scale),
-                    decoration: BoxDecoration(
-                      color: isCurrent ? kErrorColor : kSecondaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: isCurrent
-                        ? Icon(
-                            Icons.remove,
-                            color: kWhite,
-                            size: 20.scale,
-                          )
-                        : Icon(
-                            Icons.add,
-                            color: kWhite,
-                            size: 20.scale,
-                          ),
-                  );
-                }),
+                child: GetBuilder<CartController>(
+                  builder: (controller) {
+                    final records = controller.state ?? [];
+                    final isCurrent = records.any(
+                      (element) => element.code == record.code,
+                    );
+                    return Container(
+                      padding: EdgeInsets.all(4.scale),
+                      margin: EdgeInsets.only(right: 4.scale),
+                      decoration: BoxDecoration(
+                        color: isCurrent ? kErrorColor : kBorderColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: isCurrent
+                          ? Icon(
+                              Icons.remove,
+                              color: kWhite,
+                              size: 18.scale,
+                            )
+                          : Icon(
+                              Icons.add,
+                              color: kWhite,
+                              size: 18.scale,
+                            ),
+                    );
+                  },
+                ),
               )
             ],
           ),

@@ -59,10 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
         _buildImageSlider(listSlider, indicator),
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
-        Obx(() {
-          final groupList = _controller.groupList;
-          return  _buildCategory(groupList);
-        }),
+        Obx(
+          () {
+            final groupList = _controller.groupList;
+            return _buildCategory(groupList);
+          },
+        ),
         SliverToBoxAdapter(child: SizedBox(height: appPadding.scale)),
         _buildItem(),
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
@@ -190,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     fit: BoxFit.cover,
                     image: AssetImage(listSlider[index]),
                   ),
-                  borderRadius: BorderRadius.circular(appSpace.scale),
+                  borderRadius: BorderRadius.circular(appPadding.scale),
                 ),
                 width: double.infinity,
               );
