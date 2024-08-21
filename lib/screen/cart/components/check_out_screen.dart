@@ -163,7 +163,6 @@ class CheckOutScreen extends GetView<CartController> {
         ),
       ),
       bottomNavigationBar: PrimaryBtnWidget(
-        margin: EdgeInsets.symmetric(horizontal: 20.scale),
         onTap: () {
           if (customerCode.isEmpty) {
             showMessage(
@@ -189,7 +188,7 @@ class CheckOutScreen extends GetView<CartController> {
   }
 
   _buildListItem() {
-    final records = controller.state ?? [];
+    final records = controller.orderTranList;
     return ListView.builder(
       itemCount: records.length,
       shrinkWrap: true,

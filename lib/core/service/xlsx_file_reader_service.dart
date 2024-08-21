@@ -6,6 +6,7 @@ import 'package:store_pos/core/util/extentions.dart';
 
 class XlsxFileReaderService {
   XlsxFileReaderService._();
+
   static File? _file;
 
   static Future<void> loadFile() async {
@@ -49,6 +50,7 @@ class XlsxFileReaderService {
       return [];
     }
   }
+
   static Future<List<Map<String, dynamic>>> readGroupItem() async {
     try {
       final bytes = await _file!.readAsBytes();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/data/model/group_item_model.dart';
 import 'package:store_pos/core/service/xlsx_file_reader_service.dart';
 import 'package:store_pos/core/util/helper.dart';
@@ -37,9 +38,7 @@ class ImportGroupItemScreen extends GetView<ImportGroupItemController> {
             padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
             itemBuilder: (context, index) {
               final record = records[index];
-              return GroupItemWidget(
-                record: record,
-              );
+              return GroupItemWidget(record: record);
             },
           );
         },
@@ -48,20 +47,20 @@ class ImportGroupItemScreen extends GetView<ImportGroupItemController> {
         () {
           return PrimaryBtnWidget(
             onTap: () async {
-              // if (isPickFile) {
-              //   final data = controller.itemGroupList;
-              //   int i = 0;
-              //   while (i < data.length) {
-              //     controller.onCreateImportItem(arg: data[i].toMap());
-              //     i++;
-              //   }
-              //   showMessage(msg: "success".tr, status: Status.success);
-              //   controller.itemGroupList.clear();
-              //   Navigator.pop(context);
-              //   return;
-              // }
+              if (isPickFile) {
+                final data = controller.itemGroupList;
+                int i = 0;
+                while (i < data.length) {
+                  controller.onCreateImportGroupItem(arg: data[i].toMap());
+                  i++;
+                }
+                showMessage(msg: "success".tr, status: Status.success);
+                controller.itemGroupList.clear();
+                Navigator.pop(context);
+                return;
+              }
               await XlsxFileReaderService.loadFile().whenComplete(() async {
-                final result = await XlsxFileReaderService.readItem();
+                final result = await XlsxFileReaderService.readGroupItem();
                 if (result.isNotEmpty) {
                   List<GroupItemModel> listItem = [];
                   for (var element in result) {

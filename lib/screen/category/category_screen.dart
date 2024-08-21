@@ -40,7 +40,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         isBack: arg['back'] ?? false,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+        padding: EdgeInsets.all(appSpace.scale),
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
@@ -53,7 +53,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   return MasonryGridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: records.length,
-                    crossAxisSpacing: appSpace.scale,
+                    crossAxisSpacing: appPadding.scale,
+                    mainAxisSpacing: appPadding.scale,
                     gridDelegate:
                         SliverSimpleGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: itemCanFitHorizontal(width: 150.scale),

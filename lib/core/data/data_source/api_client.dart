@@ -663,16 +663,120 @@ class ApiClient extends Api {
   }
 
   @override
-  Future<ApiResponse> onCreateBatchItems({required List<Map<String,dynamic>> itemList})  async{
+  Future<ApiResponse> onCreateBatchItems(
+      {required List<Map<String, dynamic>> itemList}) async {
     try {
       final batch = db.batch();
-      for(var i in itemList){
-        batch.insert(ItemModel.tableName, i,conflictAlgorithm: ConflictAlgorithm.ignore);
+      for (var i in itemList) {
+        batch.insert(ItemModel.tableName, i,
+            conflictAlgorithm: ConflictAlgorithm.ignore);
       }
-      final response = await batch.commit(noResult: false,continueOnError: true);
+      final response =
+          await batch.commit(noResult: false, continueOnError: true);
       //will return error item in response
       return ApiResponse(
         record: Status.success.name,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onSaveImageSlider(String path) async {
+    try {
+      final response = await db.insert('home_slide', {"imgPath": path});
+      if (response == -1) {
+        return ApiResponse(
+          record: Status.failed.name,
+          status: Status.failed.name,
+        );
+      }
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetSlider() async {
+    try {
+      final response = await db.query('home_slide');
+
+      return ApiResponse(
+        record: response,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onDeleteSlide(String imgListSlider) async {
+    try {
+      final response = await db.delete(
+        'home_slide',
+        where: "imgPath=?",
+        whereArgs: [imgListSlider],
+      );
+      if (response == -1) {
+        return ApiResponse(
+          record: Status.failed.name,
+          status: Status.failed.name,
+        );
+      }
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onCreateImportGroupItem(
+      {required Map<String, dynamic> arg}) async {
+    try {
+      final response = await db.insert(GroupItemModel.tableName, arg,
+          conflictAlgorithm: ConflictAlgorithm.ignore);
+      if (response == -1) {
+        throw GeneralException();
+      }
+      return ApiResponse(
+        record: Status.success.name,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetItemTran() async {
+    try {
+      final response = await db.query(OrderTranModel.orderTran);
+      return ApiResponse(
+        record: response,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetItemById({required String itemCode}) async {
+    try {
+      final response = await db
+          .query(ItemModel.tableName, where: "code=?", whereArgs: [itemCode]);
+      return ApiResponse(
+        record: response.isEmpty ? [] : response,
         status: Status.success.name,
       );
     } catch (e) {

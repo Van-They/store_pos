@@ -2,7 +2,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:store_pos/core/service/image_cropper_service.dart';
 import 'package:store_pos/core/util/extentions.dart';
 
-Future<dynamic> customPickImageGallery({bool isEnableCropp = false}) async {
+Future<dynamic> customPickImageGallery({bool isEnableCrop = false}) async {
   final data = await ImagePicker().pickImage(
     source: ImageSource.gallery,
     imageQuality: 80,
@@ -10,7 +10,7 @@ Future<dynamic> customPickImageGallery({bool isEnableCropp = false}) async {
   if (data.isNull()) {
     return null;
   }
-  if (isEnableCropp) {
+  if (isEnableCrop) {
     final imgCrop = await customCropImage(imgFile: data);
     if (imgCrop == null) {
       return null;

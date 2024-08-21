@@ -27,6 +27,8 @@ CREATE TABLE
         uId INTEGER PRIMARY KEY AUTOINCREMENT,
         invoiceNo INTEGER,
         orderNo INTEGER,
+        currency TEXT,
+        exchangeRate REAL,
         invoiceText TEXT
     );
 
@@ -136,4 +138,6 @@ CREATE TABLE
     IF NOT EXISTS wishlist (code TEXT PRIMARY KEY NOT NULL);
 
 CREATE TABLE
-    IF NOT EXISTS home_slide (uid INTEGER PRIMARY KEY AUTOINCREMENT, imgPath TEXT)
+    IF NOT EXISTS home_slide (uid INTEGER PRIMARY KEY AUTOINCREMENT, imgPath TEXT);
+CREATE TABLE
+    IF NOT EXISTS company (uid INTEGER PRIMARY KEY AUTOINCREMENT,desc_eng TEXT,desc_kh TEXT, imgPath TEXT)

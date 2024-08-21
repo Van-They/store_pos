@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/util/helper.dart';
@@ -14,8 +15,18 @@ showYesNoDialog(
         text: content,
         fontSize: 16.scale,
       ),
-      title: TextWidget(
-        text: 'info'.tr,
+      title: Row(
+        children: [
+          Icon(
+            FontAwesomeIcons.circleQuestion,
+            size: 18.scale,
+            color: kErrorColor,
+          ),
+          SizedBox(width: appSpace.scale),
+          TextWidget(
+            text: 'info'.tr,
+          ),
+        ],
       ),
       titlePadding: EdgeInsets.only(
           left: appPadding.scale,
@@ -26,15 +37,20 @@ showYesNoDialog(
           EdgeInsets.symmetric(vertical: 0, horizontal: appPadding.scale),
       actions: [
         TextButton(
-          onPressed: onConfirm ?? () {
-            Get.back();
-          },
-          child: TextWidget(text: 'yes'.tr,color: kPrimaryColor,),
+          onPressed: onConfirm ??
+              () {
+                Get.back();
+              },
+          child: TextWidget(
+            text: 'yes'.tr,
+            color: kPrimaryColor,
+          ),
         ),
         TextButton(
-          onPressed: onCancel ?? () {
-            Get.back();
-          },
+          onPressed: onCancel ??
+              () {
+                Get.back();
+              },
           child: TextWidget(
             text: 'no'.tr,
             color: kErrorColor,

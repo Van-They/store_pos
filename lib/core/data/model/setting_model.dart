@@ -3,10 +3,15 @@ class SettingModel {
   int invoiceNo;
   int orderNo;
   String invoiceText;
+  String currency;
+  double exchangeRate;
+
   SettingModel({
     required this.invoiceNo,
     required this.orderNo,
     required this.invoiceText,
+    required this.currency,
+    required this.exchangeRate,
   });
 
   Map<String, dynamic> toMap() {
@@ -14,6 +19,8 @@ class SettingModel {
       'invoiceNo': invoiceNo,
       'orderNo': orderNo,
       'invoiceText': invoiceText,
+      'currency': currency,
+      'exchangeRate': exchangeRate,
     };
   }
 
@@ -22,6 +29,8 @@ class SettingModel {
       invoiceNo: map['invoiceNo'] ?? 0,
       orderNo: map['orderNo'] ?? 0,
       invoiceText: map['invoiceText'] ?? "",
+      currency: map['currency'] ?? "USD",
+      exchangeRate: map['exchangeRate'] ?? 4100,
     );
   }
 }

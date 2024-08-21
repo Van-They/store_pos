@@ -214,7 +214,7 @@ class GroupSetupScreen extends GetView<GroupController> {
   }
 
   void _pickImage(ValueNotifier<String> imgListener) async {
-    final img = await customPickImageGallery(isEnableCropp: true);
+    final img = await customPickImageGallery(isEnableCrop: true);
     if (img == null) {
       return;
     }

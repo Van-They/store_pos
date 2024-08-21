@@ -33,19 +33,12 @@ class SelectCustomerScreen extends GetView<CartController> {
                   name = '${record.firstName} ${record.lastName}';
                   Get.back(result: {"code": code, "name": name});
                 },
-                child: Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      top: BorderSide(color: kBorderColor),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-                    child: ListTile(
-                      leading: TextWidget(text: '${index + 1}'),
-                      title: TextWidget(
-                          text: '${record.firstName} ${record.lastName}'),
-                    ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+                  child: ListTile(
+                    leading: TextWidget(text: '${index + 1}'),
+                    title: TextWidget(
+                        text: '${record.firstName} ${record.lastName}'),
                   ),
                 ),
               );

@@ -36,21 +36,14 @@ class SelectPaymentScreen extends GetView<CartController> {
                       : record.description;
                   Get.back(result: {"code": code, "name": name});
                 },
-                child: Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      top: BorderSide(color: kBorderColor),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-                    child: ListTile(
-                      leading: TextWidget(text: '${index + 1}'),
-                      title: TextWidget(
-                        text: record.displayLang == Language.kh.name
-                            ? record.description_2
-                            : record.description,
-                      ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+                  child: ListTile(
+                    leading: TextWidget(text: '${index + 1}'),
+                    title: TextWidget(
+                      text: record.displayLang == Language.kh.name
+                          ? record.description_2
+                          : record.description,
                     ),
                   ),
                 ),

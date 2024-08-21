@@ -57,11 +57,11 @@ class _MainScreenState extends State<MainScreen> {
         child: Obx(
           () => BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            unselectedItemColor: kPrimaryColor.withOpacity(0.5),
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            unselectedItemColor: kBlack.withOpacity(0.5),
             backgroundColor: kWhite,
-            selectedItemColor: kPrimaryColor,
+            selectedItemColor: kBlack,
             iconSize: 24.scale,
             elevation: 4,
             currentIndex: _controller.currentIndex.value,
@@ -97,7 +97,7 @@ class _MainScreenState extends State<MainScreen> {
       BottomNavigationBarItem(
         icon: GetBuilder<CartController>(
           builder: (controller) {
-            final cartItem = controller.state ?? [];
+            final cartItem = controller.orderTranList;
             return Badge.count(
               isLabelVisible: cartItem.isNotEmpty,
               count: cartItem.length,

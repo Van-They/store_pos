@@ -17,6 +17,7 @@ class Translate extends Translations {
     'add_on': 'Add On',
     'add_image': 'Add Image',
     'amount_to_pay': 'Amount to pay',
+    'adjust_stock': 'Adjust stock',
 
     //-----------------
     'button': 'Button',
@@ -29,9 +30,18 @@ class Translate extends Translations {
     'cost': 'Cost',
     'category': 'Category',
     'customer': 'Customer',
+    'count_stock': 'Count stock',
+    'check_stock': 'Check stock',
+    'cash_register': 'Cash register',
+    'create_payment': 'Create payment',
+    'create_customer': 'Create customer',
+
 
     //-----------------
     'download_data': 'Download Data',
+    'data_set_up': 'Data Setup',
+    'daily_item_sale': 'Daily item sale',
+
 
     'end_of_records': 'End of records',
     'empty': 'Empty',
@@ -44,6 +54,7 @@ class Translate extends Translations {
     'setting': 'Setting',
     'company': 'Company',
     'income': 'Income',
+    'invoice_register': 'Invoice register',
     'stock': 'Stock',
     'exit': 'Exit',
     'search_item_here': 'Search item here',
@@ -56,7 +67,7 @@ class Translate extends Translations {
     'configure': 'Configure',
     'import_item': 'Import item',
     'export_item': 'Export item',
-    'daily_sale': 'Daily sale',
+    'daily_report': 'Daily report',
 
     //-----------------
     'yes': 'Yes',
@@ -112,6 +123,8 @@ class Translate extends Translations {
     'to_customer': "To customer",
     'product_list': "Product list",
 
+    'new_qty': "New Qty",
+
     'please_input_group_code': "Please input group code",
     'please_input_group_description': "Please input group description",
     'please_input_code': "Please input code",
@@ -151,8 +164,8 @@ class Translate extends Translations {
 
     'unit_price': 'Unit price',
     'recent_sale': 'Recent sale',
-    'invoice_register': 'Invoice register',
-    'cash_register': 'Cash register',
+    'invoice_report': 'Invoice report',
+    'cash_report': 'Cash report',
     'item_sale': 'Item sale',
     'payment_method': 'Payment method',
 

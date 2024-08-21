@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
+import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/util/helper.dart';
-import 'package:store_pos/screen/dashboard/item/components/item_set_up_screen.dart';
+import 'package:store_pos/screen/dashboard/item/components/set_up_item_screen.dart';
+import 'package:store_pos/screen/dashboard/item/components/update_item_screen.dart';
 import 'package:store_pos/screen/dashboard/item/item_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
@@ -33,7 +35,7 @@ class ItemScreen extends GetView<ItemController> {
       bottomNavigationBar: BoxWidget(
         margin: EdgeInsets.symmetric(
             horizontal: appPadding.scale, vertical: appSpace.scale),
-        onTap: () => Get.toNamed(ItemSetUpScreen.routeName),
+        onTap: () => Get.toNamed(SetupItemScreen.routeName),
         height: 45.scale,
         borderColor: kBgColor,
         backgroundColor: kPrimaryColor,
@@ -92,21 +94,12 @@ class ItemScreen extends GetView<ItemController> {
                   return ItemWidget(
                     record: record,
                     onEdit: () {
-                      Get.toNamed(
-                        ItemSetUpScreen.routeName,
-                        arguments: {
-                          'isUpdate': true,
-                          'imgPath': record.imgPath,
-                          'code': record.code,
-                          'group_code': record.groupCode,
-                          'qty': '${record.qty}',
-                          'cost': '${record.cost}',
-                          'price': '${record.unitPrice}',
-                          'description': record.description,
-                          'description_2': record.description_2,
-                          'display_language': record.displayLang,
-                        },
-                      );
+                      Get.toNamed(UpdateItemScreen.routeName,
+                          arguments: {"code": record.code})?.then((value) {
+                        if (value == AppState.updated) {
+                          controller.onGetItem();
+                        }
+                      });
                     },
                     onDelete: () {
                       showYesNoDialog(

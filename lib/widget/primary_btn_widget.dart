@@ -10,7 +10,7 @@ class PrimaryBtnWidget extends StatelessWidget {
     this.onTap,
     this.margin,
     this.size,
-    this.color = kPrimaryColor,
+    this.color = kBlack,
     this.width = double.infinity,
     this.height,
   });
@@ -26,7 +26,7 @@ class PrimaryBtnWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: margin ?? EdgeInsets.all(appSpace.scale),
+      padding: margin ?? EdgeInsets.all(appPadding.scale),
       child: FilledButton(
         style: FilledButton.styleFrom(
           backgroundColor: color,

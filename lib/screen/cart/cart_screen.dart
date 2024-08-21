@@ -35,67 +35,75 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(title: 'cart'.tr),
-      body: controller.obx(
-        onEmpty: const EmptyWidget(),
-        onLoading: const LoadingWidget(),
-        onError: (error) => const EmptyWidget(),
-        (state) => _buildListItem(state ?? []),
-      ),
-      bottomNavigationBar: BoxWidget(
-        height: 160.scale,
-        margin: EdgeInsets.zero,
-        padding: EdgeInsets.all(appSpace.scale),
-        child: Obx(
-          () {
-            final ordeHead = controller.orderHead.value;
-            final counter = controller.state?.length ?? 0;
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextWidget(text: 'subtotal'.tr),
-                    TextWidget(text: '\$${ordeHead?.subtotal ?? 0.0}'),
-                  ],
-                ),
-                SizedBox(height: 4.scale),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Obx(() {
+        if (controller.orderTranList.isEmpty) {
+          return const EmptyWidget();
+        }
+        return _buildListItem(controller.orderTranList);
+      }),
+      bottomNavigationBar: Obx(
+        () {
+          if (controller.orderTranList.isEmpty) {
+            return const SizedBox.shrink();
+          }
+          return BoxWidget(
+            height: 160.scale,
+            margin: EdgeInsets.zero,
+            padding: EdgeInsets.all(appSpace.scale),
+            child: Obx(
+              () {
+                final ordeHead = controller.orderHead.value;
+                final counter = controller.orderTranList.length;
+                return Column(
                   children: [
                     Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        TextWidget(text: 'discount'.tr),
-                        SizedBox(width: appSpace.scale),
-                        TextWidget(
-                          text: '(${ordeHead?.discountPercentage ?? ''}%)',
-                          color: kErrorColor,
-                        ),
+                        TextWidget(text: 'subtotal'.tr),
+                        TextWidget(text: '\$${ordeHead?.subtotal ?? 0.0}'),
                       ],
                     ),
-                    TextWidget(text: '\$${ordeHead?.discountAmount ?? 0.0}'),
+                    SizedBox(height: 4.scale),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextWidget(text: 'discount'.tr),
+                            SizedBox(width: appSpace.scale),
+                            TextWidget(
+                              text: '(${ordeHead?.discountPercentage ?? ''}%)',
+                              color: kErrorColor,
+                            ),
+                          ],
+                        ),
+                        TextWidget(
+                            text: '\$${ordeHead?.discountAmount ?? 0.0}'),
+                      ],
+                    ),
+                    SizedBox(height: appSpace.scale),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextWidget(text: 'amount_to_pay'.tr),
+                        TextWidget(text: '\$${ordeHead?.grandTotal ?? 0.0}'),
+                      ],
+                    ),
+                    const Spacer(),
+                    PrimaryBtnWidget(
+                      margin: EdgeInsets.zero,
+                      label: '${'check_out'.tr} ($counter)',
+                      onTap: () {
+                        Get.toNamed(CheckOutScreen.routeName);
+                      },
+                    )
                   ],
-                ),
-                SizedBox(height: appSpace.scale),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextWidget(text: 'amount_to_pay'.tr),
-                    TextWidget(text: '\$${ordeHead?.grandTotal ?? 0.0}'),
-                  ],
-                ),
-                const Spacer(),
-                PrimaryBtnWidget(
-                  margin: EdgeInsets.zero,
-                  label: '${'check_out'.tr} ($counter)',
-                  onTap: () {
-                    Get.toNamed(CheckOutScreen.routeName);
-                  },
-                )
-              ],
-            );
-          },
-        ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

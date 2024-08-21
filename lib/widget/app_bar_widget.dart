@@ -27,17 +27,22 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       title: TextWidget(
         text: title,
         fontWeight: FontWeight.w600,
-        fontSize: 20.scale,
+        fontSize: 16.scale,
       ),
       scrolledUnderElevation: 0.0,
       automaticallyImplyLeading: false,
       leading: isBack
           ? IconButton(
               onPressed: onBack ?? () => Get.back(),
+              style: IconButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                padding: EdgeInsets.zero,
+                minimumSize: Size(30.scale, 30.scale),
+              ),
               icon: Icon(
-                Icons.arrow_back_ios_rounded,
-                size: 18.scale,
-                color: kPrimaryColor,
+                Icons.arrow_back_rounded,
+                size: 22.scale,
+                color: kBlack,
               ),
             )
           : const SizedBox.shrink(),

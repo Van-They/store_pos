@@ -17,10 +17,10 @@ import 'package:store_pos/widget/input_text_widget.dart';
 import 'package:store_pos/widget/primary_btn_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
-class ItemSetUpScreen extends GetView<ItemController> {
-  const ItemSetUpScreen({super.key, this.isUpdate = false});
+class SetupItemScreen extends GetView<ItemController> {
+  const SetupItemScreen({super.key, this.isUpdate = false});
 
-  static const String routeName = '/ItemSetUpScreen';
+  static const String routeName = '/SetupItemScreen';
   final bool isUpdate;
 
   @override

@@ -1,5 +1,9 @@
+import 'package:intl/intl.dart';
+
 class AppService {
-  static String converToString(value) {
+  static final _displayFormat = NumberFormat("#,##.00", "en_US");
+
+  static String convertToString(value) {
     if (value == null) {
       return '';
     }
@@ -38,5 +42,9 @@ class AppService {
       return value.toInt();
     }
     return int.parse(value);
+  }
+
+  static String displayFormat(double unitPrice) {
+    return "${_displayFormat.format(unitPrice)} \$";
   }
 }

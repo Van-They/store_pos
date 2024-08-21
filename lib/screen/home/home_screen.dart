@@ -1,13 +1,13 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:store_pos/core/constant/colors.dart';
+import 'package:store_pos/core/constant/images.dart';
 import 'package:store_pos/core/data/model/group_item_model.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/category/category_screen.dart';
@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _controller = Get.put<HomeController>(HomeController());
     _controller.onGetHomeItems();
     _controller.onGetGroup();
+    _controller.onGetSlider();
     _indicator = ValueNotifier(0);
     super.initState();
   }
@@ -48,16 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _buildItemList(ValueNotifier<int> indicator) {
-    final listSlider = [
-      'asset/images/mustang.jpg',
-      'asset/images/mustang_2.jpg',
-      'asset/images/img_not_available.jpg'
-    ];
     return CustomScrollView(
       slivers: [
         _buildAppBar(),
-        SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
-        _buildImageSlider(listSlider, indicator),
+        Obx(() => _buildImageSlider(indicator)),
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
         Obx(
           () {
@@ -65,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return _buildCategory(groupList);
           },
         ),
-        SliverToBoxAdapter(child: SizedBox(height: appPadding.scale)),
+        SliverToBoxAdapter(child: SizedBox(height: 20.scale)),
         _buildItem(),
         SliverToBoxAdapter(child: SizedBox(height: appSpace.scale)),
       ],
@@ -84,8 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: records.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: appSpace.scale,
-            mainAxisSpacing: appSpace.scale,
+            crossAxisSpacing: appPadding.scale,
+            mainAxisSpacing: appPadding.scale,
             padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
             gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: itemCanFitHorizontal(width: 150.scale),
@@ -117,7 +112,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextWidget(text: 'browse_by_category'.tr, fontSize: 15.scale),
+                  TextWidget(
+                    text: 'browse_by_category'.tr,
+                    fontSize: 20.scale,
+                    fontWeight: FontWeight.w500,
+                  ),
                   Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 18.scale,
@@ -142,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: BoxWidget(
                         width: 130.scale,
                         enableShadow: true,
+                        margin: EdgeInsets.only(right: appSpace.scale),
                         child: Row(
                           children: [
                             Container(
@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: TextWidget(
                                 text: record.description,
                                 maxLine: 2,
-                                color: kSecondaryColor,
+                                color: kBlack,
                               ),
                             )
                           ],
@@ -177,22 +177,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   SliverToBoxAdapter _buildImageSlider(
-      List<String> listSlider, ValueNotifier<int> indicator) {
+    ValueNotifier<int> indicator,
+  ) {
+    if (_controller.imgSlider.isEmpty) {
+      return const SliverToBoxAdapter(
+        child: SizedBox.shrink(),
+      );
+    }
     return SliverToBoxAdapter(
       child: Stack(
         alignment: Alignment.center,
         children: [
           CarouselSlider.builder(
-            itemCount: listSlider.length,
+            itemCount: _controller.imgSlider.length,
             itemBuilder: (context, index, realIndex) {
               return Container(
-                margin: EdgeInsets.symmetric(horizontal: appPadding.scale),
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage(listSlider[index]),
+                    image: _loadImage(
+                      _controller.imgSlider[index],
+                    ),
                   ),
-                  borderRadius: BorderRadius.circular(appPadding.scale),
                 ),
                 width: double.infinity,
               );
@@ -206,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 indicator.value = index;
               },
               autoPlayInterval: const Duration(seconds: 5),
-              height: 170.scale,
+              height: 200.scale,
             ),
           ),
           Positioned(
@@ -216,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (context, value, child) {
                 return AnimatedSmoothIndicator(
                   activeIndex: value,
-                  count: listSlider.length,
+                  count: _controller.imgSlider.length,
                   effect: ExpandingDotsEffect(
                     activeDotColor: kPrimaryColor,
                     dotColor: kWhite,
@@ -237,46 +243,36 @@ class _HomeScreenState extends State<HomeScreen> {
     return SliverAppBar(
       titleSpacing: appSpace.scale,
       toolbarHeight: kToolbarHeight + (appSpace.scale),
+      centerTitle: false,
+      actions: [
+        CircleAvatar(
+          backgroundColor: Colors.transparent,
+          radius: 16.scale,
+          child: Icon(
+            FontAwesomeIcons.magnifyingGlass,
+            color: kBlack,
+            size: 16.scale,
+          ),
+        ),
+        SizedBox(width: appSpace.scale),
+        CircleAvatar(
+          backgroundColor: Colors.transparent,
+          radius: 16.scale,
+          child: Icon(
+            Icons.notifications_active,
+            size: 18.scale,
+            color: kBlack,
+          ),
+        ),
+        SizedBox(width: appSpace.scale),
+      ],
       title: Padding(
         padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextWidget(
-                  text: _greeting(),
-                  fontSize: 20.scale,
-                  color: kPrimaryColor,
-                ),
-                TextWidget(
-                  text: 'Vanthey Thorng',
-                  fontSize: 22.scale,
-                  color: Colors.black.withOpacity(0.8),
-                ),
-              ],
-            ),
-            const Spacer(),
-            CircleAvatar(
-              backgroundColor: Colors.grey,
-              radius: 20.scale,
-              child: Icon(
-                FontAwesomeIcons.magnifyingGlass,
-                color: kWhite,
-                size: 18.scale,
-              ),
-            ),
-            SizedBox(width: appSpace.scale),
-            CircleAvatar(
-              backgroundColor: Colors.grey,
-              radius: 20.scale,
-              child: Icon(
-                Icons.notifications_active,
-                size: 20.scale,
-                color: kWhite,
-              ),
-            ),
-          ],
+        child: TextWidget(
+          text: 'Hello Vanthey',
+          fontSize: 18.scale,
+          fontWeight: FontWeight.w500,
+          color: kBlack,
         ),
       ),
     );
@@ -291,5 +287,12 @@ class _HomeScreenState extends State<HomeScreen> {
       return 'good_afternoon'.tr;
     }
     return 'good_evening'.tr;
+  }
+
+  _loadImage(String path) {
+    if (!File(path).existsSync()) {
+      return const AssetImage(no_photo);
+    }
+    return FileImage(File(path));
   }
 }

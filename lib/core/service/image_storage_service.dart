@@ -7,8 +7,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:store_pos/core/exception/exceptions.dart';
 
 class ImageStorageService {
-  static Future<String> saveImageToSecureDir(File imageFile,
-      {String path = ''}) async {
+  static Future<String> saveImageToSecureDir(
+    File imageFile, {
+    String path = '',
+  }) async {
     try {
       final destFile = File(path);
       await imageFile.copy(destFile.path);
@@ -65,11 +67,11 @@ class ImageStorageService {
 
   static Future<void> onClearCache(String path) async {
     try {
-      if(path.isEmpty){
+      if (path.isEmpty) {
         return;
       }
-      final file= File(path);
-      if(await file.exists()){
+      final file = File(path);
+      if (await file.exists()) {
         await file.delete();
       }
     } catch (e) {

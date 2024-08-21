@@ -43,8 +43,14 @@ GetMaterialApp _buildScreen() {
       useMaterial3: true,
       scaffoldBackgroundColor: kBgColor,
       dialogBackgroundColor: kWhite,
-      buttonTheme: const ButtonThemeData(splashColor: kPrimaryColor),
-      appBarTheme: const AppBarTheme(backgroundColor: kBgColor),
+      buttonTheme: const ButtonThemeData(splashColor: kWhite),
+      radioTheme: const RadioThemeData(
+        fillColor: MaterialStatePropertyAll(kPrimaryColor),
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: kWhite,
+        titleTextStyle: TextStyle(color: kBlack),
+      ),
     ),
   );
 }

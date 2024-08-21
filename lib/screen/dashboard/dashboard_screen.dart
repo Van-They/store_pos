@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/util/helper.dart';
+import 'package:store_pos/screen/dashboard/cash_report/cash_report_screen.dart';
+import 'package:store_pos/screen/dashboard/customer/customer_screen.dart';
+import 'package:store_pos/screen/dashboard/daily_sale_report/daily_sale_report_screen.dart';
 import 'package:store_pos/screen/dashboard/group/group_item_screen.dart';
 import 'package:store_pos/screen/dashboard/home_slider/home_slider_screen.dart';
 import 'package:store_pos/screen/dashboard/import_group_item/import_group_item_screen.dart';
 import 'package:store_pos/screen/dashboard/import_item/import_item_screen.dart';
+import 'package:store_pos/screen/dashboard/invoice_report/invoice_report_screen.dart';
 import 'package:store_pos/screen/dashboard/item/item_screen.dart';
+import 'package:store_pos/screen/dashboard/payment_method/payment_method_screen.dart';
+import 'package:store_pos/screen/dashboard/setting/setting_screen.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
 import 'package:store_pos/widget/hr.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
-class MainMerchantScreen extends StatelessWidget {
-  const MainMerchantScreen({super.key});
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
 
-  static const String routeName = "/MainMerchantScreen";
+  static const String routeName = "/DashboardScreen";
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,7 @@ class MainMerchantScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
+        padding: EdgeInsets.all(appSpace.scale),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -37,7 +43,7 @@ class MainMerchantScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextWidget(
-                    text: 'preference'.tr,
+                    text: 'data_set_up'.tr,
                     fontSize: 18.scale,
                     fontWeight: FontWeight.bold,
                     color: kBlack,
@@ -50,7 +56,9 @@ class MainMerchantScreen extends StatelessWidget {
                   ),
                   _buildMenu(
                     title: 'payment_method'.tr,
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(PaymentMethodScreen.routeName);
+                    },
                   ),
                   _buildMenu(
                     title: 'item'.tr,
@@ -61,13 +69,44 @@ class MainMerchantScreen extends StatelessWidget {
                     onTap: () => Get.toNamed(GroupItemScreen.routeName),
                   ),
                   _buildMenu(
-                    title: 'company'.tr,
-                    onTap: () {},
+                    title: 'setting'.tr,
+                    isLast: true,
+                    onTap: () {
+                      Get.toNamed(SettingScreen.routeName);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: appSpace.scale),
+            BoxWidget(
+              padding: EdgeInsets.all(appSpace.scale),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    text: 'stock'.tr,
+                    fontSize: 18.scale,
+                    fontWeight: FontWeight.bold,
+                    color: kBlack,
                   ),
                   _buildMenu(
-                    title: 'configure'.tr,
-                    isLast: true,
-                    onTap: () {},
+                    title: 'count_stock'.tr,
+                    onTap: () {
+                      Get.toNamed(HomeSliderScreen.routeName);
+                    },
+                  ),
+                  _buildMenu(
+                    title: 'check_stock'.tr,
+                    onTap: () {
+                      Get.toNamed(HomeSliderScreen.routeName);
+                    },
+                  ),
+                  _buildMenu(
+                    title: 'adjust_stock'.tr,
+                    onTap: () {
+                      Get.toNamed(HomeSliderScreen.routeName);
+                    },
                   ),
                 ],
               ),
@@ -84,7 +123,12 @@ class MainMerchantScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: kBlack,
                   ),
-                  _buildMenu(title: 'customer'.tr, onTap: () {}, isLast: true),
+                  _buildMenu(
+                      title: 'customer'.tr,
+                      onTap: () {
+                        Get.toNamed(CustomerScreen.routeName);
+                      },
+                      isLast: true),
                 ],
               ),
             ),
@@ -101,16 +145,22 @@ class MainMerchantScreen extends StatelessWidget {
                     color: kBlack,
                   ),
                   _buildMenu(
-                    title: 'daily_sale'.tr,
-                    onTap: () {},
+                    title: 'daily_item_sale'.tr,
+                    onTap: () {
+                      Get.toNamed(DailySaleReportScreen.routeName);
+                    },
                   ),
                   _buildMenu(
                     title: 'cash_register'.tr,
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(CashReportScreen.routeName);
+                    },
                   ),
                   _buildMenu(
                     title: 'invoice_register'.tr,
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(InvoiceReportScreen.routeName);
+                    },
                     isLast: true,
                   ),
                 ],
@@ -163,7 +213,7 @@ class MainMerchantScreen extends StatelessWidget {
           children: [
             SizedBox(height: (appSpace / 2).scale),
             SizedBox(
-              height: height ?? (isLast ? 35.scale : 40.scale),
+              height: height ?? (isLast ? 40.scale : 45.scale),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

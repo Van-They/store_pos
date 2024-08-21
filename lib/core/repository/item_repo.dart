@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/data/data_source/api.dart';
 import 'package:store_pos/core/data/model/item_model.dart';
+import 'package:store_pos/core/data/model/order_tran_model.dart';
 import 'package:store_pos/core/exception/exceptions.dart';
 import 'package:store_pos/core/exception/failures.dart';
 import 'package:store_pos/core/repository/repo_response.dart';
@@ -182,6 +183,44 @@ class ItemRepo {
         RepoResponse(record: result.record),
       );
     } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<List<OrderTranModel>>>>
+      onGetItemTran() async {
+    final result = await api.onGetItemTran();
+    try {
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      final List<OrderTranModel> records = [];
+
+      for (var e in result.record) {
+        records.add(OrderTranModel.fromMap(e));
+      }
+
+      return Right(RepoResponse(record: records));
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<ItemModel>>> onGetItemById(
+      {required String itemCode}) async {
+    final result = await api.onGetItemById(itemCode: itemCode);
+    try {
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      final records = result.record;
+
+      if (records.isEmpty) {
+        throw Exception('empty');
+      }
+      final record = ItemModel.fromMap(records[0]);
+      return Right(RepoResponse(record: record));
+    } catch (e) {
       return Left(ServerFailure('failed'.tr));
     }
   }

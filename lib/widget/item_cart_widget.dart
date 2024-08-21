@@ -128,7 +128,7 @@ class ItemCartWidget extends GetView<CartController> {
                       ),
                       TextWidget(
                         text: '\$${record.grandTotal}',
-                        color: kPrimaryColor,
+                        color: kErrorColor,
                       ),
                     ],
                   ),

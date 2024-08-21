@@ -125,4 +125,19 @@ class GroupItemRepo {
       return Left(ServerFailure('failed'.tr));
     }
   }
+
+  Future<Either<Failure, RepoResponse<String>>> onCreateImportGroupItem(
+      {required Map<String, dynamic> arg}) async {
+    final result = await api.onCreateImportGroupItem(arg: arg);
+    try {
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      return Right(
+        RepoResponse(record: result.record),
+      );
+    } on GeneralException {
+      return Left(ServerFailure('failed'.tr));
+    }
+  }
 }

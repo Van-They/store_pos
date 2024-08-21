@@ -5,9 +5,23 @@ import 'package:store_pos/screen/cart/components/select_customer_screen.dart';
 import 'package:store_pos/screen/cart/components/select_payment_screen.dart';
 import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/category/components/fetch_item_by_category_screen.dart';
+import 'package:store_pos/screen/dashboard/cash_report/cash_report_controller.dart';
+import 'package:store_pos/screen/dashboard/cash_report/cash_report_screen.dart';
+import 'package:store_pos/screen/dashboard/customer/customer_controller.dart';
+import 'package:store_pos/screen/dashboard/customer/customer_screen.dart';
+import 'package:store_pos/screen/dashboard/daily_sale_report/daily_sale_controller.dart';
+import 'package:store_pos/screen/dashboard/daily_sale_report/daily_sale_report_screen.dart';
 import 'package:store_pos/screen/dashboard/home_slider/home_slider_controller.dart';
 import 'package:store_pos/screen/dashboard/import_group_item/import_group_item_controller.dart';
 import 'package:store_pos/screen/dashboard/import_group_item/import_group_item_screen.dart';
+import 'package:store_pos/screen/dashboard/invoice_report/invoice_report_controller.dart';
+import 'package:store_pos/screen/dashboard/invoice_report/invoice_report_screen.dart';
+import 'package:store_pos/screen/dashboard/item/components/update_item_controller.dart';
+import 'package:store_pos/screen/dashboard/item/components/update_item_screen.dart';
+import 'package:store_pos/screen/dashboard/payment_method/payment_method_controller.dart';
+import 'package:store_pos/screen/dashboard/payment_method/payment_method_screen.dart';
+import 'package:store_pos/screen/dashboard/setting/setting_controller.dart';
+import 'package:store_pos/screen/dashboard/setting/setting_screen.dart';
 import 'package:store_pos/screen/home/home_screen.dart';
 import 'package:store_pos/screen/main/main_screen.dart';
 import 'package:store_pos/screen/menu/menu_screen.dart';
@@ -17,10 +31,10 @@ import 'package:store_pos/screen/dashboard/home_slider/home_slider_screen.dart';
 import 'package:store_pos/screen/dashboard/import_item/import_item_controller.dart';
 import 'package:store_pos/screen/dashboard/import_item/import_item_screen.dart';
 import 'package:store_pos/screen/dashboard/item/components/fetch_group_item_screen.dart';
-import 'package:store_pos/screen/dashboard/item/components/item_set_up_screen.dart';
+import 'package:store_pos/screen/dashboard/item/components/set_up_item_screen.dart';
 import 'package:store_pos/screen/dashboard/item/item_controller.dart';
 import 'package:store_pos/screen/dashboard/item/item_screen.dart';
-import 'package:store_pos/screen/dashboard/main_merchant_screen.dart';
+import 'package:store_pos/screen/dashboard/dashboard_screen.dart';
 import 'package:store_pos/screen/menu/components/change_language_screen.dart';
 import 'package:store_pos/screen/menu/components/wishlist_screen.dart';
 
@@ -58,16 +72,16 @@ List<GetPage<dynamic>> appRoute = [
       page: () => const WishlistScreen(),
       binding: BindingsBuilder.put(() => ItemController())),
   GetPage(
-    name: ItemSetUpScreen.routeName,
-    page: () => const ItemSetUpScreen(),
+    name: SetupItemScreen.routeName,
+    page: () => const SetupItemScreen(),
   ),
   GetPage(
     name: GroupItemScreen.routeName,
     page: () => const GroupItemScreen(),
   ),
   GetPage(
-    name: MainMerchantScreen.routeName,
-    page: () => const MainMerchantScreen(),
+    name: DashboardScreen.routeName,
+    page: () => const DashboardScreen(),
   ),
   GetPage(
     name: GroupSetupScreen.routeName,
@@ -102,6 +116,45 @@ List<GetPage<dynamic>> appRoute = [
     name: ImportGroupItemScreen.routeName,
     binding: BindingsBuilder.put(() => ImportGroupItemController()),
     page: () => const ImportGroupItemScreen(),
+  ),
+  GetPage(
+    name: CashReportScreen.routeName,
+    binding: BindingsBuilder.put(() => CashReportController()),
+    page: () => const CashReportScreen(),
+  ),
+  GetPage(
+    name: UpdateItemScreen.routeName,
+    binding: BindingsBuilder.put(() => UpdateItemController()),
+    page: () => const UpdateItemScreen(),
+  ),
+  GetPage(
+    name: InvoiceReportScreen.routeName,
+    binding: BindingsBuilder.put(() => InvoiceReportController()),
+    page: () => const InvoiceReportScreen(),
+  ),
+  GetPage(
+    name: DailySaleReportScreen.routeName,
+    binding: BindingsBuilder.put(() => DailySaleController()),
+    page: () => const DailySaleReportScreen(),
+  ),
+  GetPage(
+    name: SettingScreen.routeName,
+    binding: BindingsBuilder.put(() => SettingController()),
+    page: () => const SettingScreen(),
+  ),
+  GetPage(
+    name: PaymentMethodScreen.routeName,
+    binding: BindingsBuilder.put(() {
+      return PaymentMethodController();
+    }),
+    page: () => const PaymentMethodScreen(),
+  ),
+  GetPage(
+    name: CustomerScreen.routeName,
+    binding: BindingsBuilder.put(() {
+      return CustomerController();
+    }),
+    page: () => const CustomerScreen(),
   ),
   GetPage(
     name: HomeSliderScreen.routeName,

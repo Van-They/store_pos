@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
+import 'package:store_pos/core/exception/exceptions.dart';
 import 'package:store_pos/core/repository/merchant_menu_repo.dart';
 
 class HomeSliderController extends GetxController {
-  RxList<String> imgSlider = <String>[].obs;
+  RxList<String> imgListSlider = <String>[].obs;
   RxBool isFile = false.obs;
   final MerchantMenuRepo _repo = Get.find<MerchantMenuRepo>();
 
@@ -14,15 +17,23 @@ class HomeSliderController extends GetxController {
 
   Future<void> onGetSlider() async {
     try {
-      _repo.onGetSlider();
-    } catch (e) {
+      await _repo.onGetSlider().then((value) {
+        value.fold((l) => throw GeneralException(), (r) {
+          imgListSlider.value = r.record;
+        });
+      });
+    } on GeneralException {
       rethrow;
     }
   }
 
-  Future<void> onDeleteSlide() async {
+  Future<void> onDeleteSlide(int index) async {
     try {
-      _repo.onDeleteSlide();
+      final file = File(imgListSlider[index]);
+      _repo.onDeleteSlide(imgListSlider[index]);
+      file.deleteSync(recursive: true);
+      imgListSlider.removeAt(index);
+      imgListSlider.refresh();
     } catch (e) {
       rethrow;
     }
@@ -33,6 +44,17 @@ class HomeSliderController extends GetxController {
       _repo.onAddSlide();
     } catch (e) {
       rethrow;
+    }
+  }
+
+  Future<bool> onSaveImageSlider(String path) async {
+    try {
+      final result = await _repo.onSaveImageSlider(path);
+
+      result.fold((l) => throw Exception(), (r) {});
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }
