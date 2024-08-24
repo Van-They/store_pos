@@ -9,7 +9,6 @@ import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
 import 'package:store_pos/widget/empty_widget.dart';
 import 'package:store_pos/widget/item_cart_widget.dart';
-import 'package:store_pos/widget/loading_widget.dart';
 import 'package:store_pos/widget/primary_btn_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 

@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class AppService {
-  static final _displayFormat = NumberFormat("#,##.00", "en_US");
+  static final _displayFormat = NumberFormat("#,##0.00", "en_US");
 
   static String convertToString(value) {
     if (value == null) {
@@ -45,6 +45,6 @@ class AppService {
   }
 
   static String displayFormat(double unitPrice) {
-    return "${_displayFormat.format(unitPrice)} \$";
+    return "\$${_displayFormat.format(unitPrice)}";
   }
 }

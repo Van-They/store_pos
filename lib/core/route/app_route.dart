@@ -14,6 +14,7 @@ import 'package:store_pos/screen/dashboard/daily_sale_report/daily_sale_report_s
 import 'package:store_pos/screen/dashboard/home_slider/home_slider_controller.dart';
 import 'package:store_pos/screen/dashboard/import_group_item/import_group_item_controller.dart';
 import 'package:store_pos/screen/dashboard/import_group_item/import_group_item_screen.dart';
+import 'package:store_pos/screen/dashboard/invoice_report/component/invoice_detail_screen.dart';
 import 'package:store_pos/screen/dashboard/invoice_report/invoice_report_controller.dart';
 import 'package:store_pos/screen/dashboard/invoice_report/invoice_report_screen.dart';
 import 'package:store_pos/screen/dashboard/item/components/update_item_controller.dart';
@@ -24,6 +25,7 @@ import 'package:store_pos/screen/dashboard/setting/setting_controller.dart';
 import 'package:store_pos/screen/dashboard/setting/setting_screen.dart';
 import 'package:store_pos/screen/home/home_screen.dart';
 import 'package:store_pos/screen/main/main_screen.dart';
+import 'package:store_pos/screen/menu/controller/language_controller.dart';
 import 'package:store_pos/screen/menu/menu_screen.dart';
 import 'package:store_pos/screen/dashboard/group/components/group_set_up_screen.dart';
 import 'package:store_pos/screen/dashboard/group/group_item_screen.dart';
@@ -105,6 +107,7 @@ List<GetPage<dynamic>> appRoute = [
   ),
   GetPage(
     name: ChangeLanguageScreen.routeName,
+    binding: BindingsBuilder.put(() => LanguageController()),
     page: () => const ChangeLanguageScreen(),
   ),
   GetPage(
@@ -129,8 +132,22 @@ List<GetPage<dynamic>> appRoute = [
   ),
   GetPage(
     name: InvoiceReportScreen.routeName,
-    binding: BindingsBuilder.put(() => InvoiceReportController()),
+    binding: BindingsBuilder.put(
+      () => InvoiceReportController()..onGetInvoiceList(),
+    ),
     page: () => const InvoiceReportScreen(),
+  ),
+  GetPage(
+    name: InvoiceDetailScreen.routeName,
+  
+    binding: BindingsBuilder.put(
+      () {
+        final arg = Get.arguments ?? {};
+        return Get.find<InvoiceReportController>()
+          ..onGetInvoiceDetail(arg['invoice'] ?? "");
+      },
+    ),
+    page: () => const InvoiceDetailScreen(),
   ),
   GetPage(
     name: DailySaleReportScreen.routeName,

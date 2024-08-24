@@ -44,7 +44,6 @@ class SetupItemScreen extends GetView<ItemController> {
     final itemCodeCtr = TextEditingController(text: recordCode);
     final itemCostCtr = TextEditingController(text: recordCost);
     final itemQtyCtr = TextEditingController(text: recordQty);
-    final itemNewQtyCtr = TextEditingController(); //TODO: update
     final unitPriceCtr = TextEditingController(text: recordPrice);
     final groupDescEnCtr = TextEditingController(text: recordDesc);
     final groupDescKHCtr = TextEditingController(text: recordDesc2);

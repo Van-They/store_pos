@@ -24,7 +24,7 @@ class ApiClient extends Api {
   late Database db;
 
   Future<void> getDatabase() async => db = await DbService.instance.database;
-
+  String? _error;
   @override
   Future<ApiResponse> onGetHomeItems({Map? arg}) async {
     try {
@@ -781,6 +781,38 @@ class ApiClient extends Api {
       );
     } catch (e) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetListInvoice() async {
+    try {
+      final response = await db.query(
+        OrderHead.orderHead,
+        orderBy: "orderId DESC",
+      );
+      return ApiResponse(
+        record: response.isEmpty ? [] : response,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(record: [], status: Status.failed.name, msg: _error);
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetInvoiceDetail({required String invoice}) async {
+    try {
+      final response = await db.query(OrderTranModel.orderTran,
+          where: "invoiceNo=?", whereArgs: [invoice],);
+      return ApiResponse(
+        record: response.isEmpty ? [] : response,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(record: [], status: Status.failed.name, msg: _error);
     }
   }
 }

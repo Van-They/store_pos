@@ -98,6 +98,8 @@ class Translate extends Translations {
     //-----------------
     'not_selected': 'Not selected',
     'not_allow_to_edit': 'Not allow to edit',
+    'num_row':'No',
+    'invoice_no':'Invoice',
 
     //-----------------
 
@@ -113,6 +115,12 @@ class Translate extends Translations {
 
     //-----------------
     'subtotal': 'Subtotal',
+    'summary_data': 'Summary Data',
+    'item_data': 'Item Data',
+    'grand_total': 'Grand total',
+    'phone_number': 'Phone number',
+    'paid_by': 'Paid by',
+    'date': 'Date',
     'discount': 'Discount',
 
     'check_out': 'Check out',
@@ -121,7 +129,7 @@ class Translate extends Translations {
     'quantity': "Quantity",
     'payment_type': "Payment type",
     'to_customer': "To customer",
-    'product_list': "Product list",
+    'amount': "Amount",
 
     'new_qty': "New Qty",
 
@@ -178,5 +186,10 @@ class Translate extends Translations {
     'not_allow_quantity_smaller_than_one': 'No allow quantity smaller than one',
   };
 
-  final Map<String, String> _khmer = {};
+  final Map<String, String> _khmer = {
+    //-----------------
+    'khmer': 'ខេមរភាសា',
+    'english': 'អង់គ្លេស',
+
+  };
 }

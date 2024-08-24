@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/constant/images.dart';
 import 'package:store_pos/core/util/helper.dart';
 

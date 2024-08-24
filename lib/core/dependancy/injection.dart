@@ -6,6 +6,7 @@ import 'package:store_pos/core/repository/cart_repo.dart';
 import 'package:store_pos/core/repository/group_item_repo.dart';
 import 'package:store_pos/core/repository/item_repo.dart';
 import 'package:store_pos/core/repository/merchant_menu_repo.dart';
+import 'package:store_pos/core/repository/order_head_repo.dart';
 import 'package:store_pos/screen/dashboard/group/group_controller.dart';
 
 class DInjection extends Bindings {
@@ -25,6 +26,7 @@ void _init() {
   Get.lazyPut<GroupItemRepo>(() => GroupItemRepo(Get.find<Api>()), fenix: true);
   Get.lazyPut<ItemRepo>(() => ItemRepo(Get.find<Api>()), fenix: true);
   Get.lazyPut<CartRepo>(() => CartRepo(Get.find<Api>()), fenix: true);
+  Get.lazyPut<OrderHeadRepo>(() => OrderHeadRepo(Get.find<Api>()), fenix: true);
   Get.lazyPut<MerchantMenuRepo>(() => MerchantMenuRepo(Get.find<Api>()),
       fenix: true);
 
