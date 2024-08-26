@@ -70,4 +70,8 @@ abstract class Api {
   Future<ApiResponse> onGetListInvoice();
 
   Future<ApiResponse> onGetInvoiceDetail({required String invoice});
+
+  Future<ApiResponse> onGetItemCartListCodes();
+
+  Future<ApiResponse> onGetItemWishListCodes();
 }

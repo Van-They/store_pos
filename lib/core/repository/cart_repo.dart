@@ -16,8 +16,8 @@ class CartRepo {
 
   Future<Either<Failure, RepoResponse<OrderTranModel>>> toggleCart(
       {required ItemModel arg}) async {
+    final result = await api.toggleCart(arg: arg);
     try {
-      final result = await api.toggleCart(arg: arg);
       if (result.status != 'success') {
         throw GeneralException();
       }
@@ -30,7 +30,7 @@ class CartRepo {
         ),
       );
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
@@ -59,21 +59,17 @@ class CartRepo {
   }
 
   Future<Either<Failure, RepoResponse<OrderHead>>> onGetOrderHead() async {
+    final result = await api.onGetOrderHead();
     try {
-      final result = await api.onGetOrderHead();
       if (result.status != 'success') {
         throw GeneralException();
       }
 
       final OrderHead record = OrderHead.fromMap(result.record);
 
-      return Right(
-        RepoResponse(
-          record: record,
-        ),
-      );
+      return Right(RepoResponse(record: record));
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 

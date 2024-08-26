@@ -62,15 +62,7 @@ class InvoiceDetailScreen extends GetView<InvoiceReportController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextWidget(text: 'customer'.tr),
-                      const TextWidget(text: 'Todo')
-                    ],
-                  ),
-                  SizedBox(height: appSpace.scale),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextWidget(text: 'phone_number'.tr),
-                      const TextWidget(text: 'todo')
+                      TextWidget(text: orderHead.custName)
                     ],
                   ),
                   SizedBox(height: appSpace.scale),
@@ -78,8 +70,8 @@ class InvoiceDetailScreen extends GetView<InvoiceReportController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextWidget(text: 'paid_by'.tr),
-                      const TextWidget(
-                        text: 'todo',
+                      TextWidget(
+                        text: orderHead.paymentName,
                         fontWeight: FontWeight.w500,
                       ),
                     ],

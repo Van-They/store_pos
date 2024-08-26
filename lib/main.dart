@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:sqflite_common/sqlite_api.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/dependancy/injection.dart';
 import 'package:store_pos/core/route/app_route.dart';
+import 'package:store_pos/core/service/app_database.dart';
 import 'package:store_pos/localication/translate.dart';
 import 'package:store_pos/screen/main/main_screen.dart';
+import 'package:store_pos/widget/text_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,28 +16,37 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(
-    FutureBuilder(
-      future: DInjection.initDatabase(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return _buildLoading();
-        }
-        return _buildScreen();
-      },
-    ),
-  );
+
+  final isData = await AppDatabase.instance.init();
+  final database = await AppDatabase.instance.database;
+  if (isData) {
+    runApp(_buildScreen(database));
+  } else {
+    runApp(_buildLoading());
+  }
+
+  // runApp(
+  //   FutureBuilder(
+  //     future: DInjection.initDatabase(),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return _buildLoading();
+  //       }
+  //       return _buildScreen();
+  //     },
+  //   ),
+  // );
 }
 
-GetMaterialApp _buildScreen() {
+GetMaterialApp _buildScreen(Database database) {
   return GetMaterialApp(
     debugShowCheckedModeBanner: false,
     getPages: appRoute,
-    initialBinding: DInjection(),
+    initialBinding: DInjection(database),
     navigatorKey: _navKey,
     scaffoldMessengerKey: scaffoldMessageKey,
     translations: Translate(),
-    defaultTransition: Transition.leftToRight,
+    defaultTransition: Transition.rightToLeft,
     locale: const Locale('en', 'US'),
     fallbackLocale: const Locale('en', 'US'),
     initialRoute: MainScreen.routeName,
@@ -61,9 +73,7 @@ Widget _buildLoading() {
     home: Container(
       color: kWhite,
       alignment: Alignment.center,
-      child: const CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation(kPrimaryColor),
-      ),
+      child: const TextWidget(text: "Something went wrong"),
     ),
   );
 }

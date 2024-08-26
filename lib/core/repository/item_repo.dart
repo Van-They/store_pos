@@ -206,8 +206,9 @@ class ItemRepo {
     }
   }
 
-  Future<Either<Failure, RepoResponse<ItemModel>>> onGetItemById(
-      {required String itemCode}) async {
+  Future<Either<Failure, RepoResponse<ItemModel>>> onGetItemById({
+    required String itemCode,
+  }) async {
     final result = await api.onGetItemById(itemCode: itemCode);
     try {
       if (result.status != 'success') {
@@ -222,6 +223,44 @@ class ItemRepo {
       return Right(RepoResponse(record: record));
     } catch (e) {
       return Left(ServerFailure('failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<List<String>>>>
+      onGetItemCartListCodes() async {
+    final result = await api.onGetItemCartListCodes();
+    try {
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      final List<String> records = [];
+
+      for (var e in result.record) {
+        records.add(e);
+      }
+
+      return Right(RepoResponse(record: records));
+    } catch (e) {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<List<String>>>>
+      onGetItemWishListCodes() async {
+    final result = await api.onGetItemWishListCodes();
+    try {
+      if (result.status != 'success') {
+        throw GeneralException();
+      }
+      final List<String> records = [];
+
+      for (var e in result.record) {
+        records.add(e);
+      }
+
+      return Right(RepoResponse(record: records));
+    } catch (e) {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 }

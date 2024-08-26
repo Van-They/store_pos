@@ -32,7 +32,7 @@ class CartController extends GetxController {
 
   void onGetOrderHead() async {
     final result = await cartRepo.onGetOrderHead();
-    result.fold((l) {}, (r) {
+    result.foldRight(null, (r, previous) {
       orderHead.value = r.record;
     });
   }
@@ -52,7 +52,7 @@ class CartController extends GetxController {
 
   void toggleCart(ItemModel itemModel) async {
     final result = await cartRepo.toggleCart(arg: itemModel);
-    result.fold((l) => throw Exception(), (r) {
+    result.foldRight(null, (r, previous) {
       final currentItem = orderTranList.indexWhere(
         (element) => element.code == itemModel.code,
       );
@@ -66,7 +66,7 @@ class CartController extends GetxController {
 
   void onUpdateCart({required String code, required double qty}) async {
     final result = await cartRepo.onUpdateCart(code: code, qty: qty);
-    result.fold((l) => {}, (r) {
+    result.foldRight(null, (r, previous) {
       final currentIndex =
           orderTranList.indexWhere((element) => element.code == code);
       if (currentIndex != -1) {

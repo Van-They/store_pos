@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:store_pos/core/data/data_source/api.dart';
 import 'package:store_pos/core/data/data_source/api_client.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
@@ -10,18 +11,14 @@ import 'package:store_pos/core/repository/order_head_repo.dart';
 import 'package:store_pos/screen/dashboard/group/group_controller.dart';
 
 class DInjection extends Bindings {
+  Database database;
+  DInjection(this.database);
   @override
-  void dependencies() => _init();
-  static Future<void> initDatabase() async {
-    await Get.putAsync<Api>(() async {
-      final api = ApiClient();
-      await api.getDatabase();
-      return api;
-    }, permanent: true);
-  }
+  void dependencies() => _init(database);
 }
 
-void _init() {
+void _init(Database database) async {
+  Get.put<Api>(ApiClient(database), permanent: true);
   //repo
   Get.lazyPut<GroupItemRepo>(() => GroupItemRepo(Get.find<Api>()), fenix: true);
   Get.lazyPut<ItemRepo>(() => ItemRepo(Get.find<Api>()), fenix: true);
@@ -42,5 +39,4 @@ void clearDependencies() {
   Get.delete<CartRepo>();
   Get.delete<CartController>();
   Get.delete<GroupController>();
-  _init();
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/util/helper.dart';
-import 'package:store_pos/widget/text_widget.dart';
 
 import '../../main.dart';
 
@@ -18,7 +17,6 @@ class ServerFailure extends Failure {
         SnackBar(
           backgroundColor: kErrorColor,
           behavior: SnackBarBehavior.floating,
-          duration: const Duration(milliseconds: 500),
           showCloseIcon: true,
           elevation: 0,
           margin: EdgeInsets.only(
@@ -26,7 +24,7 @@ class ServerFailure extends Failure {
             right: appSpace.scale,
             bottom: appSpace.scale,
           ),
-          content: TextWidget(text: message),
+          content: Text(message),
         ),
       );
     }

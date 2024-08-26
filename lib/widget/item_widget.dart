@@ -246,33 +246,31 @@ class ItemWidget extends GetView<CartController> {
                 onTap: () {
                   controller.toggleCart(record);
                 },
-                child: GetBuilder<CartController>(
-                  builder: (controller) {
-                    final records = controller.orderTranList;
-                    final isCurrent = records.any(
-                      (element) => element.code == record.code,
-                    );
-                    return Container(
-                      padding: EdgeInsets.all(4.scale),
-                      margin: EdgeInsets.only(right: 6.scale),
-                      decoration: BoxDecoration(
-                        color: isCurrent ? kErrorColor : kBorderColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: isCurrent
-                          ? Icon(
-                              Icons.remove,
-                              color: kWhite,
-                              size: 18.scale,
-                            )
-                          : Icon(
-                              Icons.add,
-                              color: kWhite,
-                              size: 18.scale,
-                            ),
-                    );
-                  },
-                ),
+                child: Obx(() {
+                  final records = controller.orderTranList;
+                  final isCurrent = records.any(
+                    (element) => element.code == record.code,
+                  );
+                  return Container(
+                    padding: EdgeInsets.all(4.scale),
+                    margin: EdgeInsets.only(right: 6.scale),
+                    decoration: BoxDecoration(
+                      color: isCurrent ? kErrorColor : kBorderColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: isCurrent
+                        ? Icon(
+                            Icons.remove,
+                            color: kWhite,
+                            size: 18.scale,
+                          )
+                        : Icon(
+                            Icons.add,
+                            color: kWhite,
+                            size: 18.scale,
+                          ),
+                  );
+                }),
               )
             ],
           ),

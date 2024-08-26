@@ -9,18 +9,18 @@ import 'package:store_pos/core/data/model/customer_model.dart';
 import 'package:store_pos/core/data/model/payment_method_model.dart';
 import 'package:store_pos/core/data/model/setting_model.dart';
 
-class DbService {
-  DbService._();
+class AppDatabase {
+  AppDatabase._();
 
   static Database? _database;
 
-  static final DbService instance = DbService._();
+  static final AppDatabase instance = AppDatabase._();
 
   Future<Database> get database async {
-    return _database ??= await initDatabase();
+    return _database ??= await _initDatabase();
   }
 
-  Future<Database> initDatabase() async {
+  Future<Database> _initDatabase() async {
     // String externalPath = await getDatabasesPath();
     final dir = await getExternalStorageDirectory();
     Directory extentDir = Directory('${dir?.path}/database');
@@ -77,5 +77,10 @@ class DbService {
     } on Exception {
       rethrow;
     }
+  }
+
+  init() async {
+    await database;
+    return _database != null;
   }
 }

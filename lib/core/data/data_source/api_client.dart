@@ -1,8 +1,9 @@
-import 'package:flutter/foundation.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
+
 import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/data/data_source/api.dart';
 import 'package:store_pos/core/data/data_source/api_response.dart';
@@ -17,14 +18,13 @@ import 'package:store_pos/core/data/model/setting_model.dart';
 import 'package:store_pos/core/exception/exceptions.dart';
 import 'package:store_pos/core/exception/failures.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
-import 'package:store_pos/core/service/db_service.dart';
 import 'package:store_pos/core/util/helper.dart';
 
 class ApiClient extends Api {
-  late Database db;
-
-  Future<void> getDatabase() async => db = await DbService.instance.database;
+  final Database _db;
+  ApiClient(this._db);
   String? _error;
+  Database get db => _db;
   @override
   Future<ApiResponse> onGetHomeItems({Map? arg}) async {
     try {
@@ -145,6 +145,7 @@ class ApiClient extends Api {
       final settingList = await db.query(SettingModel.tableName);
 
       if (settingList.isEmpty) {
+        _error = "Setting not initialize";
         throw GeneralException();
       }
 
@@ -173,6 +174,7 @@ class ApiClient extends Api {
         final createHead = await db.insert(OrderHead.orderHeadTmp, data);
         //if create new orderHead not success throw exception
         if (createHead == -1) {
+          _error = "Header not initialize";
           throw GeneralException();
         }
         response = data;
@@ -190,7 +192,11 @@ class ApiClient extends Api {
         status: Status.success.name,
       );
     } catch (e) {
-      rethrow;
+      return ApiResponse(
+        record: {},
+        status: Status.failed.name,
+        msg: _error,
+      );
     }
   }
 
@@ -198,15 +204,19 @@ class ApiClient extends Api {
   Future<ApiResponse> toggleCart({required ItemModel arg}) async {
     try {
       //orderHead only exist 1 during process
-      final orderHead = Get.find<CartController>().orderHead;
+      final orderHeadObx = Get.find<CartController>().orderHead;
+      final orderHead = orderHeadObx.value;
+      if (orderHead == null) {
+        throw Exception("Can't add item to cart");
+      }
 
       //check if item already exist in cart
       final isItemExist = await db.delete(OrderTranModel.orderTranTmp,
           where: "code=?", whereArgs: [arg.code]);
 
       final orderTran = {
-        'orderId': orderHead.value!.orderId,
-        'invoiceNo': orderHead.value!.invoiceNo,
+        'orderId': orderHead.orderId,
+        'invoiceNo': orderHead.invoiceNo,
         'code': arg.code,
         'groupCode': arg.groupCode,
         'description': arg.description,
@@ -222,14 +232,16 @@ class ApiClient extends Api {
         'subtotal': arg.unitPrice,
         'grandTotal': arg.unitPrice,
         'imagePath': arg.imgPath,
-        'date': orderHead.value!.date,
+        'date': formatDate(DateTime.now()),
       };
 
       if (isItemExist < 1) {
-        final createOrderTran =
-            await db.insert(OrderTranModel.orderTranTmp, orderTran);
+        final createOrderTran = await db.insert(
+          OrderTranModel.orderTranTmp,
+          orderTran,
+        );
         if (createOrderTran == -1) {
-          throw GeneralException();
+          throw Exception("Can't add item to cart");
         }
       }
 
@@ -242,28 +254,44 @@ class ApiClient extends Api {
       }
 
       final subtotal = OrderTranModel.calculateSubtotal(orderTranList);
-      orderHead.value!.subtotal = subtotal;
-      orderHead.value!.grandTotal =
-          OrderHead.calculateGrandtotal(orderHead.value!);
-      await db.update(OrderHead.orderHeadTmp, orderHead.value!.toMap());
+      orderHead.subtotal = subtotal;
+      orderHead.grandTotal = OrderHead.calculateGrandtotal(orderHead);
 
-      debugPrint(orderHead.value!.toString());
+      orderHead.date = formatDate(DateTime.now());
+
+      await db.update(OrderHead.orderHeadTmp, orderHead.toMap());
+
+      logger.d(orderHead);
 
       return ApiResponse(
         record: orderTran,
         status: Status.success.name,
       );
     } catch (e) {
-      rethrow;
+      _error = e.toString();
+      return ApiResponse(
+        record: {},
+        status: Status.failed.name,
+        msg: _error,
+      );
     }
   }
 
   @override
-  Future<ApiResponse> onUpdateCart(
-      {required String code, required double qty}) async {
+  Future<ApiResponse> onUpdateCart({
+    required String code,
+    required double qty,
+  }) async {
     try {
       //orderHead only exist 1 during process
-      final orderHead = Get.find<CartController>().orderHead;
+      final orderHeadObx = Get.find<CartController>().orderHead;
+
+      final orderHead = orderHeadObx.value;
+
+      if (orderHead == null) {
+        _error = "Can't update item";
+        throw GeneralException();
+      }
 
       final currentItemList = await db.query(OrderTranModel.orderTranTmp,
           where: 'code=?', whereArgs: [code]);
@@ -275,8 +303,10 @@ class ApiClient extends Api {
       final currentItem = OrderTranModel.fromMap(currrentItemMap);
 
       currentItem.qty = qty;
+
       currentItem.subtotal =
           OrderTranModel.calculateSubtotalByItem(currentItem);
+
       currentItem.grandTotal =
           OrderTranModel.calculateSubtotalByItem(currentItem);
 
@@ -296,12 +326,14 @@ class ApiClient extends Api {
       }
 
       final subtotal = OrderTranModel.calculateSubtotal(orderTranList);
-      orderHead.value!.subtotal = subtotal;
-      orderHead.value!.grandTotal =
-          OrderHead.calculateGrandtotal(orderHead.value!);
-      await db.update(OrderHead.orderHeadTmp, orderHead.value!.toMap());
 
-      debugPrint(orderHead.value!.toString());
+      orderHead.subtotal = subtotal;
+
+      orderHead.grandTotal = OrderHead.calculateGrandtotal(orderHead);
+
+      await db.update(OrderHead.orderHeadTmp, orderHead.toMap());
+
+      logger.d(orderHead.toString());
 
       final indexCurrentItem =
           orderTranList.indexWhere((element) => element.code == code);
@@ -313,7 +345,11 @@ class ApiClient extends Api {
         status: Status.success.name,
       );
     } catch (e) {
-      rethrow;
+      return ApiResponse(
+        record: {},
+        status: Status.failed.name,
+        msg: _error,
+      );
     }
   }
 
@@ -804,8 +840,11 @@ class ApiClient extends Api {
   @override
   Future<ApiResponse> onGetInvoiceDetail({required String invoice}) async {
     try {
-      final response = await db.query(OrderTranModel.orderTran,
-          where: "invoiceNo=?", whereArgs: [invoice],);
+      final response = await db.query(
+        OrderTranModel.orderTran,
+        where: "invoiceNo=?",
+        whereArgs: [invoice],
+      );
       return ApiResponse(
         record: response.isEmpty ? [] : response,
         status: Status.success.name,
@@ -813,6 +852,39 @@ class ApiClient extends Api {
     } catch (e) {
       _error = e.toString();
       return ApiResponse(record: [], status: Status.failed.name, msg: _error);
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetItemCartListCodes() async {
+    try {
+      final response =
+          await db.rawQuery('SELECT code from ${OrderTranModel.orderTranTmp}');
+      return ApiResponse(
+        record: response.isEmpty ? [] : response,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(record: [], status: Status.failed.name, msg: _error);
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetItemWishListCodes() async {
+    try {
+      final response = await db.query('wishlist');
+      return ApiResponse(
+        record: response.isEmpty ? [] : response,
+        status: Status.success.name,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(
+        record: [],
+        status: Status.failed.name,
+        msg: _error,
+      );
     }
   }
 }

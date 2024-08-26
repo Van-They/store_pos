@@ -36,12 +36,17 @@ CREATE TABLE
     IF NOT EXISTS order_head (
         orderId TEXT PRIMARY KEY,
         invoiceNo TEXT,
+        custId TEXT,
+        custName TEXT,
+        paymentId TEXT,
+        paymentName TEXT,
         discountAmount REAL,
         discountPercentage REAL,
         taxAmount REAL,
         taxPercentage REAL,
         subtotal REAL,
         grandTotal REAL,
+        user TEXT,
         date TEXT
     );
 
@@ -49,12 +54,17 @@ CREATE TABLE
     IF NOT EXISTS order_head_tmp (
         orderId TEXT PRIMARY KEY,
         invoiceNo TEXT,
+        custId TEXT,
+        custName TEXT,
+        paymentId TEXT,
+        paymentName TEXT,
         discountAmount REAL,
         discountPercentage REAL,
         taxAmount REAL,
         taxPercentage REAL,
         subtotal REAL,
         grandTotal REAL,
+        user TEXT,
         date TEXT
     );
 
@@ -138,6 +148,15 @@ CREATE TABLE
     IF NOT EXISTS wishlist (code TEXT PRIMARY KEY NOT NULL);
 
 CREATE TABLE
-    IF NOT EXISTS home_slide (uid INTEGER PRIMARY KEY AUTOINCREMENT, imgPath TEXT);
+    IF NOT EXISTS home_slide (
+        uid INTEGER PRIMARY KEY AUTOINCREMENT,
+        imgPath TEXT
+    );
+
 CREATE TABLE
-    IF NOT EXISTS company (uid INTEGER PRIMARY KEY AUTOINCREMENT,desc_eng TEXT,desc_kh TEXT, imgPath TEXT)
+    IF NOT EXISTS company (
+        uid INTEGER PRIMARY KEY AUTOINCREMENT,
+        desc_eng TEXT,
+        desc_kh TEXT,
+        imgPath TEXT
+    )
