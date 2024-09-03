@@ -95,11 +95,13 @@ class ItemScreen extends GetView<ItemController> {
                         record: record,
                         onEdit: () {
                           Get.toNamed(UpdateItemScreen.routeName,
-                              arguments: {"code": record.code})?.then((value) {
-                            if (value == AppState.updated) {
-                              controller.onGetItem();
-                            }
-                          });
+                              arguments: {"item": record})?.then(
+                            (value) {
+                              if (value == AppState.updated) {
+                                controller.onGetItem();
+                              }
+                            },
+                          );
                         },
                         onDelete: () {
                           showYesNoDialog(
