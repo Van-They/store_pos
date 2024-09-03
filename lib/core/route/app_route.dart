@@ -75,7 +75,10 @@ List<GetPage<dynamic>> appRoute = [
       binding: BindingsBuilder.put(() => ItemController())),
   GetPage(
     name: SetupItemScreen.routeName,
-    page: () => const SetupItemScreen(),
+    page: () {
+      Get.find<ItemController>().onOpenTransaction();
+      return const SetupItemScreen();
+    },
   ),
   GetPage(
     name: GroupItemScreen.routeName,
@@ -139,7 +142,6 @@ List<GetPage<dynamic>> appRoute = [
   ),
   GetPage(
     name: InvoiceDetailScreen.routeName,
-  
     binding: BindingsBuilder.put(
       () {
         final arg = Get.arguments ?? {};

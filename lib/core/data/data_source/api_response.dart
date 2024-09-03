@@ -1,8 +1,10 @@
+import 'package:store_pos/core/constant/constant.dart';
+
 class ApiResponse<T> {
   T record;
   int currentPage;
   int lastPage;
-  T? status;
+  Status? status;
   String? msg;
 
   ApiResponse({

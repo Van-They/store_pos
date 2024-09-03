@@ -13,6 +13,7 @@ showYesNoDialog(
     AlertDialog(
       content: TextWidget(
         text: content,
+        maxLine: 3,
         fontSize: 16.scale,
       ),
       title: Row(

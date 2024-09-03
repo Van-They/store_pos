@@ -5,6 +5,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:store_pos/core/exception/exceptions.dart';
+import 'package:store_pos/core/util/helper.dart';
 
 class ImageStorageService {
   static Future<String> saveImageToSecureDir(
@@ -22,11 +23,13 @@ class ImageStorageService {
 
   static Future<String> initImgPathTmp(File imageFile) async {
     try {
+      logger.d("original image path ${imageFile.path}");
       final extension = imageFile.absolute.path.split('.').last;
       final secureDir = await _getSecureDirectory();
       final fileName =
           'image_${DateTime.now().millisecondsSinceEpoch}.$extension';
       final filePath = '${secureDir.path}/$fileName';
+      logger.d("temp image path $filePath");
       return filePath;
     } catch (e) {
       return '';

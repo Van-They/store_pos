@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/constant/constant.dart';
@@ -11,6 +13,7 @@ import 'package:store_pos/screen/dashboard/item/components/fetch_group_item_scre
 import 'package:store_pos/screen/dashboard/item/item_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
+import 'package:store_pos/widget/components/custom_dialog.dart';
 import 'package:store_pos/widget/components/pick_image.dart';
 import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/input_text_widget.dart';
@@ -18,232 +21,175 @@ import 'package:store_pos/widget/primary_btn_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
 class SetupItemScreen extends GetView<ItemController> {
-  const SetupItemScreen({super.key, this.isUpdate = false});
+  const SetupItemScreen({super.key});
 
   static const String routeName = '/SetupItemScreen';
-  final bool isUpdate;
 
   @override
   Widget build(BuildContext context) {
-    final arguments = Get.arguments ?? {};
-    final isUpdate = arguments['isUpdate'] ?? false;
-    final recordImgPath = arguments['imgPath'] ?? '';
-    final recordCode = arguments['code'];
-    final recordGroupCode = arguments['group_code'];
-    final recordDesc = arguments['description'];
-    final recordDesc2 = arguments['description_2'];
-    final recordDisLang = arguments['display_language'] ?? 'KH';
-    final recordQty = arguments['qty'] ?? '0';
-    final recordCost = arguments['cost'] ?? '0';
-    final recordPrice = arguments['price'] ?? '0';
-    final language = recordDisLang == "EN" ? Language.en : Language.kh;
-
-    final ValueNotifier<Language> languageListener = ValueNotifier(language);
-    final ValueNotifier<String> imgListener = ValueNotifier(recordImgPath);
-    final groupCodeCtr = TextEditingController(text: recordGroupCode);
-    final itemCodeCtr = TextEditingController(text: recordCode);
-    final itemCostCtr = TextEditingController(text: recordCost);
-    final itemQtyCtr = TextEditingController(text: recordQty);
-    final unitPriceCtr = TextEditingController(text: recordPrice);
-    final groupDescEnCtr = TextEditingController(text: recordDesc);
-    final groupDescKHCtr = TextEditingController(text: recordDesc2);
-    final globalKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBarWidget(
         title: 'item_set_up'.tr,
         isBack: true,
+        onBack: () {
+          controller.onCloseTransaction();
+          Navigator.pop(context);
+        },
       ),
       bottomNavigationBar: PrimaryBtnWidget(
-        label: isUpdate ? 'update'.tr : 'create'.tr,
-        onTap: () async {
-          if (!globalKey.currentState!.validate()) {
+        label: 'save'.tr,
+        onTap: () {
+          if (!controller.formState.currentState!.validate()) {
             return;
           }
+          showYesNoDialog(
+            content:
+                "${"do_want_to_create_new_item".tr} ${controller.itemCodeCtr.text.trim()} ?",
+            onConfirm: () async {
+              File imageFile = File(controller.imageListener.value);
+              var imagePath = controller.imageListener.value;
+              if (imagePath.isNotEmpty) {
+                imagePath = await ImageStorageService.initImgPathTmp(imageFile);
+              }
+              final Map<String, dynamic> itemData = {
+                'code': controller.itemCodeCtr.text.trim(),
+                'groupCode': controller.groupCodeCtr.text.trim(),
+                'description': controller.groupDescEnCtr.text.trim(),
+                'description_2': controller.groupDescKHCtr.text.trim(),
+                'qty': controller.qtyCtr.text.trim(),
+                'cost': controller.itemCostCtr.text.trim(),
+                'active': 1,
+                'unitPrice': controller.unitPriceCtr.text.trim(),
+                'displayLang': controller.language.value.name.toUpperCase(),
+                'imgPath': imagePath,
+              };
 
-          if (isUpdate) {
-            var pathUpdate = recordImgPath;
-            if (imgListener.value != recordImgPath) {
-              pathUpdate = await ImageStorageService.saveImageToSecureDir(
-                File(imgListener.value),
-                path: recordImgPath,
-              );
-            }
-            final Map<String, dynamic> itemData = {
-              'code': itemCodeCtr.text.trim(),
-              'groupCode': groupCodeCtr.text.trim(),
-              'description': groupDescEnCtr.text.trim(),
-              'description_2': groupDescKHCtr.text.trim(),
-              'qty': itemQtyCtr.text.trim(),
-              'cost': itemCostCtr.text.trim(),
-              'active': 1,
-              'unitPrice': unitPriceCtr.text.trim(),
-              'displayLang': languageListener.value.name.toUpperCase(),
-              'imgPath': pathUpdate,
-            };
-
-            final result = await controller.onUpdateItem(arg: itemData);
-            if (result) {
-              Get.back();
-            }
-
-            return;
-          }
-
-          final impPath = await ImageStorageService.initImgPathTmp(
-            File(imgListener.value),
+              final result = await controller.onCreateItem(arg: itemData);
+              if (result) {
+                //when create success copy file to app directory
+                if (imagePath.isNotEmpty) {
+                  await ImageStorageService.saveImageToSecureDir(
+                    imageFile,
+                    path: imagePath,
+                  );
+                }
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  controller.onCloseTransaction();
+                }
+              }
+            },
           );
-          final Map<String, dynamic> itemData = {
-            'code': itemCodeCtr.text.trim(),
-            'groupCode': groupCodeCtr.text.trim(),
-            'description': groupDescEnCtr.text.trim(),
-            'description_2': groupDescKHCtr.text.trim(),
-            'qty': itemQtyCtr.text.trim(),
-            'cost': itemCostCtr.text.trim(),
-            'active': 1,
-            'unitPrice': unitPriceCtr.text.trim(),
-            'displayLang': languageListener.value.name.toUpperCase(),
-            'imgPath': impPath,
-          };
-          final result = await controller.onCreateItem(arg: itemData);
-          if (result) {
-            await ImageStorageService.saveImageToSecureDir(
-              File(imgListener.value),
-              path: impPath,
-            );
-            Get.back();
-          }
         },
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(appPadding.scale),
         child: Form(
-          key: globalKey,
+          key: controller.formState,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: appSpace.scale),
-              ValueListenableBuilder(
-                valueListenable: imgListener,
-                builder: (context, value, child) {
-                  return BoxWidget(
+              Obx(() {
+                return Stack(children: [
+                  BoxWidget(
                     onTap: () async {
                       final img = await customPickImageGallery();
                       if (img == null) {
                         return;
                       }
-                      imgListener.value = img.path;
+                      controller.imageListener.value = img.path;
                     },
                     height: 160.scale,
                     child: ImageWidget(
-                      imgPath: value,
+                      imgPath: controller.imageListener.value,
                     ),
-                  );
-                },
-              ),
+                  ),
+                  if (controller.imageListener.isNotEmpty)
+                    Positioned(
+                      right: 0,
+                      child: IconButton(
+                        onPressed: () {
+                          controller.imageListener.value = '';
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.xmark,
+                          size: 18.scale,
+                          color: kRed,
+                        ),
+                      ),
+                    ),
+                ]);
+              }),
               SizedBox(height: 15.scale),
               InputTextWidget(
-                readOnly: isUpdate,
-                onTap: () {
-                  if (isUpdate) {
-                    showMessage(
-                      msg: 'not_allow_to_edit'.tr,
-                      status: Status.failed,
-                    );
-                  }
-                },
+                isMark: true,
                 validator: (p0) {
                   if (p0 == null || p0.isEmpty) {
                     return "please_input_code".tr;
                   }
                   return null;
                 },
-                controller: itemCodeCtr,
+                controller: controller.itemCodeCtr,
                 labelOuter: 'item_code'.tr,
                 hintText: '${'type_your'.tr} ${'item_code'.tr} ${'here'}...',
               ),
               SizedBox(height: 15.scale),
               TextWidget(text: 'display_language'.tr),
-              ValueListenableBuilder(
-                valueListenable: languageListener,
-                builder: (context, value, child) {
-                  return Row(
-                    children: [
-                      Expanded(
-                        child: RadioListTile(
-                          title: TextWidget(text: 'khmer'.tr),
-                          value: value,
-                          groupValue: Language.kh,
-                          splashRadius: appSpace,
-                          contentPadding:
-                              EdgeInsets.only(right: appSpace.scale),
-                          dense: true,
-                          onChanged: (value) {
-                            languageListener.value = Language.kh;
-                          },
-                          fillColor:
-                              const MaterialStatePropertyAll(kPrimaryColor),
+              Obx(() {
+                return Row(
+                  children: [
+                    Expanded(
+                      child: RadioListTile(
+                        title: TextWidget(text: 'khmer'.tr),
+                        value: controller.language.value,
+                        groupValue: Language.kh,
+                        splashRadius: appSpace,
+                        contentPadding: EdgeInsets.only(
+                          right: appSpace.scale,
+                        ),
+                        dense: true,
+                        onChanged: (value) {
+                          controller.language.value = Language.kh;
+                        },
+                        fillColor: const MaterialStatePropertyAll(
+                          kPrimaryColor,
                         ),
                       ),
-                      Expanded(
-                        child: RadioListTile(
-                            value: value,
-                            title: TextWidget(text: 'english'.tr),
-                            dense: true,
-                            contentPadding:
-                                EdgeInsets.only(right: appSpace.scale),
-                            groupValue: Language.en,
-                            onChanged: (value) {
-                              languageListener.value = Language.en;
-                            },
-                            fillColor:
-                                const MaterialStatePropertyAll(kPrimaryColor)),
-                      ),
-                      const Spacer(),
-                    ],
-                  );
-                },
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: InputTextWidget(
-                      textInputType: TextInputType.number,
-                      inputFormatter: [FilteringTextInputFormatter.digitsOnly],
-                      validator: (p0) {
-                        if (p0 == null || p0.isEmpty) {
-                          return "please_input_qty".tr;
-                        }
-                        return null;
-                      },
-                      controller: itemQtyCtr,
-                      labelOuter: 'qty'.tr,
-                      hintText: 'item_qty'.tr,
                     ),
-                  ),
-                  if (isUpdate) SizedBox(width: appSpace.scale),
-                  // if (isUpdate)
-                  //   Expanded(
-                  //     child: InputTextWidget(
-                  //       textInputType: TextInputType.number,
-                  //       readOnly: true,
-                  //       inputFormatter: [
-                  //         FilteringTextInputFormatter.deny('-'),
-                  //         FilteringTextInputFormatter.deny(','),
-                  //         FilteringTextInputFormatter.deny(' '),
-                  //         FilteringTextInputFormatter.deny('..'),
-                  //       ],
-                  //       validator: (p0) {
-                  //         if (p0 == null || p0.isEmpty) {
-                  //           return "please_input_new_qty".tr;
-                  //         }
-                  //         return null;
-                  //       },
-                  //       controller: itemNewQtyCtr,
-                  //       labelOuter: 'new_qty'.tr,
-                  //       hintText: 'item_qty'.tr,
-                  //     ),
-                  //   ),
+                    Expanded(
+                      child: RadioListTile(
+                        value: controller.language.value,
+                        title: TextWidget(text: 'english'.tr),
+                        dense: true,
+                        contentPadding: EdgeInsets.only(right: appSpace.scale),
+                        groupValue: Language.en,
+                        onChanged: (value) {
+                          controller.language.value = Language.en;
+                        },
+                        fillColor: const MaterialStatePropertyAll(
+                          kPrimaryColor,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                );
+              }),
+              InputTextWidget(
+                textInputType: TextInputType.number,
+                inputFormatter: [
+                  FilteringTextInputFormatter.digitsOnly,
                 ],
+                validator: (p0) {
+                  if (p0 == null || p0.isEmpty) {
+                    return "please_input_qty".tr;
+                  }
+                  return null;
+                },
+                controller: controller.qtyCtr,
+                labelOuter: 'qty'.tr,
+                hintText: 'item_qty'.tr,
               ),
               SizedBox(height: 15.scale),
               Row(
@@ -251,6 +197,10 @@ class SetupItemScreen extends GetView<ItemController> {
                   Expanded(
                     child: InputTextWidget(
                       textInputType: TextInputType.number,
+                      suffixIcon: Icon(
+                        FontAwesomeIcons.dollarSign,
+                        size: 14.scale,
+                      ),
                       inputFormatter: [
                         FilteringTextInputFormatter.deny('-'),
                         FilteringTextInputFormatter.deny(','),
@@ -263,7 +213,7 @@ class SetupItemScreen extends GetView<ItemController> {
                         }
                         return null;
                       },
-                      controller: itemCostCtr,
+                      controller: controller.itemCostCtr,
                       labelOuter: 'cost'.tr,
                       hintText: 'item_cost'.tr,
                     ),
@@ -284,8 +234,12 @@ class SetupItemScreen extends GetView<ItemController> {
                         }
                         return null;
                       },
-                      controller: unitPriceCtr,
+                      controller: controller.unitPriceCtr,
                       labelOuter: 'unit_price'.tr,
+                      suffixIcon: Icon(
+                        FontAwesomeIcons.dollarSign,
+                        size: 14.scale,
+                      ),
                       hintText: 'unit_price'.tr,
                     ),
                   ),
@@ -293,8 +247,9 @@ class SetupItemScreen extends GetView<ItemController> {
               ),
               SizedBox(height: 15.scale),
               InputTextWidget(
-                controller: groupCodeCtr,
+                controller: controller.groupCodeCtr,
                 readOnly: true,
+                isMark: true,
                 validator: (p0) {
                   if (p0 == null || p0.isEmpty) {
                     return "please_select_group_code".tr;
@@ -304,7 +259,7 @@ class SetupItemScreen extends GetView<ItemController> {
                 onTap: () {
                   Get.toNamed(FetchGroupItemScreen.routeName)!.then((value) {
                     if (value != null) {
-                      groupCodeCtr.text = value['group_code'];
+                      controller.groupCodeCtr.text = value['group_code'];
                     }
                   });
                 },
@@ -323,7 +278,7 @@ class SetupItemScreen extends GetView<ItemController> {
                   }
                   return null;
                 },
-                controller: groupDescEnCtr,
+                controller: controller.groupDescEnCtr,
                 labelOuter: 'description'.tr,
                 hintText: '${'type_your_description_here'.tr}...',
                 maxLine: 2,
@@ -336,7 +291,7 @@ class SetupItemScreen extends GetView<ItemController> {
                   }
                   return null;
                 },
-                controller: groupDescKHCtr,
+                controller: controller.groupDescKHCtr,
                 labelOuter: 'description_2'.tr,
                 hintText: '${'type_your_description_here'.tr}...',
                 maxLine: 2,

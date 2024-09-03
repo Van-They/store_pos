@@ -55,6 +55,7 @@ dependencies:
   spreadsheet_decoder: ^2.2.0
   carousel_slider: ^4.2.1
   shared_preferences: ^2.2.3
+  sqflite_common: ^2.5.4
 
 dev_dependencies:
   flutter_test:

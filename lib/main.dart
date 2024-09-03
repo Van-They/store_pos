@@ -6,6 +6,7 @@ import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/dependancy/injection.dart';
 import 'package:store_pos/core/route/app_route.dart';
 import 'package:store_pos/core/service/app_database.dart';
+import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/localication/translate.dart';
 import 'package:store_pos/screen/main/main_screen.dart';
 import 'package:store_pos/widget/text_widget.dart';
@@ -18,6 +19,7 @@ void main() async {
   ]);
 
   final isData = await AppDatabase.instance.init();
+  logger.d(isData ? "Database created" : "Database create failed");
   final database = await AppDatabase.instance.database;
   if (isData) {
     runApp(_buildScreen(database));
@@ -57,7 +59,7 @@ GetMaterialApp _buildScreen(Database database) {
       dialogBackgroundColor: kWhite,
       buttonTheme: const ButtonThemeData(splashColor: kWhite),
       radioTheme: const RadioThemeData(
-        fillColor: MaterialStatePropertyAll(kPrimaryColor),
+        fillColor: MaterialStatePropertyAll(kBlack),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: kWhite,

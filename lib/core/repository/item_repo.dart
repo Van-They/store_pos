@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
+import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/data/data_source/api.dart';
 import 'package:store_pos/core/data/model/item_model.dart';
 import 'package:store_pos/core/data/model/order_tran_model.dart';
@@ -14,9 +15,9 @@ class ItemRepo {
 
   Future<Either<Failure, RepoResponse<List<ItemModel>>>> onGetHomeItems(
       {Map? arg}) async {
+    final result = await api.onGetItem();
     try {
-      final result = await api.onGetItem();
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
 
@@ -26,37 +27,29 @@ class ItemRepo {
         records.add(ItemModel.fromMap(e));
       }
 
-      return Right(
-        RepoResponse(
-          record: records,
-        ),
-      );
+      return Right(RepoResponse(record: records));
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
   Future<Either<Failure, RepoResponse<String>>> onCreateItem(
       {required Map<String, dynamic> arg}) async {
+    final result = await api.onCreateItem(arg: arg);
     try {
-      final result = await api.onCreateItem(arg: arg);
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
-      return Right(
-        RepoResponse(
-          record: result.status,
-        ),
-      );
+      return Right(RepoResponse(record: ''));
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
   Future<Either<Failure, RepoResponse<List<ItemModel>>>> onGetItem() async {
+    final result = await api.onGetItem();
     try {
-      final result = await api.onGetItem();
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
 
@@ -66,54 +59,44 @@ class ItemRepo {
         records.add(ItemModel.fromMap(e));
       }
 
-      return Right(
-        RepoResponse(
-          record: records,
-        ),
-      );
+      return Right(RepoResponse(record: records));
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
-  Future<Either<Failure, RepoResponse<String>>> onDeleteItem(
+  Future<Either<Failure, RepoResponse<Status>>> onDeleteItem(
       String code) async {
+    final result = await api.onDeleteItem(code);
     try {
-      final result = await api.onDeleteItem(code);
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
-      return Right(
-        RepoResponse(record: result.record),
-      );
+      return Right(RepoResponse(record: result.record));
     } on GeneralException {
-      return Left(ServerFailure('can_not_delete_item_has_transaction'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
   Future<Either<Failure, RepoResponse<String>>> onUpdateItem(
       {required Map<String, dynamic> arg}) async {
+    final result = await api.onUpdateItem(arg: arg);
     try {
-      final result = await api.onUpdateItem(arg: arg);
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
-      return Right(
-        RepoResponse(
-          record: result.status,
-        ),
-      );
+      return Right(RepoResponse(record: ''));
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
   Future<Either<Failure, RepoResponse<List<ItemModel>>>> onGetItemByCategory({
     Map? arg,
   }) async {
+    final result = await api.onGetItemByCategory(arg: arg);
     try {
-      final result = await api.onGetItemByCategory(arg: arg);
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
       final List<ItemModel> record = [];
@@ -122,13 +105,9 @@ class ItemRepo {
         record.add(ItemModel.fromMap(e));
       }
 
-      return Right(
-        RepoResponse(
-          record: record,
-        ),
-      );
+      return Right(RepoResponse(record: record));
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
@@ -136,7 +115,7 @@ class ItemRepo {
       {Map? arg}) async {
     final result = await api.onGetWishList(arg: arg);
     try {
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
       final List<ItemModel> record = [];
@@ -145,13 +124,9 @@ class ItemRepo {
         record.add(ItemModel.fromMap(e));
       }
 
-      return Right(
-        RepoResponse(
-          record: record,
-        ),
-      );
+      return Right(RepoResponse(record: record));
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
@@ -159,16 +134,12 @@ class ItemRepo {
       {Map? arg}) async {
     final result = await api.onToggleWishList(arg: arg);
     try {
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
-      return Right(
-        RepoResponse(
-          record: result.record,
-        ),
-      );
+      return Right(RepoResponse(record: result.record));
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
@@ -176,14 +147,14 @@ class ItemRepo {
       {required Map<String, dynamic> arg}) async {
     final result = await api.onCreateImportItem(arg: arg);
     try {
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
       return Right(
         RepoResponse(record: result.record),
       );
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
@@ -191,7 +162,7 @@ class ItemRepo {
       onGetItemTran() async {
     final result = await api.onGetItemTran();
     try {
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
       final List<OrderTranModel> records = [];
@@ -202,16 +173,17 @@ class ItemRepo {
 
       return Right(RepoResponse(record: records));
     } on GeneralException {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
+  //TODO
   Future<Either<Failure, RepoResponse<ItemModel>>> onGetItemById({
     required String itemCode,
   }) async {
     final result = await api.onGetItemById(itemCode: itemCode);
     try {
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
       final records = result.record;
@@ -222,7 +194,7 @@ class ItemRepo {
       final record = ItemModel.fromMap(records[0]);
       return Right(RepoResponse(record: record));
     } catch (e) {
-      return Left(ServerFailure('failed'.tr));
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
 
@@ -230,7 +202,7 @@ class ItemRepo {
       onGetItemCartListCodes() async {
     final result = await api.onGetItemCartListCodes();
     try {
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
       final List<String> records = [];
@@ -249,13 +221,32 @@ class ItemRepo {
       onGetItemWishListCodes() async {
     final result = await api.onGetItemWishListCodes();
     try {
-      if (result.status != 'success') {
+      if (result.status != Status.success) {
         throw GeneralException();
       }
       final List<String> records = [];
 
       for (var e in result.record) {
         records.add(e);
+      }
+
+      return Right(RepoResponse(record: records));
+    } catch (e) {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<List<ItemModel>>>> onSearchItem(
+      {required String query}) async {
+    final result = await api.onSearchItem(query: query);
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+      final List<ItemModel> records = [];
+
+      for (var e in result.record) {
+        records.add(ItemModel.fromMap(e));
       }
 
       return Right(RepoResponse(record: records));

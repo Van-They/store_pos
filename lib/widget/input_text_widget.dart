@@ -21,7 +21,11 @@ class InputTextWidget extends StatelessWidget {
     this.maxLine,
     this.maxLength,
     this.suffixIcon,
+    this.prefixIcon,
     this.onTap,
+    this.onChange,
+    this.isMark = false,
+    this.markSign = "*",
   });
 
   final bool isDense, autofocus;
@@ -29,7 +33,7 @@ class InputTextWidget extends StatelessWidget {
   final EdgeInsetsGeometry? contentPadding;
   final TextInputType? textInputType;
   final List<TextInputFormatter>? inputFormatter;
-  final Widget? suffixIcon;
+  final Widget? suffixIcon, prefixIcon;
   final String? Function(String?)? validator;
   final bool obscureText;
   final bool readOnly;
@@ -37,6 +41,9 @@ class InputTextWidget extends StatelessWidget {
   final String? hintText;
   final int? maxLine, maxLength;
   final VoidCallback? onTap;
+  final Function(String query)? onChange;
+  final bool isMark;
+  final String markSign;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +51,18 @@ class InputTextWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (labelOuter.isNotEmpty) TextWidget(text: labelOuter),
+        if (labelOuter.isNotEmpty)
+          Row(
+            children: [
+              TextWidget(text: labelOuter),
+              if (isMark)
+                TextWidget(
+                  text: markSign,
+                  color: kRed,
+                  fontSize: 12.scale,
+                ),
+            ],
+          ),
         if (labelOuter.isNotEmpty) SizedBox(height: 4.scale),
         AbsorbPointer(
           absorbing: false,
@@ -62,12 +80,14 @@ class InputTextWidget extends StatelessWidget {
             maxLines: maxLine,
             obscuringCharacter: '*',
             onTap: onTap,
+            onChanged: onChange,
             onTapOutside: (event) => FocusScope.of(context).unfocus(),
             decoration: InputDecoration(
               contentPadding: contentPadding ?? EdgeInsets.all(appSpace.scale),
               isDense: isDense,
               hintText: hintText,
               suffixIcon: suffixIcon,
+              prefixIcon: prefixIcon,
               fillColor: kShadow,
               filled: true,
               errorBorder: OutlineInputBorder(

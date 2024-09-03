@@ -1,9 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
-
 import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/data/data_source/api.dart';
 import 'package:store_pos/core/data/data_source/api_response.dart';
@@ -16,7 +14,6 @@ import 'package:store_pos/core/data/model/payment_method_model.dart';
 import 'package:store_pos/core/data/model/posh_cash.dart';
 import 'package:store_pos/core/data/model/setting_model.dart';
 import 'package:store_pos/core/exception/exceptions.dart';
-import 'package:store_pos/core/exception/failures.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
 import 'package:store_pos/core/util/helper.dart';
 
@@ -31,7 +28,7 @@ class ApiClient extends Api {
       final record = [];
       return ApiResponse(
         record: record,
-        status: 'success',
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -48,17 +45,22 @@ class ApiClient extends Api {
         arg,
         conflictAlgorithm: ConflictAlgorithm.rollback,
       );
+
       if (response == -1) {
-        throw SqlException();
+        throw GeneralException();
       }
 
       return ApiResponse(
         record: arg,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
-      ServerFailure('group_already_exist'.tr);
-      rethrow;
+      _error = 'group_already_exist'.tr;
+      return ApiResponse(
+        record: '',
+        msg: _error,
+        status: Status.failed,
+      );
     }
   }
 
@@ -68,11 +70,15 @@ class ApiClient extends Api {
       final response = await db.query(GroupItemModel.tableName);
       return ApiResponse(
         record: response,
-        status: Status.success.name,
+        status: Status.success,
       );
-    } on Exception {
-      ServerFailure('something_went_wrong'.tr);
-      rethrow;
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(
+        record: '',
+        status: Status.failed,
+        msg: _error,
+      );
     }
   }
 
@@ -83,7 +89,7 @@ class ApiClient extends Api {
           where: 'active=?', whereArgs: ['1'], limit: 10);
       return ApiResponse(
         record: response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } on Exception {
       rethrow;
@@ -102,8 +108,8 @@ class ApiClient extends Api {
         throw GeneralException();
       }
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } catch (e) {
       showMessage(msg: 'item_already_exist'.tr, status: Status.failed);
@@ -117,7 +123,7 @@ class ApiClient extends Api {
       final result = await db.query(ItemModel.tableName);
       return ApiResponse(
         record: result,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -131,7 +137,7 @@ class ApiClient extends Api {
 
       return ApiResponse(
         record: result,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       logger.i(e);
@@ -189,12 +195,12 @@ class ApiClient extends Api {
 
       return ApiResponse(
         record: response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       return ApiResponse(
         record: {},
-        status: Status.failed.name,
+        status: Status.failed,
         msg: _error,
       );
     }
@@ -265,13 +271,13 @@ class ApiClient extends Api {
 
       return ApiResponse(
         record: orderTran,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       _error = e.toString();
       return ApiResponse(
         record: {},
-        status: Status.failed.name,
+        status: Status.failed,
         msg: _error,
       );
     }
@@ -342,12 +348,12 @@ class ApiClient extends Api {
 
       return ApiResponse(
         record: orderTran.toMap(),
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       return ApiResponse(
         record: {},
-        status: Status.failed.name,
+        status: Status.failed,
         msg: _error,
       );
     }
@@ -359,7 +365,7 @@ class ApiClient extends Api {
       final records = await db.query(CustomerModel.tableName);
       return ApiResponse(
         record: records,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -372,7 +378,7 @@ class ApiClient extends Api {
       final records = await db.query(PaymentMethodModel.tableName);
       return ApiResponse(
         record: records,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -416,8 +422,8 @@ class ApiClient extends Api {
       }
 
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -431,9 +437,9 @@ class ApiClient extends Api {
           where: 'groupCode=?', whereArgs: [arg?['code']]);
       if (response.isNotEmpty) {
         return ApiResponse(
-          record: Status.failed.name,
+          record: Status.failed,
           msg: 'can_not_delete_group_is_not_empty',
-          status: Status.failed.name,
+          status: Status.failed,
         );
       }
       final result = await db.delete(
@@ -443,14 +449,14 @@ class ApiClient extends Api {
       );
       if (result != -1) {
         return ApiResponse(
-          record: Status.success.name,
-          status: Status.success.name,
+          record: Status.success,
+          status: Status.success,
         );
       }
       return ApiResponse(
-        record: Status.failed.name,
+        record: Status.failed,
         msg: 'can_not_delete_group_is_not_empty',
-        status: Status.failed.name,
+        status: Status.failed,
       );
     } on Exception {
       rethrow;
@@ -467,8 +473,8 @@ class ApiClient extends Api {
         throw SqlException();
       }
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } on Exception {
       rethrow;
@@ -484,8 +490,8 @@ class ApiClient extends Api {
         throw SqlException();
       }
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } on Exception {
       rethrow;
@@ -495,28 +501,40 @@ class ApiClient extends Api {
   @override
   Future<ApiResponse> onDeleteItem(String code) async {
     try {
-      final orderTranTmp = await db.query(OrderTranModel.orderTranTmp,
-          where: 'code=?', whereArgs: [code]);
+      final orderTranTmp = await db.query(
+        OrderTranModel.orderTranTmp,
+        where: 'code=?',
+        whereArgs: [code],
+      );
+
       if (orderTranTmp.isNotEmpty) {
-        throw SqlException();
+        _error = "can_not_delete_item_transaction".tr;
+        throw GeneralException();
       }
 
-      final orderTran = await db
-          .query(OrderTranModel.orderTran, where: 'code=?', whereArgs: [code]);
+      final orderTran = await db.query(
+        OrderTranModel.orderTran,
+        where: 'code=?',
+        whereArgs: [code],
+      );
+
       if (orderTran.isNotEmpty) {
-        return ApiResponse(
-          record: Status.success.name,
-          status: Status.failed.name,
-        );
+        _error = "can_not_delete_item_transaction".tr;
+        throw GeneralException();
       }
 
       await db.delete(ItemModel.tableName, where: 'code=?', whereArgs: [code]);
+
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } on Exception {
-      rethrow;
+      return ApiResponse(
+        record: Status.failed,
+        status: Status.failed,
+        msg: _error,
+      );
     }
   }
 
@@ -532,8 +550,8 @@ class ApiClient extends Api {
         throw GeneralException();
       }
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } on Exception {
       rethrow;
@@ -549,8 +567,8 @@ class ApiClient extends Api {
         throw SqlException();
       }
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } on Exception {
       rethrow;
@@ -566,8 +584,8 @@ class ApiClient extends Api {
     //     throw SqlException();
     //   }
     //   return ApiResponse(
-    //     record: Status.success.name,
-    //     status: Status.success.name,
+    //     record: Status.success,
+    //     status: Status.success,
     //   );
     // } on Exception {
     //   rethrow;
@@ -584,8 +602,8 @@ class ApiClient extends Api {
     //     throw SqlException();
     //   }
     //   return ApiResponse(
-    //     record: Status.success.name,
-    //     status: Status.success.name,
+    //     record: Status.success,
+    //     status: Status.success,
     //   );
     // } on Exception {
     //   rethrow;
@@ -602,8 +620,8 @@ class ApiClient extends Api {
     //     throw SqlException();
     //   }
     //   return ApiResponse(
-    //     record: Status.success.name,
-    //     status: Status.success.name,
+    //     record: Status.success,
+    //     status: Status.success,
     //   );
     // } on Exception {
     //   rethrow;
@@ -623,7 +641,7 @@ class ApiClient extends Api {
       );
       return ApiResponse(
         record: response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -639,7 +657,7 @@ class ApiClient extends Api {
       final response = await db.rawQuery(query);
       return ApiResponse(
         record: response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -663,7 +681,7 @@ class ApiClient extends Api {
         );
         return ApiResponse(
           record: "Delete",
-          status: Status.success.name,
+          status: Status.success,
         );
       }
       await db.insert(
@@ -673,7 +691,7 @@ class ApiClient extends Api {
       );
       return ApiResponse(
         record: "Insert",
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -690,8 +708,8 @@ class ApiClient extends Api {
         throw GeneralException();
       }
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -711,8 +729,8 @@ class ApiClient extends Api {
           await batch.commit(noResult: false, continueOnError: true);
       //will return error item in response
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -725,13 +743,13 @@ class ApiClient extends Api {
       final response = await db.insert('home_slide', {"imgPath": path});
       if (response == -1) {
         return ApiResponse(
-          record: Status.failed.name,
-          status: Status.failed.name,
+          record: Status.failed,
+          status: Status.failed,
         );
       }
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -745,7 +763,7 @@ class ApiClient extends Api {
 
       return ApiResponse(
         record: response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -762,13 +780,13 @@ class ApiClient extends Api {
       );
       if (response == -1) {
         return ApiResponse(
-          record: Status.failed.name,
-          status: Status.failed.name,
+          record: Status.failed,
+          status: Status.failed,
         );
       }
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -785,8 +803,8 @@ class ApiClient extends Api {
         throw GeneralException();
       }
       return ApiResponse(
-        record: Status.success.name,
-        status: Status.success.name,
+        record: Status.success,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -799,7 +817,7 @@ class ApiClient extends Api {
       final response = await db.query(OrderTranModel.orderTran);
       return ApiResponse(
         record: response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -813,7 +831,7 @@ class ApiClient extends Api {
           .query(ItemModel.tableName, where: "code=?", whereArgs: [itemCode]);
       return ApiResponse(
         record: response.isEmpty ? [] : response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       rethrow;
@@ -829,11 +847,11 @@ class ApiClient extends Api {
       );
       return ApiResponse(
         record: response.isEmpty ? [] : response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       _error = e.toString();
-      return ApiResponse(record: [], status: Status.failed.name, msg: _error);
+      return ApiResponse(record: [], status: Status.failed, msg: _error);
     }
   }
 
@@ -847,11 +865,11 @@ class ApiClient extends Api {
       );
       return ApiResponse(
         record: response.isEmpty ? [] : response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       _error = e.toString();
-      return ApiResponse(record: [], status: Status.failed.name, msg: _error);
+      return ApiResponse(record: [], status: Status.failed, msg: _error);
     }
   }
 
@@ -862,11 +880,11 @@ class ApiClient extends Api {
           await db.rawQuery('SELECT code from ${OrderTranModel.orderTranTmp}');
       return ApiResponse(
         record: response.isEmpty ? [] : response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       _error = e.toString();
-      return ApiResponse(record: [], status: Status.failed.name, msg: _error);
+      return ApiResponse(record: [], status: Status.failed, msg: _error);
     }
   }
 
@@ -876,13 +894,35 @@ class ApiClient extends Api {
       final response = await db.query('wishlist');
       return ApiResponse(
         record: response.isEmpty ? [] : response,
-        status: Status.success.name,
+        status: Status.success,
       );
     } catch (e) {
       _error = e.toString();
       return ApiResponse(
         record: [],
-        status: Status.failed.name,
+        status: Status.failed,
+        msg: _error,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> onSearchItem({required String query}) async {
+    try {
+      final response = await db.query(
+        ItemModel.tableName,
+        where: "code LIKE ? OR description LIKE ? OR description_2 LIKE ?",
+        whereArgs: ["%$query%", "%$query%", "%$query%"],
+      );
+      return ApiResponse(
+        record: response.isEmpty ? [] : response,
+        status: Status.success,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(
+        record: [],
+        status: Status.failed,
         msg: _error,
       );
     }

@@ -36,12 +36,10 @@ class Translate extends Translations {
     'create_payment': 'Create payment',
     'create_customer': 'Create customer',
 
-
     //-----------------
     'download_data': 'Download Data',
     'data_set_up': 'Data Setup',
     'daily_item_sale': 'Daily item sale',
-
 
     'end_of_records': 'End of records',
     'empty': 'Empty',
@@ -98,8 +96,8 @@ class Translate extends Translations {
     //-----------------
     'not_selected': 'Not selected',
     'not_allow_to_edit': 'Not allow to edit',
-    'num_row':'No',
-    'invoice_no':'Invoice',
+    'num_row': 'No',
+    'invoice_no': 'Invoice',
 
     //-----------------
 
@@ -130,6 +128,10 @@ class Translate extends Translations {
     'payment_type': "Payment type",
     'to_customer': "To customer",
     'amount': "Amount",
+    'update_item': "Update Item",
+    'item_already_exist': "Item already exist",
+    'can_not_delete_item_transaction':
+        "Can't delete item already has transaction",
 
     'new_qty': "New Qty",
 
@@ -190,6 +192,5 @@ class Translate extends Translations {
     //-----------------
     'khmer': 'ខេមរភាសា',
     'english': 'អង់គ្លេស',
-
   };
 }

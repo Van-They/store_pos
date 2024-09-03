@@ -113,7 +113,6 @@ class ItemWidget extends GetView<CartController> {
         ),
       );
     }
-
     if (isList) {
       return Container(
         margin: margin ?? EdgeInsets.only(top: appSpace.scale),
@@ -134,34 +133,30 @@ class ItemWidget extends GetView<CartController> {
                 SizedBox(width: appSpace.scale),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextWidget(
+                          maxLine: 2,
+                          fontSize: 16.scale,
+                          text: record.displayLang.contains("KH")
+                              ? record.description_2
+                              : record.description,
+                        ),
+                        SizedBox(height: appSpace.scale),
+                        TextWidget(
+                          text: '${"code".tr} : ${record.code}',
+                          color: kLabel,
+                          fontSize: 12.scale,
+                        ),
+                      ],
+                    ),
                     TextWidget(
                       text: AppService.displayFormat(record.unitPrice),
                       color: kErrorColor,
                       fontSize: 18.scale,
-                    ),
-                    TextWidget(
-                      maxLine: 2,
-                      fontSize: 16.scale,
-                      text: record.displayLang.contains("KH")
-                          ? record.description_2
-                          : record.description,
-                    ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          TextWidget(
-                            text: "${'code'.tr}: ${record.code}",
-                            color: kPrimaryColor,
-                            fontSize: 12.scale,
-                          ),
-                          TextWidget(
-                            text:
-                                "${'qty'.tr}: ${AppService.convertToInt(record.qty)}",
-                          ),
-                        ],
-                      ),
                     ),
                   ],
                 ),

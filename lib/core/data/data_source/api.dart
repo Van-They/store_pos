@@ -74,4 +74,6 @@ abstract class Api {
   Future<ApiResponse> onGetItemCartListCodes();
 
   Future<ApiResponse> onGetItemWishListCodes();
+
+  Future<ApiResponse> onSearchItem({required String query});
 }
