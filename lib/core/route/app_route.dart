@@ -11,6 +11,7 @@ import 'package:store_pos/screen/dashboard/customer/customer_controller.dart';
 import 'package:store_pos/screen/dashboard/customer/customer_screen.dart';
 import 'package:store_pos/screen/dashboard/daily_sale_report/daily_sale_controller.dart';
 import 'package:store_pos/screen/dashboard/daily_sale_report/daily_sale_report_screen.dart';
+import 'package:store_pos/screen/dashboard/group/group_controller.dart';
 import 'package:store_pos/screen/dashboard/home_slider/home_slider_controller.dart';
 import 'package:store_pos/screen/dashboard/import_group_item/import_group_item_controller.dart';
 import 'package:store_pos/screen/dashboard/import_group_item/import_group_item_screen.dart';
@@ -90,7 +91,10 @@ List<GetPage<dynamic>> appRoute = [
   ),
   GetPage(
     name: GroupSetupScreen.routeName,
-    page: () => const GroupSetupScreen(),
+    page: () {
+      Get.find<GroupController>().onOpenTransaction();
+      return const GroupSetupScreen();
+    },
   ),
   GetPage(
     name: CheckOutScreen.routeName,

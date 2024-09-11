@@ -7,6 +7,7 @@ import 'package:store_pos/screen/dashboard/item/components/set_up_item_screen.da
 import 'package:store_pos/screen/dashboard/item/components/update_item_screen.dart';
 import 'package:store_pos/screen/dashboard/item/item_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
+import 'package:store_pos/widget/button_float_widget.dart';
 import 'package:store_pos/widget/components/custom_dialog.dart';
 import 'package:store_pos/widget/empty_widget.dart';
 import 'package:store_pos/widget/input_text_widget.dart';
@@ -22,34 +23,42 @@ class ItemScreen extends GetView<ItemController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        title: 'item'.tr,
-        isBack: true,
-        isSearch: true,
-        onSearch: () {
-          controller.searchListener.value = !controller.searchListener.value;
-        },
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Obx(
+          () {
+            return AppBarWidget(
+              title: 'item'.tr,
+              isBack: true,
+              isSearch: true,
+              iconSearch: controller.searchListener.value
+                  ? Icon(
+                      Icons.close,
+                      size: 20.scale,
+                      color: kPrimaryColor,
+                    )
+                  : null,
+              onSearch: () {
+                controller.searchListener.value =
+                    !controller.searchListener.value;
+              },
+            );
+          },
+        ),
       ),
-      floatingActionButton: GestureDetector(
+      floatingActionButton: ButtonFloatWidget(
         onTap: () {
           Get.toNamed(SetupItemScreen.routeName);
         },
-        child: const CircleAvatar(
-          backgroundColor: kPrimaryColor,
-          child: Icon(
-            Icons.add,
-            color: kWhite,
-          ),
-        ),
       ),
       body: RefreshIndicatorWidget(
         onRefresh: () => controller.onGetItem(),
-        child: SingleChildScrollView(
+        child: CustomScrollView(
           controller: controller.scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              Obx(() {
+          slivers: [
+            SliverToBoxAdapter(
+              child: Obx(() {
                 return AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
                   child: controller.searchListener.value
@@ -73,7 +82,9 @@ class ItemScreen extends GetView<ItemController> {
                       : const SizedBox.shrink(),
                 );
               }),
-              Obx(
+            ),
+            SliverFillRemaining(
+              child: Obx(
                 () {
                   final records = controller.itemList;
                   if (controller.isLoading.value) {
@@ -120,9 +131,8 @@ class ItemScreen extends GetView<ItemController> {
                   );
                 },
               ),
-              SizedBox(height: appPadding.scale),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

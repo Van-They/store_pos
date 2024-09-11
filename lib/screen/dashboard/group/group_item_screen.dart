@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
@@ -8,13 +7,12 @@ import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/dashboard/group/components/group_set_up_screen.dart';
 import 'package:store_pos/screen/dashboard/group/group_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
-import 'package:store_pos/widget/box_widget.dart';
+import 'package:store_pos/widget/button_float_widget.dart';
 import 'package:store_pos/widget/components/custom_dialog.dart';
-import 'package:store_pos/widget/custom_empty_widget.dart';
-import 'package:store_pos/widget/custom_error_widget.dart';
+import 'package:store_pos/widget/empty_widget.dart';
 import 'package:store_pos/widget/group_item_widget.dart';
 import 'package:store_pos/widget/input_text_widget.dart';
-import 'package:store_pos/widget/text_widget.dart';
+import 'package:store_pos/widget/loading_widget.dart';
 
 class GroupItemScreen extends GetView<GroupController> {
   const GroupItemScreen({super.key});
@@ -23,48 +21,69 @@ class GroupItemScreen extends GetView<GroupController> {
 
   @override
   Widget build(BuildContext context) {
-    final ValueNotifier<bool> searchListener = ValueNotifier(false);
     return Scaffold(
-      appBar: AppBarWidget(
-        title: 'group_item'.tr,
-        isBack: true,
-        isSearch: true,
-        onSearch: () => _onSearch(searchListener),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Obx(
+          () {
+            return AppBarWidget(
+              title: 'group_item'.tr,
+              isBack: true,
+              isSearch: true,
+              iconSearch: controller.searchListener.value
+                  ? Icon(
+                      Icons.close,
+                      size: 20.scale,
+                      color: kPrimaryColor,
+                    )
+                  : null,
+              onSearch: () {
+                controller.searchListener.value =
+                    !controller.searchListener.value;
+              },
+            );
+          },
+        ),
       ),
       body: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
+        controller: controller.scrollController,
         slivers: [
           SliverToBoxAdapter(
-            child: ValueListenableBuilder(
-              valueListenable: searchListener,
-              builder: (context, value, child) {
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  child: value
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: appPadding.scale,
-                            vertical: appSpace.scale,
+            child: Obx(() {
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: controller.searchListener.value
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: appPadding.scale,
+                          vertical: appSpace.scale,
+                        ),
+                        child: InputTextWidget(
+                          hintText: '${'search_group'.tr}...',
+                          suffixIcon: Icon(
+                            Icons.search,
+                            size: 18.scale,
                           ),
-                          child: InputTextWidget(
-                            hintText: '${'search_group'.tr}...',
-                            suffixIcon: Icon(
-                              Icons.search,
-                              size: 18.scale,
-                            ),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                );
-              },
-            ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              );
+            }),
           ),
           SliverFillRemaining(
-            child: controller.obx(
-              onError: (error) => const CustomErrorWidget(),
-              onEmpty: const CustomEmptyWidget(),
-              (state) {
-                final records = state ?? [];
+            child: Obx(
+              () {
+                if (controller.isLoading.value) {
+                  return const LoadingWidget();
+                }
+
+                final records = controller.groupItemList;
+
+                if (records.isEmpty) {
+                  return const EmptyWidget();
+                }
+
                 return MasonryGridView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: records.length,
@@ -134,24 +153,11 @@ class GroupItemScreen extends GetView<GroupController> {
           ),
         ],
       ),
-      bottomNavigationBar: BoxWidget(
-        margin: EdgeInsets.symmetric(
-            horizontal: appPadding.scale, vertical: appSpace.scale),
-        onTap: () => Get.toNamed(GroupSetupScreen.routeName),
-        height: 45.scale,
-        borderColor: kBgColor,
-        backgroundColor: kPrimaryColor,
-        padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
-        enableShadow: true,
-        child: TextWidget(
-          text: 'add_group'.tr,
-          color: kWhite,
-        ),
+      floatingActionButton: ButtonFloatWidget(
+        onTap: () {
+          Get.toNamed(GroupSetupScreen.routeName);
+        },
       ),
     );
-  }
-
-  _onSearch(ValueNotifier<bool> searchListener) {
-    searchListener.value = !searchListener.value;
   }
 }

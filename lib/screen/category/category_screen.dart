@@ -7,8 +7,6 @@ import 'package:store_pos/screen/category/components/fetch_item_by_category_scre
 import 'package:store_pos/screen/dashboard/group/group_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
-import 'package:store_pos/widget/custom_empty_widget.dart';
-import 'package:store_pos/widget/custom_error_widget.dart';
 import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
@@ -45,11 +43,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             SliverFillRemaining(
-              child: _controller.obx(
-                onError: (error) => const CustomErrorWidget(),
-                onEmpty: const CustomEmptyWidget(),
-                (state) {
-                  final records = state ?? [];
+              child: Obx(
+                () {
+                  final records = _controller.groupItemList;
                   return MasonryGridView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: records.length,

@@ -57,7 +57,7 @@ class ItemController extends GetxController {
     groupCodeCtr = TextEditingController();
     itemCodeCtr = TextEditingController();
     itemCostCtr = TextEditingController();
-    qtyCtr = TextEditingController();
+    qtyCtr = TextEditingController(text: "0");
     unitPriceCtr = TextEditingController();
     groupDescEnCtr = TextEditingController();
     groupDescKHCtr = TextEditingController();

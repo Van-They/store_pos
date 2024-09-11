@@ -176,22 +176,6 @@ class SetupItemScreen extends GetView<ItemController> {
                   ],
                 );
               }),
-              InputTextWidget(
-                textInputType: TextInputType.number,
-                inputFormatter: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                validator: (p0) {
-                  if (p0 == null || p0.isEmpty) {
-                    return "please_input_qty".tr;
-                  }
-                  return null;
-                },
-                controller: controller.qtyCtr,
-                labelOuter: 'qty'.tr,
-                hintText: 'item_qty'.tr,
-              ),
-              SizedBox(height: 15.scale),
               Row(
                 children: [
                   Expanded(

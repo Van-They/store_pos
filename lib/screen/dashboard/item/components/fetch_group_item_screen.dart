@@ -7,14 +7,13 @@ import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/dashboard/group/group_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
-import 'package:store_pos/widget/custom_empty_widget.dart';
-import 'package:store_pos/widget/custom_error_widget.dart';
 import 'package:store_pos/widget/image_widget.dart';
 import 'package:store_pos/widget/input_text_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
 class FetchGroupItemScreen extends GetView<GroupController> {
   const FetchGroupItemScreen({super.key});
+
   static const String routeName = "/FetchGroupItemScreen";
 
   @override
@@ -42,11 +41,9 @@ class FetchGroupItemScreen extends GetView<GroupController> {
             ),
           ),
           SliverToBoxAdapter(
-            child: controller.obx(
-              onError: (error) => const CustomErrorWidget(),
-              onEmpty: const CustomEmptyWidget(),
-              (state) {
-                final records = state ?? [];
+            child: Obx(
+              () {
+                final records = controller.groupItemList;
                 return MasonryGridView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: records.length,

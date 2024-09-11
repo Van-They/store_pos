@@ -41,8 +41,7 @@ class UpdateItemController extends GetxController {
     itemCostCtr = TextEditingController(text: '${itemUpdate.value.cost}');
     unitPriceCtr = TextEditingController(text: '${itemUpdate.value.unitPrice}');
     descEnCtr = TextEditingController(text: itemUpdate.value.description);
-    descKHCtr =
-        TextEditingController(text: itemUpdate.value.description_2);
+    descKHCtr = TextEditingController(text: itemUpdate.value.description_2);
     imageListener.value = itemUpdate.value.imgPath;
     language.value =
         itemUpdate.value.displayLang == "KH" ? Language.kh : Language.en;
@@ -65,9 +64,8 @@ class UpdateItemController extends GetxController {
         itemModel.value = r.record;
         isLoading.value = false;
       });
-    } catch (e) {
+    } on Exception {
       isLoading.value = false;
-      rethrow;
     }
   }
 

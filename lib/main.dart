@@ -26,18 +26,6 @@ void main() async {
   } else {
     runApp(_buildLoading());
   }
-
-  // runApp(
-  //   FutureBuilder(
-  //     future: DInjection.initDatabase(),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.connectionState == ConnectionState.waiting) {
-  //         return _buildLoading();
-  //       }
-  //       return _buildScreen();
-  //     },
-  //   ),
-  // );
 }
 
 GetMaterialApp _buildScreen(Database database) {
