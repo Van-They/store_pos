@@ -19,9 +19,13 @@ import 'package:store_pos/core/util/helper.dart';
 
 class ApiClient extends Api {
   final Database _db;
+
   ApiClient(this._db);
+
   String? _error;
+
   Database get db => _db;
+
   @override
   Future<ApiResponse> onGetHomeItems({Map? arg}) async {
     try {
@@ -493,8 +497,13 @@ class ApiClient extends Api {
         record: Status.success,
         status: Status.success,
       );
-    } on Exception {
-      rethrow;
+    } catch(e) {
+      _error = e.toString();
+      return ApiResponse(
+        record: Status.failed,
+        status: Status.failed,
+        msg: _error,
+      );
     }
   }
 
@@ -922,6 +931,31 @@ class ApiClient extends Api {
       _error = e.toString();
       return ApiResponse(
         record: [],
+        status: Status.failed,
+        msg: _error,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetGroupByCode({required String code}) async {
+    try {
+      final response = await db
+          .query(GroupItemModel.tableName, where: "code=?", whereArgs: [code]);
+
+      if (response.isEmpty) {
+        _error = "group_code_not_found".tr;
+        throw Exception();
+      }
+
+      return ApiResponse(
+        record: response[0],
+        status: Status.success,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(
+        record: {},
         status: Status.failed,
         msg: _error,
       );

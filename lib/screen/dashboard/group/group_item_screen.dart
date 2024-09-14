@@ -5,6 +5,7 @@ import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/service/image_storage_service.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/dashboard/group/components/group_set_up_screen.dart';
+import 'package:store_pos/screen/dashboard/group/components/update_group_screen.dart';
 import 'package:store_pos/screen/dashboard/group/group_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/button_float_widget.dart';
@@ -118,15 +119,8 @@ class GroupItemScreen extends GetView<GroupController> {
                       },
                       onEdit: () {
                         Get.toNamed(
-                          GroupSetupScreen.routeName,
-                          arguments: {
-                            'isUpdate': true,
-                            'imgPath': record.imgPath,
-                            'code': record.code,
-                            'description': record.description,
-                            'description_2': record.description_2,
-                            'display_language': record.displayLang,
-                          },
+                          UpdateGroupScreen.routeName,
+                          arguments: {'code': record.code},
                         );
                       },
                       onDelete: () {

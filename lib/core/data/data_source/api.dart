@@ -41,7 +41,9 @@ abstract class Api {
   Future<ApiResponse> onUpdateItem({required Map<String, dynamic> arg});
 
   Future<ApiResponse> onGetHomeSldier();
+
   Future<ApiResponse> onInsertHomeSlder({Map? arg});
+
   Future<ApiResponse> onDeleteHomeSlider({Map? arg});
 
   Future<ApiResponse> onGetItemByCategory({Map? arg});
@@ -51,6 +53,7 @@ abstract class Api {
   Future<ApiResponse> onToggleWishList({Map? arg});
 
   Future<ApiResponse> onCreateImportItem({required Map<String, dynamic> arg});
+
   Future<ApiResponse> onCreateBatchItems(
       {required List<Map<String, dynamic>> itemList});
 
@@ -76,4 +79,6 @@ abstract class Api {
   Future<ApiResponse> onGetItemWishListCodes();
 
   Future<ApiResponse> onSearchItem({required String query});
+
+  Future<ApiResponse> onGetGroupByCode({required String code});
 }

@@ -47,7 +47,7 @@ GetMaterialApp _buildScreen(Database database) {
       dialogBackgroundColor: kWhite,
       buttonTheme: const ButtonThemeData(splashColor: kWhite),
       radioTheme: const RadioThemeData(
-        fillColor: MaterialStatePropertyAll(kBlack),
+        fillColor: WidgetStatePropertyAll(kBlack),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: kWhite,

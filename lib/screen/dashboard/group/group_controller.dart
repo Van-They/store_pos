@@ -14,10 +14,6 @@ class GroupController extends GetxController {
 
   late ScrollController scrollController;
 
-  //status
-  bool isCreate = false;
-  bool isUpdate = false;
-
   final keyForm = GlobalKey<FormState>();
   late TextEditingController groupCodeCtr;
   late TextEditingController groupDescEn;
@@ -27,17 +23,19 @@ class GroupController extends GetxController {
   Rx<Language> displayLanguage = Language.en.obs;
   RxString imgListener = ''.obs;
 
+  //update
+  String oldGroupImagePath = "";
+  GroupItemModel? _groupUpdateModel;
+
   @override
   void onInit() {
     onGetGroupItem();
-    if (!isCreate && !isUpdate) {
-      scrollController = ScrollController()
-        ..addListener(
-          () {
-            searchListener.value = false;
-          },
-        );
-    }
+    scrollController = ScrollController()
+      ..addListener(
+        () {
+          searchListener.value = false;
+        },
+      );
     super.onInit();
   }
 
@@ -51,6 +49,34 @@ class GroupController extends GetxController {
     groupCodeCtr.dispose();
     groupDescEn.dispose();
     groupDescKH.dispose();
+  }
+
+  void onGetGroupToUpdate({required String groupCode}) async {
+    final result = await groupRepo.onGetGroupByCode(code: groupCode);
+    try {
+      result.fold(
+        (l) => throw Exception(),
+        (r) {
+          _groupUpdateModel = r.record;
+          _onSetDisplayData();
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  void _onSetDisplayData() {
+    GroupItemModel? group = _groupUpdateModel;
+    if (group != null) {
+      groupCodeCtr.text = group.code;
+      groupDescEn.text = group.description;
+      groupDescKH.text = group.description_2;
+      displayLanguage.value =
+          group.displayLang == "KH" ? Language.kh : Language.en;
+      oldGroupImagePath = group.imgPath;
+      imgListener.value = group.imgPath;
+    }
   }
 
   Future<void> onGetGroupItem() async {

@@ -117,4 +117,17 @@ class GroupItemRepo {
       return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
+
+  Future<Either<Failure, RepoResponse<GroupItemModel>>> onGetGroupByCode(
+      {required String code}) async {
+    final result = await api.onGetGroupByCode(code: code);
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+      return Right(RepoResponse(record: GroupItemModel.fromMap(result.record)));
+    } on GeneralException {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
 }
