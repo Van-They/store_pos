@@ -169,19 +169,18 @@ class ItemWidget extends GetView<CartController> {
     ValueNotifier<bool> isFavorite = ValueNotifier(false);
     return BoxWidget(
       padding: EdgeInsets.only(bottom: appSpace.scale),
-      borderRadius: BorderRadius.all(Radius.circular(appSpace.scale)),
+      borderRadius: const BorderRadius.all(Radius.circular(2)),
       enableShadow: true,
+      blueRadius: 0.5,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Stack(
             children: [
-              Padding(
-                padding: EdgeInsets.all(4.scale),
-                child: ImageWidget(
-                  imgPath: record.imgPath,
-                  height: 130.scale,
-                ),
+              ImageWidget(
+                imgPath: record.imgPath,
+                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                height: 130.scale,
               ),
               Positioned(
                 top: 2.scale,
@@ -208,7 +207,7 @@ class ItemWidget extends GetView<CartController> {
               )
             ],
           ),
-          SizedBox(height: appSpace.scale),
+          const SizedBox(height: appSpace),
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,53 +219,60 @@ class ItemWidget extends GetView<CartController> {
                     Padding(
                       padding: EdgeInsets.only(left: appSpace.scale),
                       child: TextWidget(
-                        text: AppService.displayFormat(record.unitPrice),
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20.scale,
-                        color: kErrorColor,
+                        maxLine: 2,
+                        fontSize: 16.scale,
+                        text: record.displayLang.contains("KH")
+                            ? record.description_2
+                            : record.description,
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: appSpace.scale),
-                      child: TextWidget(
-                        maxLine: 2,
-                        fontSize: 15.scale,
-                        text: record.description,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: appSpace.scale),
+                          child: TextWidget(
+                            text: AppService.displayFormat(record.unitPrice),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.scale,
+                            color: kErrorColor,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            controller.toggleCart(record);
+                          },
+                          child: Obx(() {
+                            final records = controller.orderTranList;
+                            final isCurrent = records.any(
+                              (element) => element.code == record.code,
+                            );
+                            return Container(
+                              padding: EdgeInsets.all(4.scale),
+                              margin: EdgeInsets.only(right: 4.scale),
+                              decoration: BoxDecoration(
+                                color: isCurrent ? kErrorColor : kPrimaryColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: isCurrent
+                                  ? Icon(
+                                      Icons.remove,
+                                      color: kWhite,
+                                      size: 16.scale,
+                                    )
+                                  : Icon(
+                                      Icons.add,
+                                      color: kWhite,
+                                      size: 16.scale,
+                                    ),
+                            );
+                          }),
+                        )
+                      ],
                     ),
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  controller.toggleCart(record);
-                },
-                child: Obx(() {
-                  final records = controller.orderTranList;
-                  final isCurrent = records.any(
-                    (element) => element.code == record.code,
-                  );
-                  return Container(
-                    padding: EdgeInsets.all(4.scale),
-                    margin: EdgeInsets.only(right: 6.scale),
-                    decoration: BoxDecoration(
-                      color: isCurrent ? kErrorColor : kBorderColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: isCurrent
-                        ? Icon(
-                            Icons.remove,
-                            color: kWhite,
-                            size: 18.scale,
-                          )
-                        : Icon(
-                            Icons.add,
-                            color: kWhite,
-                            size: 18.scale,
-                          ),
-                  );
-                }),
-              )
             ],
           ),
         ],

@@ -79,9 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: records.length,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: appPadding.scale,
-            mainAxisSpacing: appPadding.scale,
-            padding: EdgeInsets.symmetric(horizontal: appPadding.scale),
+            crossAxisSpacing: 4,
+            mainAxisSpacing: 4,
+            padding: EdgeInsets.symmetric(horizontal: appSpace.scale),
             gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: itemCanFitHorizontal(width: 150.scale),
             ),
