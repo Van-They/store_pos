@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const kBgColor = Color(0xFFf8f9fa);
+const kBgColor = Color(0xfffcfcfc);
 const kWhite = Color(0xFFFFFFFF);
 const kBlack = Color(0xFF000000);
 const kLabel = Color(0xFFAFAFAF);

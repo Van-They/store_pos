@@ -10,7 +10,7 @@ class PrimaryBtnWidget extends StatelessWidget {
     this.onTap,
     this.margin,
     this.size,
-    this.color = kBlack,
+    this.color = kPrimaryColor,
     this.width = double.infinity,
     this.height,
   });

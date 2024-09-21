@@ -497,7 +497,7 @@ class ApiClient extends Api {
         record: Status.success,
         status: Status.success,
       );
-    } catch(e) {
+    } catch (e) {
       _error = e.toString();
       return ApiResponse(
         record: Status.failed,
@@ -956,6 +956,94 @@ class ApiClient extends Api {
       _error = e.toString();
       return ApiResponse(
         record: {},
+        status: Status.failed,
+        msg: _error,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> onGetAllPaymentMethod() async {
+    try {
+      final response = await db.query(PaymentMethodModel.tableName);
+      return ApiResponse(
+        record: response,
+        status: Status.success,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(
+        record: [],
+        status: Status.failed,
+        msg: _error,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> onCreatePaymentMethod({
+    required Map<String, dynamic> arg,
+  }) async {
+    try {
+      final response = await db.insert(PaymentMethodModel.tableName, arg);
+      if (response == -1) {
+        throw SqlException();
+      }
+      return ApiResponse(
+        record: response,
+        status: Status.success,
+      );
+    } catch (e) {
+      _error = "payment_method_already_exist".tr;
+      return ApiResponse(
+        record: "",
+        status: Status.failed,
+        msg: _error,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> onDeletePaymentMethod(
+      {required Map<String, dynamic> arg}) async {
+    try {
+      final response = await db.query(OrderHead.orderHead,
+          where: "paymentId=?", whereArgs: [arg['code']]);
+      if (response.isNotEmpty) {
+        throw SqlException();
+      }
+      await db.delete(PaymentMethodModel.tableName,
+          where: "code=?", whereArgs: [arg['code']]);
+      return ApiResponse(
+        record: response,
+        status: Status.success,
+      );
+    } catch (e) {
+      _error = "can_not_delete_payment_has_transaction".tr;
+      return ApiResponse(
+        record: "",
+        status: Status.failed,
+        msg: _error,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> onUpdatePaymentMethod(
+      {required Map<String, dynamic> arg}) async {
+    try {
+      final response = await db.update(PaymentMethodModel.tableName, arg);
+      if (response == -1) {
+        throw SqlException();
+      }
+      return ApiResponse(
+        record: response,
+        status: Status.success,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(
+        record: "",
         status: Status.failed,
         msg: _error,
       );

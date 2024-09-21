@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/data/data_source/api.dart';
+import 'package:store_pos/core/data/model/payment_method_model.dart';
 import 'package:store_pos/core/exception/exceptions.dart';
 import 'package:store_pos/core/exception/failures.dart';
 import 'package:store_pos/core/repository/repo_response.dart';
@@ -46,6 +47,63 @@ class MerchantMenuRepo {
   Future<Either<Failure, RepoResponse<bool>>> onSaveImageSlider(
       String path) async {
     final result = await api.onSaveImageSlider(path);
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+      return Right(RepoResponse(record: true));
+    } on GeneralException {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<List<PaymentMethodModel>>>>
+      onGetAllPaymentMethod() async {
+    final result = await api.onGetAllPaymentMethod();
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+      final List<PaymentMethodModel> record = [];
+
+      for (var e in result.record) {
+        record.add(PaymentMethodModel.fromMap(e));
+      }
+      return Right(RepoResponse(record: record));
+    } on GeneralException {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<bool>>> onCreatePaymentMethod(
+      {required Map<String, dynamic> arg}) async {
+    final result = await api.onCreatePaymentMethod(arg: arg);
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+      return Right(RepoResponse(record: true));
+    } on GeneralException {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<bool>>> onDeletePaymentMethod(
+      {required Map<String, dynamic> arg}) async {
+    final result = await api.onDeletePaymentMethod(arg: arg);
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+      return Right(RepoResponse(record: true));
+    } on GeneralException {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<bool>>> onUpdatePaymentMethod(
+      {required Map<String, dynamic> arg}) async {
+    final result = await api.onUpdatePaymentMethod(arg: arg);
     try {
       if (result.status != Status.success) {
         throw GeneralException();

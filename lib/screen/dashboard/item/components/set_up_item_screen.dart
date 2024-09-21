@@ -31,10 +31,6 @@ class SetupItemScreen extends GetView<ItemController> {
       appBar: AppBarWidget(
         title: 'item_set_up'.tr,
         isBack: true,
-        onBack: () {
-          controller.onCloseTransaction();
-          Navigator.pop(context);
-        },
       ),
       bottomNavigationBar: PrimaryBtnWidget(
         label: 'save'.tr,
@@ -75,7 +71,6 @@ class SetupItemScreen extends GetView<ItemController> {
                 }
                 if (context.mounted) {
                   Navigator.pop(context);
-                  controller.onCloseTransaction();
                 }
               }
             },
@@ -84,7 +79,8 @@ class SetupItemScreen extends GetView<ItemController> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(appPadding.scale),
-        child: Form(
+        child:
+        Form(
           key: controller.formState,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -81,4 +81,12 @@ abstract class Api {
   Future<ApiResponse> onSearchItem({required String query});
 
   Future<ApiResponse> onGetGroupByCode({required String code});
+
+  Future<ApiResponse> onGetAllPaymentMethod();
+
+  Future<ApiResponse>  onCreatePaymentMethod({required Map<String,dynamic> arg});
+
+  Future<ApiResponse> onDeletePaymentMethod({required Map<String, dynamic> arg});
+
+  Future<ApiResponse>  onUpdatePaymentMethod({required Map<String, dynamic> arg});
 }

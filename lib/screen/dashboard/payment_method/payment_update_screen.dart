@@ -17,16 +17,16 @@ import 'package:store_pos/widget/input_text_widget.dart';
 import 'package:store_pos/widget/primary_btn_widget.dart';
 import 'package:store_pos/widget/text_widget.dart';
 
-class PaymentSetupScreen extends GetView<PaymentMethodController> {
-  const PaymentSetupScreen({super.key});
+class PaymentUpdateScreen extends GetView<PaymentMethodController> {
+  const PaymentUpdateScreen({super.key});
 
-  static const String routeName = "/PaymentSetupScreen";
+  static const String routeName = "/PaymentUpdateScreen";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        title: "set_up_payment_method".tr,
+        title: "update_payment_method".tr,
         isBack: true,
         onBack: () {
           Get.back(closeOverlays: true);
@@ -73,7 +73,14 @@ class PaymentSetupScreen extends GetView<PaymentMethodController> {
               }),
               SizedBox(height: 15.scale),
               InputTextWidget(
+                onTap: () {
+                  showMessage(
+                    msg: 'not_allow_to_edit'.tr,
+                    status: Status.failed,
+                  );
+                },
                 isMark: true,
+                readOnly: true,
                 validator: (p0) {
                   if (p0 == null || p0.isEmpty) {
                     return "please_input_code".tr;
@@ -157,21 +164,33 @@ class PaymentSetupScreen extends GetView<PaymentMethodController> {
         ),
       ),
       bottomNavigationBar: PrimaryBtnWidget(
-        label: 'save'.tr,
+        label: 'update'.tr,
         onTap: () {
           if (!controller.formState.currentState!.validate()) {
             return;
           }
           showYesNoDialog(
             content:
-            "${"do_want_to_create_new_payment_method".tr} ${controller.codeCtr
-                .text.trim()} ?",
+                "${"do_want_to_update_payment_method".tr} ${controller.codeCtr.text.trim()} ?",
             onConfirm: () async {
-              File imageFile = File(controller.imageListener.value);
-              var imagePath = controller.imageListener.value;
+              var imagePath = controller.paymentUpdate.imagePath;
               if (imagePath.isNotEmpty) {
-                imagePath = await ImageStorageService.initImgPathTmp(imageFile);
+                if (controller.imageListener.value != imagePath) {
+                  imagePath = await ImageStorageService.saveImageToSecureDir(
+                    File(controller.imageListener.value),
+                    path: imagePath,
+                  );
+                }
+              } else {
+                final tmpImg = await ImageStorageService.initImgPathTmp(
+                    File(controller.imageListener.value));
+
+                imagePath = await ImageStorageService.saveImageToSecureDir(
+                    File(controller.imageListener.value),
+                    path: tmpImg);
               }
+
+
               final Map<String, dynamic> paymentMethod = <String, dynamic>{
                 'code': controller.codeCtr.text.toUpperCase(),
                 'description': controller.descEnCtr.text,
@@ -181,15 +200,9 @@ class PaymentSetupScreen extends GetView<PaymentMethodController> {
               };
 
               final result =
-              await controller.onCreatePaymentMethod(arg: paymentMethod);
+                  await controller.onUpdatePaymentMethod(arg: paymentMethod);
               if (result) {
                 //when create success copy file to app directory
-                if (imagePath.isNotEmpty) {
-                  await ImageStorageService.saveImageToSecureDir(
-                    imageFile,
-                    path: imagePath,
-                  );
-                }
                 if (context.mounted) {
                   Get.back(closeOverlays: true);
                 }

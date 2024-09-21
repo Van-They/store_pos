@@ -102,6 +102,7 @@ class ItemController extends GetxController {
         itemList.add(newItem);
         itemList.refresh();
       });
+      onCloseTransaction();
       return true;
     } on Exception {
       return false;

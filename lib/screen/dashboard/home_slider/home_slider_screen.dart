@@ -7,6 +7,7 @@ import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/service/image_storage_service.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
+import 'package:store_pos/widget/button_float_widget.dart';
 import 'package:store_pos/widget/components/pick_image.dart';
 import 'package:store_pos/widget/empty_widget.dart';
 import 'package:store_pos/widget/primary_btn_widget.dart';
@@ -79,7 +80,7 @@ class HomeSliderScreen extends GetView<HomeSliderController> {
           );
         },
       ),
-      bottomNavigationBar: PrimaryBtnWidget(
+      floatingActionButton: ButtonFloatWidget(
         onTap: () async {
           final img = await customPickImageGallery(isEnableCrop: true);
           if (img != null) {
@@ -89,7 +90,6 @@ class HomeSliderScreen extends GetView<HomeSliderController> {
             _onUploadImage(img.path, path);
           }
         },
-        label: 'add_image'.tr,
       ),
     );
   }

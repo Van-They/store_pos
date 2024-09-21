@@ -178,6 +178,7 @@ class Translate extends Translations {
     'cash_report': 'Cash report',
     'item_sale': 'Item sale',
     'payment_method': 'Payment method',
+    'set_up_payment_method': 'Set up payment method',
 
     //-----------------
     'wishlist': 'WishList',

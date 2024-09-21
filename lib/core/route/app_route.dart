@@ -23,6 +23,8 @@ import 'package:store_pos/screen/dashboard/item/components/update_item_controlle
 import 'package:store_pos/screen/dashboard/item/components/update_item_screen.dart';
 import 'package:store_pos/screen/dashboard/payment_method/payment_method_controller.dart';
 import 'package:store_pos/screen/dashboard/payment_method/payment_method_screen.dart';
+import 'package:store_pos/screen/dashboard/payment_method/payment_set_up_screen.dart';
+import 'package:store_pos/screen/dashboard/payment_method/payment_update_screen.dart';
 import 'package:store_pos/screen/dashboard/setting/setting_controller.dart';
 import 'package:store_pos/screen/dashboard/setting/setting_screen.dart';
 import 'package:store_pos/screen/home/home_screen.dart';
@@ -194,5 +196,15 @@ List<GetPage<dynamic>> appRoute = [
     name: HomeSliderScreen.routeName,
     binding: BindingsBuilder.put(() => HomeSliderController()),
     page: () => const HomeSliderScreen(),
+  ),
+  GetPage(
+    name: PaymentSetupScreen.routeName,
+    binding: BindingsBuilder.put(() => const PaymentSetupScreen()),
+    page: () => const PaymentSetupScreen(),
+  ),
+  GetPage(
+    name: PaymentUpdateScreen.routeName,
+    binding: BindingsBuilder.put(() => const PaymentUpdateScreen()),
+    page: () => const PaymentUpdateScreen(),
   ),
 ];
