@@ -187,6 +187,16 @@ class Translate extends Translations {
     'menu': 'Menu',
     'import_group_item': 'Import group item',
     'not_allow_quantity_smaller_than_one': 'No allow quantity smaller than one',
+    'day': 'Day',
+    'month': 'Month',
+    'year': 'Year',
+    'date_of_birth': 'DOB',
+    'first_name': 'First name',
+    'last_name': 'Last name',
+    'customer_set_up': 'Customer set up',
+    'customer_code': 'Customer code',
+    'na': 'N/A',
+
   };
 
   final Map<String, String> _khmer = {

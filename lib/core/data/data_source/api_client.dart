@@ -734,8 +734,7 @@ class ApiClient extends Api {
         batch.insert(ItemModel.tableName, i,
             conflictAlgorithm: ConflictAlgorithm.ignore);
       }
-      final response =
-          await batch.commit(noResult: false, continueOnError: true);
+      await batch.commit(noResult: false, continueOnError: true);
       //will return error item in response
       return ApiResponse(
         record: Status.success,
@@ -1049,4 +1048,68 @@ class ApiClient extends Api {
       );
     }
   }
+
+  @override
+  Future<ApiResponse> onGetListCustomer() async {
+    try {
+      final response = await db.query(CustomerModel.tableName);
+      return ApiResponse(
+        record: response,
+        status: Status.success,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(
+        record: [],
+        status: Status.failed,
+        msg: _error,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> createCustomer(
+      {required Map<String, dynamic> arg}) async {
+    try {
+      await db.insert(CustomerModel.tableName, arg,
+          conflictAlgorithm: ConflictAlgorithm.abort);
+      return ApiResponse(
+        record: true,
+        status: Status.success,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(
+        record: false,
+        status: Status.failed,
+        msg: _error,
+      );
+    }
+  }
+
+  @override
+  Future<ApiResponse> onDeleteCurrentRecord(
+      {required Map<String, String> arg}) async {
+    try {
+      final response =
+          await db.rawDelete("DELETE FROM customer WHERE code = '${arg['code']}' AND code NOT IN (SELECT custId FROM ${OrderHead.orderHead})");
+
+
+      logger.d(response);
+
+      return ApiResponse(
+        record: true,
+        status: Status.success,
+      );
+    } catch (e) {
+      _error = e.toString();
+      return ApiResponse(
+        record: false,
+        status: Status.failed,
+        msg: _error,
+      );
+    }
+  }
+
+//end
 }

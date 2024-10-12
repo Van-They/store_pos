@@ -131,7 +131,7 @@ CREATE TABLE
         phoneNumber TEXT,
         imagePath TEXT,
         dob TEXT,
-        date TEXT
+        date TEXT DEFAULT (datetime('now', 'localtime'))
     );
 
 CREATE TABLE

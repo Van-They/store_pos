@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/constant/constant.dart';
 import 'package:store_pos/core/data/data_source/api.dart';
+import 'package:store_pos/core/data/model/customer_model.dart';
 import 'package:store_pos/core/data/model/payment_method_model.dart';
 import 'package:store_pos/core/exception/exceptions.dart';
 import 'package:store_pos/core/exception/failures.dart';
@@ -104,6 +105,52 @@ class MerchantMenuRepo {
   Future<Either<Failure, RepoResponse<bool>>> onUpdatePaymentMethod(
       {required Map<String, dynamic> arg}) async {
     final result = await api.onUpdatePaymentMethod(arg: arg);
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+      return Right(RepoResponse(record: true));
+    } on GeneralException {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<List<CustomerModel>>>>
+      getListCustomer() async {
+    final result = await api.onGetListCustomer();
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+
+      final List<CustomerModel> dataSet = [];
+
+      for (var e in result.record) {
+        dataSet.add(CustomerModel.fromMap(e));
+      }
+
+      return Right(RepoResponse(record: dataSet));
+    } on GeneralException {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<bool>>> createCustomer(
+      {required Map<String, dynamic> arg}) async {
+    final result = await api.createCustomer(arg: arg);
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+      return Right(RepoResponse(record: true));
+    } on GeneralException {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<bool>>> onDeleteCurrentRecord(
+      {required Map<String, String> arg}) async {
+    final result = await api.onDeleteCurrentRecord(arg: arg);
     try {
       if (result.status != Status.success) {
         throw GeneralException();

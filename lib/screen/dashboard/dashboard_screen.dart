@@ -93,19 +93,19 @@ class DashboardScreen extends StatelessWidget {
                   _buildMenu(
                     title: 'count_stock'.tr,
                     onTap: () {
-                      Get.toNamed(HomeSliderScreen.routeName);
+                      Get.showSnackbar(GetSnackBar(title: "Feature",message: "Coming soon",duration: Duration(seconds: 1),));
                     },
                   ),
                   _buildMenu(
                     title: 'check_stock'.tr,
                     onTap: () {
-                      Get.toNamed(HomeSliderScreen.routeName);
+                      Get.showSnackbar(GetSnackBar(title: "Feature",message: "Coming soon",duration: Duration(seconds: 1),));
                     },
                   ),
                   _buildMenu(
                     title: 'adjust_stock'.tr,
                     onTap: () {
-                      Get.toNamed(HomeSliderScreen.routeName);
+                      Get.showSnackbar(GetSnackBar(title: "Feature",message: "Coming soon",duration: Duration(seconds: 1),));
                     },
                   ),
                 ],

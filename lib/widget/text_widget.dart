@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_common/get_reset.dart';
+import 'package:store_pos/core/constant/colors.dart';
 
 class TextWidget extends StatelessWidget {
   const TextWidget({
@@ -7,7 +10,7 @@ class TextWidget extends StatelessWidget {
     this.fontWeight,
     this.fontSize = 14,
     this.fontStyle,
-    this.color,
+    this.color = kTextColor,
     this.maxLine,
     this.height,
     this.textAlign,
@@ -25,7 +28,7 @@ class TextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      _getText(),
       overflow: TextOverflow.ellipsis,
       textAlign: textAlign,
       maxLines: maxLine,
@@ -34,8 +37,15 @@ class TextWidget extends StatelessWidget {
         fontSize: fontSize,
         fontStyle: fontStyle,
         fontWeight: fontWeight,
-        color: color,
+        color: text.isEmpty ? kLabel : color,
       ),
     );
+  }
+
+  String _getText() {
+    if (text.isEmpty) {
+      return "na".tr;
+    }
+    return text;
   }
 }

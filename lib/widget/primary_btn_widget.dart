@@ -44,7 +44,7 @@ class PrimaryBtnWidget extends StatelessWidget {
               ),
         ),
         onPressed: onTap ?? () {},
-        child: TextWidget(text: label),
+        child: TextWidget(text: label,color: kWhite,),
       ),
     );
   }

@@ -84,9 +84,19 @@ abstract class Api {
 
   Future<ApiResponse> onGetAllPaymentMethod();
 
-  Future<ApiResponse>  onCreatePaymentMethod({required Map<String,dynamic> arg});
+  Future<ApiResponse> onCreatePaymentMethod(
+      {required Map<String, dynamic> arg});
 
-  Future<ApiResponse> onDeletePaymentMethod({required Map<String, dynamic> arg});
+  Future<ApiResponse> onDeletePaymentMethod(
+      {required Map<String, dynamic> arg});
 
-  Future<ApiResponse>  onUpdatePaymentMethod({required Map<String, dynamic> arg});
+  Future<ApiResponse> onUpdatePaymentMethod(
+      {required Map<String, dynamic> arg});
+
+  Future<ApiResponse> onGetListCustomer();
+
+  Future<ApiResponse> createCustomer({required Map<String, dynamic> arg});
+
+  Future<ApiResponse> onDeleteCurrentRecord({required Map<String, String> arg});
+
 }

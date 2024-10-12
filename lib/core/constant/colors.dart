@@ -15,6 +15,7 @@ const kRed = Color(0xFFFF0000);
 const kWarningColor = Colors.amberAccent;
 const kGrey = Colors.grey;
 const kOrange = Colors.orangeAccent;
-const kTextColor = Color(0xFFdad7cd);
+const kHintTextColor = Color(0xFFdad7cd);
+const kTextColor = Color(0xff474747);
 
 

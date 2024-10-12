@@ -7,6 +7,7 @@ import 'package:store_pos/screen/category/category_screen.dart';
 import 'package:store_pos/screen/category/components/fetch_item_by_category_screen.dart';
 import 'package:store_pos/screen/dashboard/cash_report/cash_report_controller.dart';
 import 'package:store_pos/screen/dashboard/cash_report/cash_report_screen.dart';
+import 'package:store_pos/screen/dashboard/customer/component/customer_set_up.dart';
 import 'package:store_pos/screen/dashboard/customer/customer_controller.dart';
 import 'package:store_pos/screen/dashboard/customer/customer_screen.dart';
 import 'package:store_pos/screen/dashboard/daily_sale_report/daily_sale_controller.dart';
@@ -191,6 +192,10 @@ List<GetPage<dynamic>> appRoute = [
       return CustomerController();
     }),
     page: () => const CustomerScreen(),
+  ),
+  GetPage(
+    name: CustomerSetUp.routeName,
+    page: () => const CustomerSetUp(),
   ),
   GetPage(
     name: HomeSliderScreen.routeName,
