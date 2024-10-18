@@ -99,4 +99,7 @@ abstract class Api {
 
   Future<ApiResponse> onDeleteCurrentRecord({required Map<String, String> arg});
 
+  Future<ApiResponse> onGetCustomerByCode({required Map<String, dynamic> arg});
+
+  Future<ApiResponse> updateCustomer({required Map<String, dynamic> arg});
 }

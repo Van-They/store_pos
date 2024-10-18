@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/screen/dashboard/customer/component/customer_set_up.dart';
+import 'package:store_pos/screen/dashboard/customer/component/customer_update.dart';
 import 'package:store_pos/screen/dashboard/customer/customer_controller.dart';
 import 'package:store_pos/widget/app_bar_widget.dart';
 import 'package:store_pos/widget/box_widget.dart';
@@ -39,7 +40,11 @@ class CustomerScreen extends GetView<CustomerController> {
                 height: 100.scale,
                 child: SlidableWidget(
                   onDelete: () {
-                    controller.onDeleteCurrentRecord(index:index);
+                    controller.onDeleteCurrentRecord(index: index);
+                  },
+                  onEdit: () {
+                    Get.toNamed(CustomerUpdate.routeName,
+                        arguments: {"code": record.code});
                   },
                   child: BoxWidget(
                     enableShadow: true,

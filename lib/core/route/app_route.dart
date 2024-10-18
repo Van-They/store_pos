@@ -8,6 +8,7 @@ import 'package:store_pos/screen/category/components/fetch_item_by_category_scre
 import 'package:store_pos/screen/dashboard/cash_report/cash_report_controller.dart';
 import 'package:store_pos/screen/dashboard/cash_report/cash_report_screen.dart';
 import 'package:store_pos/screen/dashboard/customer/component/customer_set_up.dart';
+import 'package:store_pos/screen/dashboard/customer/component/customer_update.dart';
 import 'package:store_pos/screen/dashboard/customer/customer_controller.dart';
 import 'package:store_pos/screen/dashboard/customer/customer_screen.dart';
 import 'package:store_pos/screen/dashboard/daily_sale_report/daily_sale_controller.dart';
@@ -192,6 +193,16 @@ List<GetPage<dynamic>> appRoute = [
       return CustomerController();
     }),
     page: () => const CustomerScreen(),
+  ),
+  GetPage(
+    name: CustomerUpdate.routeName,
+    arguments: Get.arguments ?? {},
+    binding: BindingsBuilder.put(
+      () {
+        return Get.find<CustomerController>()..onGetCustomerByCode();
+      },
+    ),
+    page: () => const CustomerUpdate(),
   ),
   GetPage(
     name: CustomerSetUp.routeName,

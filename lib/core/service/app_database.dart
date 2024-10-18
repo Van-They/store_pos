@@ -16,7 +16,7 @@ class AppDatabase {
 
   static final AppDatabase instance = AppDatabase._();
 
-  Future<Database> get database async {
+  Future<Database> get getDatabase async {
     return _database ??= await _initDatabase();
   }
 
@@ -79,8 +79,8 @@ class AppDatabase {
     }
   }
 
-  init() async {
-    await database;
+  Future<bool> init() async {
+    await getDatabase;
     return _database != null;
   }
 }

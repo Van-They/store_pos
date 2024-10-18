@@ -160,4 +160,33 @@ class MerchantMenuRepo {
       return Left(ServerFailure(result.msg ?? 'failed'.tr));
     }
   }
+
+  Future<Either<Failure, RepoResponse<CustomerModel>>> onGetCustomerByCode(
+      {required Map<String, dynamic> arg}) async {
+    final result = await api.onGetCustomerByCode(arg: arg);
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+      final customModel = CustomerModel.fromMap(result.record[0]);
+      return Right(RepoResponse(record: customModel));
+    } on GeneralException {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
+
+  Future<Either<Failure, RepoResponse<CustomerModel>>> updateCustomer({required Map<String, dynamic> arg}) async {
+    final result = await api.updateCustomer(arg: arg);
+    try {
+      if (result.status != Status.success) {
+        throw GeneralException();
+      }
+
+      final record = CustomerModel.fromMap(arg);
+
+      return Right(RepoResponse(record: record));
+    } on GeneralException {
+      return Left(ServerFailure(result.msg ?? 'failed'.tr));
+    }
+  }
 }

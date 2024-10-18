@@ -20,12 +20,15 @@ void main() async {
 
   final isData = await AppDatabase.instance.init();
   logger.d(isData ? "Database created" : "Database create failed");
-  final database = await AppDatabase.instance.database;
-  if (isData) {
-    runApp(_buildScreen(database));
-  } else {
-    runApp(_buildLoading());
-  }
+  final database = await AppDatabase.instance.getDatabase;
+
+  runApp(_buildScreen(database));
+
+  // if (isData) {
+  //   runApp(_buildScreen(database));
+  // } else {
+  //   runApp(_buildLoading());
+  // }
 }
 
 GetMaterialApp _buildScreen(Database database) {
@@ -33,8 +36,6 @@ GetMaterialApp _buildScreen(Database database) {
     debugShowCheckedModeBanner: false,
     getPages: appRoute,
     initialBinding: DInjection(database),
-    navigatorKey: _navKey,
-    scaffoldMessengerKey: scaffoldMessageKey,
     translations: Translate(),
     defaultTransition: Transition.rightToLeft,
     locale: const Locale('en', 'US'),
@@ -68,6 +69,3 @@ Widget _buildLoading() {
   );
 }
 
-final _navKey = GlobalKey<NavigatorState>();
-
-final scaffoldMessageKey = GlobalKey<ScaffoldMessengerState>();
