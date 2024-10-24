@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:store_pos/core/constant/colors.dart';
 import 'package:store_pos/core/data/model/item_model.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
+import 'package:store_pos/core/global/wish_list_controller.dart';
 import 'package:store_pos/core/service/app_service.dart';
 import 'package:store_pos/core/util/helper.dart';
 import 'package:store_pos/widget/image_widget.dart';
@@ -11,7 +12,7 @@ import 'package:store_pos/widget/text_widget.dart';
 
 import 'box_widget.dart';
 
-class ItemWidget extends GetView<CartController> {
+class ItemWidget extends GetView {
   const ItemWidget({
     super.key,
     required this.record,
@@ -166,7 +167,8 @@ class ItemWidget extends GetView<CartController> {
         ),
       );
     }
-    ValueNotifier<bool> isFavorite = ValueNotifier(false);
+
+    //item display on sale
     return BoxWidget(
       padding: EdgeInsets.only(bottom: appSpace.scale),
       borderRadius: const BorderRadius.all(Radius.circular(2)),
@@ -185,23 +187,24 @@ class ItemWidget extends GetView<CartController> {
               Positioned(
                 top: 2.scale,
                 right: 2.scale,
-                child: ValueListenableBuilder(
-                  valueListenable: isFavorite,
-                  builder: (context, value, child) {
+                child: GetBuilder<WishListController>(
+                  builder: (controller) {
+                    final isFavorite = controller.dataSet.contains(record.code);
                     return GestureDetector(
-                      onTap: () {
-                        isFavorite.value = !isFavorite.value;
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: value ? kRed : kWhite,
-                        radius: 14.scale,
-                        child: Icon(
-                          value ? Icons.favorite : Icons.favorite_border,
+                        onTap: () {
+                          // isFavorite.value = !isFavorite.value;
+                          showMessage(msg: "ToDo Favorite");
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: isFavorite ? kRed : kWhite,
+                          radius: 14.scale,
+                          child: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
                           size: 16.scale,
-                          color: value ? kWhite : kBorderColor,
-                        ),
-                      ),
-                    );
+                          color: isFavorite ? kWhite : kBorderColor,
+                          ),
+                          ),
+                      ); 
                   },
                 ),
               )
@@ -238,35 +241,40 @@ class ItemWidget extends GetView<CartController> {
                             color: kErrorColor,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            controller.toggleCart(record);
+                        GetBuilder<CartController>(
+                          builder: (controller) {
+                              final records = controller.orderTranList;
+                                  final isCurrent = records.any(
+                                        (element) => element.code == record.code,
+                                  );
+                            return GestureDetector(
+                              onTap: () {
+                                controller.toggleCart(record);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(4.scale),
+                                margin: EdgeInsets.only(right: 4.scale),
+                                decoration: BoxDecoration(
+                                  color: isCurrent
+                                      ? kErrorColor
+                                      : kPrimaryColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: isCurrent
+                                    ? Icon(
+                                  Icons.remove,
+                                  color: kWhite,
+                                  size: 16.scale,
+                                )
+                                    : Icon(
+                                  Icons.add,
+                                  color: kWhite,
+                                  size: 16.scale,
+                                ),
+                              )
+                          );
                           },
-                          child: Obx(() {
-                            final records = controller.orderTranList;
-                            final isCurrent = records.any(
-                              (element) => element.code == record.code,
-                            );
-                            return Container(
-                              padding: EdgeInsets.all(4.scale),
-                              margin: EdgeInsets.only(right: 4.scale),
-                              decoration: BoxDecoration(
-                                color: isCurrent ? kErrorColor : kPrimaryColor,
-                                shape: BoxShape.circle,
-                              ),
-                              child: isCurrent
-                                  ? Icon(
-                                      Icons.remove,
-                                      color: kWhite,
-                                      size: 16.scale,
-                                    )
-                                  : Icon(
-                                      Icons.add,
-                                      color: kWhite,
-                                      size: 16.scale,
-                                    ),
-                            );
-                          }),
+                    
                         )
                       ],
                     ),

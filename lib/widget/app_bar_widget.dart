@@ -42,7 +42,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                 minimumSize: Size(30.scale, 30.scale),
               ),
               icon: Icon(
-                Icons.close,
+                Icons.arrow_back,
                 size: 22.scale,
                 color: kBlack,
               ),

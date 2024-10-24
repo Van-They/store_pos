@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:store_pos/core/data/data_source/api.dart';
 import 'package:store_pos/core/data/data_source/api_client.dart';
 import 'package:store_pos/core/global/cart_controller.dart';
+import 'package:store_pos/core/global/wish_list_controller.dart';
 import 'package:store_pos/core/repository/cart_repo.dart';
 import 'package:store_pos/core/repository/group_item_repo.dart';
 import 'package:store_pos/core/repository/item_repo.dart';
@@ -29,6 +30,7 @@ void _init(Database database) async {
 
   //controller
   Get.lazyPut<CartController>(() => CartController(), fenix: true);
+  Get.lazyPut<WishListController>(() => WishListController(), fenix: true);
   Get.lazyPut<GroupController>(() => GroupController(), fenix: true);
 }
 

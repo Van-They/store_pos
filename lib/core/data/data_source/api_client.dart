@@ -669,7 +669,11 @@ class ApiClient extends Api {
         status: Status.success,
       );
     } catch (e) {
-      rethrow;
+      _error = e.toString();
+      return ApiResponse(
+        record: [],
+        status: Status.failed,
+      );
     }
   }
 
